@@ -155,11 +155,15 @@ public class TestAlphaCiv {
 		assertEquals(false, game.moveUnit(new Position(3, 0), new Position(4, 0)));
 	}
 	@Test
+	public void archerCanMove2TilesIn2Turns() {
+		// TODO: Write this in google docs. And implement
+	}
+	@Test
 	public void unitCanMoveDiagonal() {
-		// TODO: 
+		// TODO: Write this in google docs. And implement 
 	}
 	@Test
 	public void PositionCalculatesDistanceCorrectly() {
-		// TODO: 
+		// TODO: Write this in google docs. And implement
 	}
 }

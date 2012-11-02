@@ -20,11 +20,8 @@ import hotciv.standard.units.*;
 
 public class GameImpl implements Game {
 	private Map<Position, Tile> tileMap = new HashMap<Position, Tile>();
-	private Map<Position, Unit> unitMap = new HashMap<Position, Unit>();
+	private Map<Position, UnitImpl> unitMap = new HashMap<Position, UnitImpl>();
 	private Map<Position, City> cityMap = new HashMap<Position, City>();
-	
-	// A map telling us how much each unit has moved in this round. 
-	private Map<Unit, Integer> movedUnits = new HashMap<Unit, Integer>();
 	
 	private Player playerTurn;
 	
@@ -52,7 +49,7 @@ public class GameImpl implements Game {
 		return tileMap.get(p);
 	}
 
-	public Unit getUnitAt(Position p) {
+	public UnitImpl getUnitAt(Position p) {
 		return unitMap.get(p);
 	}
 
@@ -78,7 +75,7 @@ public class GameImpl implements Game {
 	}
 
 	public boolean moveUnit(Position from, Position to) {
-		Unit unit = getUnitAt(from);
+		UnitImpl unit = getUnitAt(from);
 		Tile targetTile = getTileAt(to);
 		
 		// See if we try to move to an type of tile we cannot move to.
@@ -88,21 +85,15 @@ public class GameImpl implements Game {
 		
 		// Tests if we try to move to far. 
 		System.out.println("Move from : " + from + " to: " + to + " dis: " + Position.getDistance(from, to));
-		int unitHasMoved = 0;
-		if (movedUnits.get(unit) != null) {
-			unitHasMoved = movedUnits.get(unit);
-		}
 		int distance = Position.getDistance(from, to);
-		if (distance  + unitHasMoved > unit.getMoveCount()) {
-			System.out.println(unit.getMoveCount());
+		if (distance > unit.getMoveCount()) {
 			return false;
 		}
-		movedUnits.put(unit, unitHasMoved + distance);
+		unit.movedUnit(distance);
 		
 		// Moves the unit. 
 		unitMap.remove(from);
 		unitMap.put(to, unit);
-		System.out.println("Returns true");
 		return true;
 	
 	}
