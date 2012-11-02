@@ -32,6 +32,9 @@ public class TestAlphaCiv {
 			if (game.getPlayerInTurn() == Player.RED)
 				break;
 		}
+        if (game.getPlayerInTurn() != Player.RED) {
+            throw new RuntimeException("The player wasn't red when it was supposed to be, or endOfTurn() doesn't work");
+        }
 	}
 
 	@Test
