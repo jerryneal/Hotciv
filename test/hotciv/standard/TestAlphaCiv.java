@@ -37,4 +37,17 @@ public class TestAlphaCiv {
     assertEquals( "City at (1,1) should be owned by red",
       Player.RED, p );
   }
+  @Test
+  public void redStartsFirst() {
+	  assertEquals(Player.RED, game.getPlayerInTurn());
+  } 
+  @Test 
+  public void tileContantReturnsItsType() {
+	  TileConstant testTile = new TileConstant(new Position(0,0), "ocean");
+	  assertEquals("ocean", testTile.getTypeString());
+  }
+  @Test 
+  public void theresOceanAt1_0 () {
+	  // assertEquals(game.getTileAt(new Position(1,0)).getTypeString(), "ocean");
+  }
 }
