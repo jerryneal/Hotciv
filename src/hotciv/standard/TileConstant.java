@@ -4,20 +4,20 @@ import hotciv.framework.Position;
 import hotciv.framework.Tile;
 
 public class TileConstant implements Tile{
-	
-	public TileConstant(Position position, String string) {
-		
+	Position position;
+	String type;
+	public TileConstant(Position position, String type) {
+		this.position = position;
+		this.type = type;
 	}
 
 	@Override
 	public Position getPosition() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.position;
 	}
 
 	@Override
 	public String getTypeString() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.type;
 	}
 }

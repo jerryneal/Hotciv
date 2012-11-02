@@ -41,6 +41,13 @@ public class Position {
    * @return the column.
    */
   public int getColumn() { return c; }
+  
+  public static int getDistance(Position p1, Position p2) {
+	  // Since we can move in diagonals, its equals just moving 
+	  int verticalDistance = Math.abs(p1.getRow() - p2.getRow());
+	  int horizontalDistance = Math.abs(p1.getColumn() - p2.getColumn());
+	  return Math.max(verticalDistance, horizontalDistance);
+  }
 
   public boolean equals(Object o) {
     if (o == null) { return false; }
