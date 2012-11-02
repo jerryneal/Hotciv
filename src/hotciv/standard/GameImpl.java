@@ -23,6 +23,9 @@ public class GameImpl implements Game {
 	private Map<Position, Unit> unitMap = new HashMap<Position, Unit>();
 	private Map<Position, City> cityMap = new HashMap<Position, City>();
 	
+	// A map telling us how much each unit has moved in this round. 
+	private Map<Unit, Integer> movedUnits = new HashMap<Unit, Integer>();
+	
 	private Player playerTurn;
 	
 	private int age = -4000;
@@ -85,11 +88,16 @@ public class GameImpl implements Game {
 		
 		// Tests if we try to move to far. 
 		System.out.println("Move from : " + from + " to: " + to + " dis: " + Position.getDistance(from, to));
-		if (Position.getDistance(from, to) > unit.getMoveCount()) {
+		int unitHasMoved = 0;
+		if (movedUnits.get(unit) != null) {
+			unitHasMoved = movedUnits.get(unit);
+		}
+		int distance = Position.getDistance(from, to);
+		if (distance  + unitHasMoved > unit.getMoveCount()) {
 			System.out.println(unit.getMoveCount());
 			return false;
 		}
-		// TODO: decrease the unit count of the unit. 
+		movedUnits.put(unit, unitHasMoved + distance);
 		
 		// Moves the unit. 
 		unitMap.remove(from);

@@ -158,4 +158,8 @@ public class TestAlphaCiv {
 	public void unitCanMoveDiagonal() {
 		// TODO: 
 	}
+	@Test
+	public void PositionCalculatesDistanceCorrectly() {
+		// TODO: 
+	}
 }
