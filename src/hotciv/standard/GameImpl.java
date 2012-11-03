@@ -80,18 +80,28 @@ public class GameImpl implements Game {
 
 	public boolean moveUnit(Position from, Position to) {
 		UnitImpl unit = getUnitAt(from);
+		UnitImpl unitAtTarget = getUnitAt(to);
 		Tile targetTile = getTileAt(to);
-		
-		// See if we try to move to an type of tile we cannot move to.
-		if (targetTile.getTypeString().equals(GameConstants.MOUNTAINS)) {
-			return false;
-		}
 		
 		// Tests if we try to move to far.
 		int distance = Position.getDistance(from, to);
 		if (distance > unit.getMoveCount()) {
 			return false;
 		}
+		
+		// See if we try to move to an type of tile we cannot move to.
+		if (targetTile.getTypeString().equals(GameConstants.MOUNTAINS)) {
+			return false;
+		}
+		
+		//If there is a unit at the target, if it is an enemy, attack it, if it is the players unit, reject move.
+		if (unitAtTarget != null && unitAtTarget.getOwner() != unit.getOwner()) {
+			unitMap.remove(unitAtTarget);
+		}
+		else if (unitAtTarget != null && unitAtTarget.getOwner() == unit.getOwner()) { 
+			return false;
+		}
+
 		unit.movedUnit(distance);
 		
 		// Moves the unit. 
