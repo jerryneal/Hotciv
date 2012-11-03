@@ -159,11 +159,23 @@ public class TestAlphaCiv {
 	}
 	@Test
 	public void archerCanMove2TilesIn2Turns() {
-		// TODO: Write this in google docs. And implement
+        // Red archer at (2,0)
+        Unit archer = game.getUnitAt(new Position(2, 0));
+        assertEquals(GameConstants.ARCHER, archer.getTypeString());
+        assertEquals(Player.RED, archer.getOwner());
+        // Try to move the archer 2 tiles in 2 steps over 2 turns.
+        assertEquals(true, game.moveUnit(new Position(2, 0), new Position(3, 0)));
+        goToNextRound();
+        assertEquals(true, game.moveUnit(new Position(3, 0), new Position(4, 0)));
 	}
 	@Test
 	public void unitCanMoveDiagonal() {
-		// TODO: Write this in google docs. And implement 
+        // Red archer at (2,0)
+        Unit archer = game.getUnitAt(new Position(2, 0));
+        assertEquals(GameConstants.ARCHER, archer.getTypeString());
+        assertEquals(Player.RED, archer.getOwner());
+        // Try to move the archer diagonal.
+        assertEquals(true, game.moveUnit(new Position(2, 0), new Position(3, 1)));
 	}
 	@Test
 	public void PositionCalculatesDistanceCorrectly() {

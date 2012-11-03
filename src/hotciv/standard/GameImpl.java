@@ -83,8 +83,7 @@ public class GameImpl implements Game {
 			return false;
 		}
 		
-		// Tests if we try to move to far. 
-		System.out.println("Move from : " + from + " to: " + to + " dis: " + Position.getDistance(from, to));
+		// Tests if we try to move to far.
 		int distance = Position.getDistance(from, to);
 		if (distance > unit.getMoveCount()) {
 			return false;
@@ -104,12 +103,18 @@ public class GameImpl implements Game {
 		}
 		else if (playerTurn == Player.BLUE) {
 			playerTurn = Player.RED;
-			age += 100;
+            endOfRound();
 		}
 		else {
 			throw new RuntimeException("Unrecognized player: " + playerTurn);
 		}
 	}
+    private void endOfRound() {
+        age += 100;
+        for (Map.Entry<Position, UnitImpl> unitEntry : unitMap.entrySet()) {
+            unitEntry.getValue().roundEnded();
+        }
+    }
 
 	public void changeWorkForceFocusInCityAt(Position p, String balance) {
 	}
