@@ -30,10 +30,14 @@ public class GameImpl implements Game {
 		setupTiles();
 		// Player starts
 		playerTurn = Player.RED;
-		// Red has a city at (1,1).
+		// Red has a city at (1,1)
 		cityMap.put(new Position(1,1), new CityImpl(Player.RED));
-		// Red has a archer at (2,0);
+		// Red has a archer at (2,0)
 		unitMap.put(new Position(2,0), new Archer(Player.RED));
+		// Blue has a legion at (3,2)
+		unitMap.put(new Position(3,2), new Legion(Player.BLUE));
+		// Red has a settler at (4,3)
+		unitMap.put(new Position(4,3), new Settler(Player.RED));
 	}
 	private void setupTiles() {
 		// Ocean at 1,0

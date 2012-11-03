@@ -181,4 +181,20 @@ public class TestAlphaCiv {
 	public void PositionCalculatesDistanceCorrectly() {
 		// TODO: Write this in google docs. And implement
 	}
+	@Test
+	public void allUnitsProperlyInserted() {
+		//Red archer at (2,0)
+		Unit archer = game.getUnitAt(new Position(2, 0));
+        assertEquals(GameConstants.ARCHER, archer.getTypeString());
+        assertEquals(Player.RED, archer.getOwner());
+		//Blue legion at (3,2)
+        Unit legion = game.getUnitAt(new Position(3, 2));
+        assertEquals(GameConstants.LEGION, legion.getTypeString());
+        assertEquals(Player.BLUE, legion.getOwner());
+		//Red Settler at (4,3)
+        Unit settler = game.getUnitAt(new Position(4, 3));
+        assertEquals(GameConstants.SETTLER, settler.getTypeString());
+        assertEquals(Player.RED, settler.getOwner());
+	}
+	
 }
