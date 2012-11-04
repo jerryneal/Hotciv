@@ -326,4 +326,29 @@ public class TestAlphaCiv {
         assertEquals("At this point there should be a settler at (0,0)",
                 GameConstants.SETTLER, game.getUnitAt(new Position(0,0)).getTypeString());
     }
+    @Test
+    public void citiesCanProduceArchers() {
+        City city = game.getCityAt(new Position(1, 1));
+        city.setProduction(GameConstants.ARCHER);
+        assertNull(game.getUnitAt(new Position(1, 1)));
+        assertEquals(Player.RED, city.getOwner());
+        for (int i = 0; i < 5; i++) {
+            goToNextRound();
+        }
+        assertEquals("After 5 rounds there should be a ARCHER on the city, because we specified it. ",
+                GameConstants.ARCHER, game.getUnitAt(new Position(1,1)).getTypeString());
+    }
+
+    @Test
+    public void citiesCanProduceLegions() {
+        City city = game.getCityAt(new Position(1, 1));
+        city.setProduction(GameConstants.LEGION);
+        assertNull(game.getUnitAt(new Position(1, 1)));
+        assertEquals(Player.RED, city.getOwner());
+        for (int i = 0; i < 5; i++) {
+            goToNextRound();
+        }
+        assertEquals("After 5 rounds there should be a LEGION on the city, because we specified it. ",
+                GameConstants.LEGION, game.getUnitAt(new Position(1,1)).getTypeString());
+    }
 }
