@@ -179,7 +179,9 @@ public class TestAlphaCiv {
 	}
 	@Test
 	public void PositionCalculatesDistanceCorrectly() {
-		// TODO: Write this in google docs. And implement
+		assertEquals(2, Position.getDistance(new Position(0,0), new Position(2,2)));
+        assertEquals(3, Position.getDistance(new Position(1,1), new Position(3,4)));
+        assertEquals(1, Position.getDistance(new Position(0,0), new Position(1,0)));
 	}
 	@Test
 	public void allUnitsProperlyInserted() {
