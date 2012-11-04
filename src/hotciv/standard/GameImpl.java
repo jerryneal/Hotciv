@@ -20,7 +20,7 @@ import hotciv.standard.units.*;
 
 public class GameImpl implements Game {
 	private Map<Position, Tile> tileMap = new HashMap<Position, Tile>();
-	private Map<Position, UnitImpl> unitMap = new HashMap<Position, UnitImpl>();
+	private UnitMap unitMap = new UnitMap();
 	private Map<Position, CityImpl> cityMap = new HashMap<Position, CityImpl>();
 	
 	private Player playerTurn;
@@ -33,11 +33,14 @@ public class GameImpl implements Game {
 		// Red has a city at (1,1)
 		cityMap.put(new Position(1,1), new CityImpl(Player.RED));
 		// Red has a archer at (2,0)
-		unitMap.put(new Position(2,0), new Archer(Player.RED));
+		unitMap.place(new Position(2, 0), new Archer(Player.RED));
 		// Blue has a legion at (3,2)
-		unitMap.put(new Position(3,2), new Legion(Player.BLUE));
+		unitMap.place(new Position(3, 2), new Legion(Player.BLUE));
 		// Red has a settler at (4,3)
-		unitMap.put(new Position(4,3), new Settler(Player.RED));
+		unitMap.place(new Position(4, 3), new Settler(Player.RED));
+
+        // Blue has a city at (4,1)
+        cityMap.put(new Position(4,1), new CityImpl(Player.BLUE));
 	}
 	private void setupTiles() {
 		// Ocean at 1,0
@@ -98,7 +101,7 @@ public class GameImpl implements Game {
 		
 		//If there is a unit at the target, if it is an enemy, attack it, if it is the players unit, reject move.
 		if (unitAtTarget != null && unitAtTarget.getOwner() != unit.getOwner()) {
-			unitMap.remove(unitAtTarget);
+			unitMap.remove(to);
 		}
 		else if (unitAtTarget != null && unitAtTarget.getOwner() == unit.getOwner()) { 
 			return false;
@@ -108,7 +111,7 @@ public class GameImpl implements Game {
 		
 		// Moves the unit. 
 		unitMap.remove(from);
-		unitMap.put(to, unit);
+		unitMap.place(to, unit);
 		return true;
 	
 	}
@@ -126,12 +129,48 @@ public class GameImpl implements Game {
 		}
 	}
     private void endOfRound() {
+        // Aging the world.
         age += 100;
-        for (Map.Entry<Position, UnitImpl> unitEntry : unitMap.entrySet()) {
-            unitEntry.getValue().roundEnded();
+
+        // Telling all unites that the round has ended, so they can reset their moveCount.
+        for (UnitImpl unit : unitMap.getUnits()) {
+            unit.roundEnded();
         }
+
+        // Producing some units.
         for (Map.Entry<Position, CityImpl> cityEntry : cityMap.entrySet()) {
-                cityEntry.getValue().productionInc(6);
+            CityImpl city = cityEntry.getValue();
+            Position cityPosition = cityEntry.getKey();
+
+            city.increaseProductionAmount(6);
+            int productionAmount = city.getProductionAmount();
+            String produces = city.getProduction();
+
+            UnitImpl unit = null;
+
+            Player cityOwner = city.getOwner();
+
+            if (produces.equals(GameConstants.SETTLER)) {
+                if (productionAmount >= 30) {
+                    city.decreaseProductionAmount(30);
+                    unit = new Settler(city.getOwner());
+                }
+            }
+            else if (produces.equals(GameConstants.ARCHER)) {
+                if (productionAmount >= 10) {
+                    city.decreaseProductionAmount(10);
+                    unit = new Archer(city.getOwner());
+                }
+            }
+            else if (produces.equals(GameConstants.LEGION)) {
+                if (productionAmount >= 15) {
+                    city.decreaseProductionAmount(15);
+                    unit = new Legion(city.getOwner());
+                }
+            }
+            if (unit != null) {
+                unitMap.placeNear(cityPosition, unit);
+            }
         }
     }
 
