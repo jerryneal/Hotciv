@@ -8,11 +8,9 @@ public class CityImpl implements City {
 	private Player owner;
 	private String produces;
     private int productionAmount;
-    private UnitMap unitMap;
 	
 	public CityImpl(Player owner) {
 		this.owner = owner;
-        this.unitMap = unitMap;
         // We set a city to pr. default produce settlers.
         this.produces = GameConstants.SETTLER;
         this.productionAmount = 0;

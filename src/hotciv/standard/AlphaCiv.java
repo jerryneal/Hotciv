@@ -5,6 +5,7 @@ import java.util.Map;
 
 import hotciv.framework.*;
 import hotciv.standard.units.*;
+import sun.security.util.UntrustedCertificates;
 
 /**
  * Skeleton implementation of HotCiv.
@@ -19,9 +20,7 @@ import hotciv.standard.units.*;
  */
 
 public class AlphaCiv implements Game {
-    private Map<Position, Tile> tileMap = new HashMap<Position, Tile>();
-    private UnitMap unitMap = new UnitMap();
-    private Map<Position, CityImpl> cityMap = new HashMap<Position, CityImpl>();
+    private GameWorld<UnitImpl, TileConstant, CityImpl> gameWorld = new GameWorld<UnitImpl, TileConstant, CityImpl>();
 
     private Player playerTurn;
 
@@ -31,39 +30,35 @@ public class AlphaCiv implements Game {
         // Player starts
         playerTurn = Player.RED;
         // Red has a city at (1,1)
-        cityMap.put(new Position(1,1), new CityImpl(Player.RED));
+        gameWorld.placeCity(new Position(1, 1), new CityImpl(Player.RED));
         // Red has a archer at (2,0)
-        unitMap.place(new Position(2, 0), new Archer(Player.RED));
+        gameWorld.placeUnit(new Position(2, 0), new Archer(Player.RED));
         // Blue has a legion at (3,2)
-        unitMap.place(new Position(3, 2), new Legion(Player.BLUE));
+        gameWorld.placeUnit(new Position(3, 2), new Legion(Player.BLUE));
         // Red has a settler at (4,3)
-        unitMap.place(new Position(4, 3), new Settler(Player.RED));
+        gameWorld.placeUnit(new Position(4, 3), new Settler(Player.RED));
 
         // Blue has a city at (4,1)
-        cityMap.put(new Position(4,1), new CityImpl(Player.BLUE));
+        gameWorld.placeCity(new Position(4, 1), new CityImpl(Player.BLUE));
     }
     private void setupTiles() {
         // Ocean at 1,0
-        tileMap.put(new Position(1,0), new TileConstant(new Position(1,0), GameConstants.OCEANS));
+        gameWorld.placeTile(new Position(1, 0), new TileConstant(new Position(1, 0), GameConstants.OCEANS));
         // Hills at 0,1
-        tileMap.put(new Position(0,1), new TileConstant(new Position(1,0), GameConstants.HILLS));
+        gameWorld.placeTile(new Position(0, 1), new TileConstant(new Position(1, 0), GameConstants.HILLS));
         // Mountain at 2,2
-        tileMap.put(new Position(2,2), new TileConstant(new Position(2,2), GameConstants.MOUNTAINS));
+        gameWorld.placeTile(new Position(2, 2), new TileConstant(new Position(2, 2), GameConstants.MOUNTAINS));
     }
     public Tile getTileAt(Position p) {
-        Tile result = tileMap.get(p);
-        if (result == null) {
-            return new TileConstant(p, GameConstants.PLAINS);
-        }
-        return tileMap.get(p);
+        return gameWorld.getTile(p);
     }
 
     public UnitImpl getUnitAt(Position p) {
-        return unitMap.get(p);
+        return gameWorld.getUnit(p);
     }
 
     public City getCityAt(Position p) {
-        return cityMap.get(p);
+        return gameWorld.getCity(p);
     }
 
     public Player getPlayerInTurn() {
@@ -101,7 +96,7 @@ public class AlphaCiv implements Game {
 
         //If there is a unit at the target, if it is an enemy, attack it, if it is the players unit, reject move.
         if (unitAtTarget != null && unitAtTarget.getOwner() != unit.getOwner()) {
-            unitMap.remove(to);
+            gameWorld.removeUnit(to);
         }
         else if (unitAtTarget != null && unitAtTarget.getOwner() == unit.getOwner()) {
             return false;
@@ -110,8 +105,8 @@ public class AlphaCiv implements Game {
         unit.movedUnit(distance);
 
         // Moves the unit.
-        unitMap.remove(from);
-        unitMap.place(to, unit);
+        gameWorld.removeUnit(from);
+        gameWorld.placeUnit(to, unit);
         return true;
 
     }
@@ -133,12 +128,12 @@ public class AlphaCiv implements Game {
         age += 100;
 
         // Telling all unites that the round has ended, so they can reset their moveCount.
-        for (UnitImpl unit : unitMap.getUnits()) {
-            unit.roundEnded();
+        for (Map.Entry<Position, UnitImpl> unitEntry : gameWorld.getUnitsEntrySet()) {
+            unitEntry.getValue().roundEnded();
         }
 
         // Producing some units.
-        for (Map.Entry<Position, CityImpl> cityEntry : cityMap.entrySet()) {
+        for (Map.Entry<Position, CityImpl> cityEntry : gameWorld.getCityEntrySet()) {
             CityImpl city = cityEntry.getValue();
             Position cityPosition = cityEntry.getKey();
 
@@ -169,7 +164,7 @@ public class AlphaCiv implements Game {
                 }
             }
             if (unit != null) {
-                unitMap.placeNear(cityPosition, unit);
+                gameWorld.placeUnitNear(cityPosition, unit);
             }
         }
     }

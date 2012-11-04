@@ -251,10 +251,12 @@ public class TestAlphaCiv {
     }
 
     @Test
-    public void testCityProductionWhenNoProductionSpecifiedAndClockwisePositioning() {
-        // We look at the city at (4,1), first we see that it produces an Settler after 6 rounds if none specified.
+    public void testCityProductionBlueCity() {
+        // This test assumes that a settler is produced after exactly 5 rounds. Again and again and again... And that is the case in AlphaCiv
+        // We look at the city at (4,1), first we see that it produces an Settler after 6 rounds. Because we haven't specified that it should produce something else.
         City city = game.getCityAt(new Position(4, 1));
         assertNull(game.getUnitAt(new Position(4, 1)));
+        assertEquals(Player.BLUE, city.getOwner());
         for (int i = 0; i < 5; i++) {
             goToNextRound();
         }
@@ -274,23 +276,52 @@ public class TestAlphaCiv {
         }
         assertEquals("After 5 more rounds there should be a settler just east of the city",
                 GameConstants.SETTLER, game.getUnitAt(new Position(4,2)).getTypeString());
-        assertNull("At this point there shouldn't be a unit at (5,2)",
-                game.getUnitAt(new Position(5,2)));
-
+        // A full test of the "clockWise" behaviour is in testCityProductionRedCity();
+    }
+    @Test
+    public void testCityProductionRedCity() {
+        // This test assumes that a settler is produced after exactly 5 rounds. Again and again and again...  And that is the case in AlphaCiv
+        // We look at the city at (1,1), first we see that it produces an Settler after 6 rounds. Because we haven't specified that it should produce something else.
+        // This test only works if the code correctly handles that a unit cannot be placed on a mountain or an ocean, and cannot be placed on top of another existing unit.
+        City city = game.getCityAt(new Position(1, 1));
+        assertNull(game.getUnitAt(new Position(1, 1)));
+        assertEquals(Player.RED, city.getOwner());
+        for (int i = 0; i < 5; i++) {
+            goToNextRound();
+        }
+        assertEquals("After 5 rounds there should be a settler on the city, when no other production is specified",
+                GameConstants.SETTLER, game.getUnitAt(new Position(1,1)).getTypeString());
+        assertEquals("Red should own the unit",
+                Player.RED, game.getUnitAt(new Position(1,1)).getOwner());
+        assertNull("After 5 rounds there should not be a unit just north of the city",
+                game.getUnitAt(new Position(0, 1)));
+        for (int i = 0; i < 5; i++) {
+            goToNextRound();
+        }
+        assertEquals("After 5 more rounds there should be a settler just north of the city",
+                GameConstants.SETTLER, game.getUnitAt(new Position(0,1)).getTypeString());
 
         for (int i = 0; i < 5; i++) {
             goToNextRound();
         }
-        assertEquals("After 5 more rounds there should be a settler just southEast of the city",
-                GameConstants.SETTLER, game.getUnitAt(new Position(5,2)).getTypeString());
+        assertEquals("After 5 more rounds there should be a settler just northEast of the city",
+                GameConstants.SETTLER, game.getUnitAt(new Position(0,2)).getTypeString());
+        assertNull("At this point there shouldn't be a unit at (1,2)",
+                game.getUnitAt(new Position(1,2)));
 
-        for (int i = 0; i < 19; i++) {
+        for (int i = 0; i < 5; i++) {
             goToNextRound();
         }
-        assertNull("At this point there shouldn't be a unit at (3,0)",
-                game.getUnitAt(new Position(3,0)));
+        assertEquals("After 5 more rounds there should be a settler just East of the city",
+                GameConstants.SETTLER, game.getUnitAt(new Position(1,2)).getTypeString());
+
+        for (int i = 0; i < 9; i++) {
+            goToNextRound();
+        }
+        assertNull("At this point there shouldn't be a unit at (0,0)",
+                game.getUnitAt(new Position(0,0)));
         goToNextRound();
-        assertEquals("At this point there should be a settler at (3,0)",
-                GameConstants.SETTLER, game.getUnitAt(new Position(3,0)).getTypeString());
+        assertEquals("At this point there should be a settler at (0,0)",
+                GameConstants.SETTLER, game.getUnitAt(new Position(0,0)).getTypeString());
     }
 }
