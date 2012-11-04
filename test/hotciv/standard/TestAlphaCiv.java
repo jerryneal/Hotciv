@@ -192,6 +192,8 @@ public class TestAlphaCiv {
 		assertEquals(2, Position.getDistance(new Position(0,0), new Position(2,2)));
         assertEquals(3, Position.getDistance(new Position(1,1), new Position(3,4)));
         assertEquals(1, Position.getDistance(new Position(0,0), new Position(1,0)));
+        assertEquals(1, Position.getDistance(new Position(2,2), new Position(3,3)));
+        assertEquals(2, Position.getDistance(new Position(1,10), new Position(3,10)));
 	}
 	@Test
 	public void allUnitsProperlyInserted() {

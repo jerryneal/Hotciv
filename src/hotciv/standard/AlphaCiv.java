@@ -7,6 +7,8 @@ import hotciv.framework.*;
 import hotciv.standard.units.*;
 import sun.security.util.UntrustedCertificates;
 
+import static org.junit.Assert.assertNotNull;
+
 /**
  * Skeleton implementation of HotCiv.
  *
@@ -42,6 +44,12 @@ public class AlphaCiv implements Game {
         gameWorld.placeCity(new Position(4, 1), new CityImpl(Player.BLUE));
     }
     private void setupTiles() {
+        // Default is plains.
+        for (int i = 0; i < 16; i++) {
+            for (int j = 0; j < 16; j++) {
+                gameWorld.placeTile(new Position(i, j), new TileConstant(new Position(i, j), GameConstants.PLAINS));
+            }
+        }
         // Ocean at 1,0
         gameWorld.placeTile(new Position(1, 0), new TileConstant(new Position(1, 0), GameConstants.OCEANS));
         // Hills at 0,1
@@ -50,10 +58,6 @@ public class AlphaCiv implements Game {
         gameWorld.placeTile(new Position(2, 2), new TileConstant(new Position(2, 2), GameConstants.MOUNTAINS));
     }
     public Tile getTileAt(Position p) {
-        Tile tile = gameWorld.getTile(p);
-        if (tile == null) {
-            return new TileConstant(p, GameConstants.PLAINS);
-        }
         return gameWorld.getTile(p);
     }
 
@@ -136,7 +140,7 @@ public class AlphaCiv implements Game {
             unitEntry.getValue().roundEnded();
         }
 
-        // Producing some units.
+        // Making the Cities produce something and make the units they can.
         for (Map.Entry<Position, CityImpl> cityEntry : gameWorld.getCityEntrySet()) {
             CityImpl city = cityEntry.getValue();
             Position cityPosition = cityEntry.getKey();
