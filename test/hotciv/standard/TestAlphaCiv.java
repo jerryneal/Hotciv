@@ -16,6 +16,7 @@ import static org.junit.Assert.*;
  * implied. You may study, use, modify, and distribute it for non-commercial
  * purposes. For any commercial use, see http://www.baerbak.com/
  */
+// TEST
 public class TestAlphaCiv {
 	private Game game;
 
