@@ -5,8 +5,11 @@ import hotciv.framework.Player;
 
 public class CityImpl implements City {
 	private Player owner;
+	private String production;
+	
 	public CityImpl(Player owner) {
 		this.owner = owner;
+		production = "0";
 	}
 
 	@Override
@@ -21,8 +24,12 @@ public class CityImpl implements City {
 
 	@Override
 	public String getProduction() {
-		// TODO Auto-generated method stub
-		return null;
+		return production;
+	}
+
+	public void productionInc(int increment){
+		int i = Integer.parseInt(getProduction())+increment;
+		production = Integer.toString(i);
 	}
 
 	@Override

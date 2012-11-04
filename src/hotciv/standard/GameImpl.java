@@ -21,7 +21,7 @@ import hotciv.standard.units.*;
 public class GameImpl implements Game {
 	private Map<Position, Tile> tileMap = new HashMap<Position, Tile>();
 	private Map<Position, UnitImpl> unitMap = new HashMap<Position, UnitImpl>();
-	private Map<Position, City> cityMap = new HashMap<Position, City>();
+	private Map<Position, CityImpl> cityMap = new HashMap<Position, CityImpl>();
 	
 	private Player playerTurn;
 	
@@ -129,6 +129,9 @@ public class GameImpl implements Game {
         age += 100;
         for (Map.Entry<Position, UnitImpl> unitEntry : unitMap.entrySet()) {
             unitEntry.getValue().roundEnded();
+        }
+        for (Map.Entry<Position, CityImpl> cityEntry : cityMap.entrySet()) {
+                cityEntry.getValue().productionInc(6);
         }
     }
 

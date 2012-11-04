@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
  * implied. You may study, use, modify, and distribute it for non-commercial
  * purposes. For any commercial use, see http://www.baerbak.com/
  */
-// TEST
+
 public class TestAlphaCiv {
 	private Game game;
 
@@ -230,5 +230,13 @@ public class TestAlphaCiv {
         Unit archerAfterBattle = game.getUnitAt(new Position(3, 1));
         assertEquals(GameConstants.LEGION, archerAfterBattle.getTypeString());
         assertEquals(Player.BLUE, archerAfterBattle.getOwner());
+    }
+    
+    @Test
+    public void testCityProductionGrows6(){
+    	City city = game.getCityAt(new Position(1, 1));
+    	assertEquals("0", city.getProduction());
+    	goToNextRound();
+    	assertEquals("6", city.getProduction());
     }
 }
