@@ -23,7 +23,7 @@ public class TestAlphaCiv {
 	/** Fixture for alphaciv testing. */
 	@Before
 	public void setUp() {
-		game = new GameImpl();
+		game = new AlphaCiv();
 	}
 
 	private void goToNextRound() {
@@ -261,7 +261,7 @@ public class TestAlphaCiv {
         assertEquals("After 5 rounds there should be a settler on the city, when no production is specified",
                 GameConstants.SETTLER, game.getUnitAt(new Position(4,1)).getTypeString());
         assertNull("After 5 rounds there should not be a unit just north of the city",
-                game.getUnitAt(new Position(3,1)));
+                game.getUnitAt(new Position(3, 1)));
         for (int i = 0; i < 5; i++) {
             goToNextRound();
         }
