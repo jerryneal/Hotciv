@@ -51,7 +51,7 @@ public class TestAlphaCiv {
 	}
 
 	@Test
-	public void tileContantWhatItsGiven() {
+	public void tileConstantReturnsWhatItsGiven() {
 		TileConstant testTile = new TileConstant(new Position(0, 0),
 				GameConstants.OCEANS);
 		assertEquals("ocean", testTile.getTypeString());
@@ -59,9 +59,10 @@ public class TestAlphaCiv {
 	}
 
 	@Test
-	public void theresOceanAt1_0() {
-		assertEquals(game.getTileAt(new Position(1, 0)).getTypeString(),
-				GameConstants.OCEANS);
+	public void allTilesProperlyInserted() {
+		assertEquals(game.getTileAt(new Position(1, 0)).getTypeString(), GameConstants.OCEANS);
+        assertEquals(game.getTileAt(new Position(0, 1)).getTypeString(), GameConstants.HILLS);
+        assertEquals(game.getTileAt(new Position(2, 2)).getTypeString(), GameConstants.MOUNTAINS);
 	}
 
 	@Test

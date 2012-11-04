@@ -42,6 +42,8 @@ public class GameImpl implements Game {
 	private void setupTiles() {
 		// Ocean at 1,0
 		tileMap.put(new Position(1,0), new TileConstant(new Position(1,0), GameConstants.OCEANS));
+        // Hills at 0,1
+        tileMap.put(new Position(0,1), new TileConstant(new Position(1,0), GameConstants.HILLS));
 		// Mountain at 2,2
 		tileMap.put(new Position(2,2), new TileConstant(new Position(2,2), GameConstants.MOUNTAINS));
 	}
