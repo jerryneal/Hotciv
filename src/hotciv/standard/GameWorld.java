@@ -90,7 +90,7 @@ public class GameWorld<UnitImpl extends Unit, TileImpl extends Tile, CityImpl ex
         }
 
         // Now if a piece of terrain conflicts.
-        TileImpl tile = tileMap.get(position);
+        TileImpl tile = getTile(position);
         if (tile != null) {
             String tileType = tile.getTypeString();
             if (tileType.equals(GameConstants.OCEANS) || tileType.equals(GameConstants.MOUNTAINS)) {
@@ -135,11 +135,7 @@ public class GameWorld<UnitImpl extends Unit, TileImpl extends Tile, CityImpl ex
         this.tileMap.put(position, tile);
     }
 
-    public Tile getTile(Position p) {
-        Tile result = tileMap.get(p);
-        if (result == null) {
-            return new TileConstant(p, GameConstants.PLAINS);
-        }
+    public TileImpl getTile(Position p) {
         return tileMap.get(p);
     }
 

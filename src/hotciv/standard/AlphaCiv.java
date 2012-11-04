@@ -50,6 +50,10 @@ public class AlphaCiv implements Game {
         gameWorld.placeTile(new Position(2, 2), new TileConstant(new Position(2, 2), GameConstants.MOUNTAINS));
     }
     public Tile getTileAt(Position p) {
+        Tile tile = gameWorld.getTile(p);
+        if (tile == null) {
+            return new TileConstant(p, GameConstants.PLAINS);
+        }
         return gameWorld.getTile(p);
     }
 
