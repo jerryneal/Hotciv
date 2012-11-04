@@ -197,14 +197,13 @@ public class TestAlphaCiv {
         assertEquals(Player.RED, settler.getOwner());
 	}
 	@Test
-	public void battleEndsWithAttackersVictory() {
+	public void battleEndsWithAttackersVictoryRedAttacks() {
 		//Red archer from (2,0) moves to and attacks blue legion at (3,2)
 		Unit archer = game.getUnitAt(new Position(2, 0));
         assertEquals(GameConstants.ARCHER, archer.getTypeString());
         assertEquals(Player.RED, archer.getOwner());
         assertEquals(true, game.moveUnit(new Position(2, 0), new Position(3, 1)));
-        game.endOfTurn();
-        game.endOfTurn();
+        goToNextRound();
         //Attack occurs, red archer from (3,1) attacks blue legion (3,2)
         assertEquals(true, game.moveUnit(new Position(3, 1), new Position(3, 2)));
         //Blue legion is destroyed and red archer is now at (3,2)
@@ -212,4 +211,20 @@ public class TestAlphaCiv {
         assertEquals(GameConstants.ARCHER, archerAfterBattle.getTypeString());
         assertEquals(Player.RED, archerAfterBattle.getOwner());
 	}
+
+    @Test
+    public void battleEndsWithAttackersVictoryBlueAttacks() {
+        //Red archer from (2,0) moves to and attacks blue legion at (3,2)
+        Unit archer = game.getUnitAt(new Position(2, 0));
+        assertEquals(GameConstants.ARCHER, archer.getTypeString());
+        assertEquals(Player.RED, archer.getOwner());
+        assertEquals(true, game.moveUnit(new Position(2, 0), new Position(3, 1)));
+        goToNextRound();
+        //Attack occurs, blue legion (3,2) attacks red archer from (3,1)
+        assertEquals(true, game.moveUnit(new Position(3, 2), new Position(3, 1)));
+        //Red archer is destroyed and blue legion is now at (3,1)
+        Unit archerAfterBattle = game.getUnitAt(new Position(3, 1));
+        assertEquals(GameConstants.LEGION, archerAfterBattle.getTypeString());
+        assertEquals(Player.BLUE, archerAfterBattle.getOwner());
+    }
 }
