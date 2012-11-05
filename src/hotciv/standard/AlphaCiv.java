@@ -1,13 +1,9 @@
 package hotciv.standard;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import hotciv.framework.*;
 import hotciv.standard.units.*;
-import sun.security.util.UntrustedCertificates;
-
-import static org.junit.Assert.assertNotNull;
 
 /**
  * Skeleton implementation of HotCiv.
@@ -35,13 +31,13 @@ public class AlphaCiv implements Game {
         gameWorld.placeCity(new Position(1, 1), new CityImpl(Player.RED));
         // Red has a archer at (2,0)
         gameWorld.placeUnit(new Position(2, 0), new Archer(Player.RED));
-        // Blue has a legion at (3,2)
-        gameWorld.placeUnit(new Position(3, 2), new Legion(Player.BLUE));
         // Red has a settler at (4,3)
         gameWorld.placeUnit(new Position(4, 3), new Settler(Player.RED));
 
         // Blue has a city at (4,1)
         gameWorld.placeCity(new Position(4, 1), new CityImpl(Player.BLUE));
+        // Blue has a legion at (3,2)
+        gameWorld.placeUnit(new Position(3, 2), new Legion(Player.BLUE));
     }
     private void setupTiles() {
         // Default is plains.
@@ -103,11 +99,14 @@ public class AlphaCiv implements Game {
         }
 
         //If there is a unit at the target, if it is an enemy, attack it, if it is the players unit, reject move.
-        if (unitAtTarget != null && unitAtTarget.getOwner() != unit.getOwner()) {
-            gameWorld.removeUnit(to);
-        }
-        else if (unitAtTarget != null && unitAtTarget.getOwner() == unit.getOwner()) {
-            return false;
+        if (unitAtTarget != null ) {
+            if (unitAtTarget.getOwner() != unit.getOwner()) {
+                // Attacking unit always win in AlphaCiv.
+                gameWorld.removeUnit(to);
+            }
+            else /* if (unitAtTarget.getOwner() == unit.getOwner())*/ {
+                return false;
+            }
         }
 
         unit.movedUnit(distance);
