@@ -351,4 +351,19 @@ public class TestAlphaCiv {
         assertEquals("After 5 rounds there should be a LEGION on the city, because we specified it. ",
                 GameConstants.LEGION, game.getUnitAt(new Position(1,1)).getTypeString());
     }
+    @Test
+    public void cannotMoveUnitToFriendlyUnit() {
+        // Moving the red archer all the way to the red setler. Long way, but only way in AlphaCiv.
+        assertEquals(GameConstants.ARCHER, game.getUnitAt(new Position(2,0)).getTypeString());
+        assertTrue(game.moveUnit(new Position(2,0), new Position(3,0)));
+        goToNextRound();
+        assertTrue(game.moveUnit(new Position(3,0), new Position(4,0)));
+        goToNextRound();
+        assertTrue(game.moveUnit(new Position(4,0), new Position(5,1)));
+        goToNextRound();
+        assertTrue(game.moveUnit(new Position(5,1), new Position(5,2)));
+        goToNextRound();
+        // And now it should reject.
+        assertFalse(game.moveUnit(new Position(5,2), new Position(4,3)));
+    }
 }

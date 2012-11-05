@@ -119,15 +119,16 @@ public class AlphaCiv implements Game {
     }
 
     public void endOfTurn() {
-        if (playerTurn == Player.RED) {
-            playerTurn = Player.BLUE;
-        }
-        else if (playerTurn == Player.BLUE) {
-            playerTurn = Player.RED;
-            endOfRound();
-        }
-        else {
-            throw new RuntimeException("Unrecognized player: " + playerTurn);
+        switch (playerTurn) {
+            case RED:
+                playerTurn = Player.BLUE;
+                break;
+            case BLUE:
+                playerTurn = Player.RED;
+                endOfRound();
+                break;
+            default:
+                throw new RuntimeException("Unrecognized player: " + playerTurn);
         }
     }
     private void endOfRound() {
