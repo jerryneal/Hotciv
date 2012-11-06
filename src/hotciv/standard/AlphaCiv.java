@@ -1,6 +1,8 @@
 package hotciv.standard;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import hotciv.framework.*;
 import hotciv.standard.units.*;
@@ -82,19 +84,26 @@ public class AlphaCiv implements Game {
         return age;
     }
 
+    private Set<Unit> movedUnits = new HashSet<Unit>();
     public boolean moveUnit(Position from, Position to) {
         UnitImpl unit = getUnitAt(from);
+
+        // Can only move my own unit
+        if (unit.getOwner() != playerTurn) {
+            return false;
+        }
+
         UnitImpl unitAtTarget = getUnitAt(to);
         Tile targetTile = getTileAt(to);
 
         // Tests if we try to move to far.
         int distance = Position.getDistance(from, to);
-        if (distance > unit.getMoveCount()) {
+        if (distance > unit.getMoveCount() || movedUnits.contains(unit)) {
             return false;
         }
 
         // See if we try to move to an type of tile we cannot move to.
-        if (targetTile.getTypeString().equals(GameConstants.MOUNTAINS)) {
+        if (targetTile.getTypeString().equals(GameConstants.MOUNTAINS) || targetTile.getTypeString().equals(GameConstants.OCEANS)) {
             return false;
         }
 
@@ -109,7 +118,7 @@ public class AlphaCiv implements Game {
             }
         }
 
-        unit.movedUnit(distance);
+        movedUnits.add(unit);
 
         // Moves the unit.
         gameWorld.removeUnit(from);
@@ -119,6 +128,10 @@ public class AlphaCiv implements Game {
     }
 
     public void endOfTurn() {
+        // Restore unit moved.
+        movedUnits.clear();
+
+        // Change player in turn.
         switch (playerTurn) {
             case RED:
                 playerTurn = Player.BLUE;

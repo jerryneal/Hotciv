@@ -116,10 +116,10 @@ public class TestAlphaCiv {
 
 	@Test
 	public void cityAlwaysHasPopulation1() {
-		City city = new CityImpl(Player.RED);
+		City city = game.getCityAt(new Position(1, 1));
 		assertEquals(1, city.getSize());
-		city = game.getCityAt(new Position(1, 1));
-		assertEquals(1, city.getSize());
+        city = game.getCityAt(new Position(4, 1));
+        assertEquals(1, city.getSize());
 	}
 
 	@Test
@@ -138,6 +138,12 @@ public class TestAlphaCiv {
 			}
 		}
 	}
+
+    @Test
+    public void unitCannotMoveToOcean() {
+        Unit archer = game.getUnitAt(new Position(2,0));
+        assertFalse(game.moveUnit(new Position(2,0), new Position(1,0)));
+    }
 
 	@Test
 	public void UnitsCannotMoveOverMountains() {
@@ -234,12 +240,23 @@ public class TestAlphaCiv {
         assertEquals(Player.RED, archer.getOwner());
         assertEquals(true, game.moveUnit(new Position(2, 0), new Position(3, 1)));
         goToNextRound();
+        // Make it blue players turn.
+        game.endOfTurn();
         //Attack occurs, blue legion (3,2) attacks red archer from (3,1)
         assertEquals(true, game.moveUnit(new Position(3, 2), new Position(3, 1)));
         //Red archer is destroyed and blue legion is now at (3,1)
         Unit archerAfterBattle = game.getUnitAt(new Position(3, 1));
         assertEquals(GameConstants.LEGION, archerAfterBattle.getTypeString());
         assertEquals(Player.BLUE, archerAfterBattle.getOwner());
+    }
+
+    @Test
+    public void cannotMoveOtherPlayersUnit() {
+        // Starts with red players turn, trying to move blue unit.
+        assertFalse(game.moveUnit(new Position(3, 2), new Position(3, 1)));
+        // Now red players turn.
+        game.endOfTurn();
+        assertFalse(game.moveUnit(new Position(2, 0), new Position(3, 1)));
     }
     
     @Test
