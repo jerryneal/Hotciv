@@ -260,6 +260,18 @@ public class TestAlphaCiv {
     }
     
     @Test
+    public void movingToUnoccupiedEnemyCityGrantsMovingPlayerCity() {
+    	//Blue Legion attacks red city at (1,1)
+    	Unit legion = game.getUnitAt(new Position(3, 2));
+    	game.moveUnit(new Position(3,2), new Position (2,1));
+    	goToNextRound();
+    	game.moveUnit(new Position(2,1), new Position(1,1));
+    	City city = game.getCityAt(new Position(1,1));
+    	assertEquals(legion.getOwner(), city.getOwner());
+    	
+    }
+    
+    @Test
     public void testCityProductionGrows6(){
     	City city = game.getCityAt(new Position(1, 1));
     	assertEquals(0, city.getProductionAmount());
