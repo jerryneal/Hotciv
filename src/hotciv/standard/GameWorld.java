@@ -139,7 +139,7 @@ public class GameWorld<UnitImpl extends Unit, TileImpl extends Tile, CityImpl ex
         return tileMap.get(p);
     }
 
-    public City getCity(Position p) {
+    public CityImpl getCity(Position p) {
         return cityMap.get(p);
     }
 

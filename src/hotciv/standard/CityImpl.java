@@ -20,6 +20,11 @@ public class CityImpl implements City {
 	public Player getOwner() {
 		return owner;
 	}
+	
+	public void setOwner(Player owner)
+	{
+		this.owner = owner;
+	}
 
 	@Override
 	public int getSize() {

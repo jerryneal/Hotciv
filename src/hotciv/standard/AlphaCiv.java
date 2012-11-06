@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import sun.net.www.content.text.plain;
+
 import hotciv.framework.*;
 import hotciv.standard.units.*;
 
@@ -63,7 +65,7 @@ public class AlphaCiv implements Game {
         return gameWorld.getUnit(p);
     }
 
-    public City getCityAt(Position p) {
+    public CityImpl getCityAt(Position p) {
         return gameWorld.getCity(p);
     }
 
@@ -117,7 +119,11 @@ public class AlphaCiv implements Game {
                 return false;
             }
         }
-
+        
+        if (getCityAt(to) != null && getCityAt(to).getOwner() != playerTurn ) {
+        	getCityAt(to).setOwner(playerTurn); 
+        }
+        
         movedUnits.add(unit);
 
         // Moves the unit.
