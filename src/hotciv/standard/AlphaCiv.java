@@ -168,8 +168,6 @@ public class AlphaCiv implements Game {
 
             UnitImpl unit = null;
 
-            Player cityOwner = city.getOwner();
-
             if (produces.equals(GameConstants.SETTLER)) {
                 if (productionAmount >= 30) {
                     city.decreaseProductionAmount(30);
