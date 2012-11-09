@@ -1,25 +1,22 @@
-package hotciv.standard;
+package hotciv.common;
+
+import hotciv.common.strategy.AgingStrategy;
+import hotciv.common.strategy.GetWinnerStrategy;
+import hotciv.common.units.Archer;
+import hotciv.common.units.Legion;
+import hotciv.common.units.Settler;
+import hotciv.framework.*;
 
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import hotciv.framework.*;
-import hotciv.standard.units.*;
-
 /**
- * Skeleton implementation of HotCiv.
- *
- * This source code is from the book "Flexible, Reliable Software: Using
- * Patterns and Agile Development" published 2010 by CRC Press. Author: Henrik B
- * Christensen Computer Science Department Aarhus University
- *
- * This source code is provided WITHOUT ANY WARRANTY either expressed or
- * implied. You may study, use, modify, and distribute it for non-commercial
- * purposes. For any commercial use, see http://www.baerbak.com/
+ * This is a game instance, that does the most basic behaviour, and has a big constructor that specifies all the strategies this game uses.
+ * @author : Erik
+ * Date: 09-11-12, 11:22
  */
-
-public class AlphaCiv implements Game {
+public class BaseGame implements Game {
     private GameWorld<UnitImpl, TileConstant, CityImpl> gameWorld = new GameWorld<UnitImpl, TileConstant, CityImpl>();
 
     private Player playerTurn;
@@ -27,7 +24,17 @@ public class AlphaCiv implements Game {
     private Set<Unit> movedUnits = new HashSet<Unit>();
 
     private int age = -4000;
-    public AlphaCiv() {
+
+    // Strategies
+    GetWinnerStrategy winnerStrategy;
+    AgingStrategy agingStrategy;
+
+    protected BaseGame(GetWinnerStrategy winnerStrategy, AgingStrategy agingStrategy) {
+        // First strategies
+        this.winnerStrategy = winnerStrategy;
+        this.agingStrategy = agingStrategy;
+
+
         setupTiles();
         // Player starts
         playerTurn = Player.RED;
@@ -74,16 +81,11 @@ public class AlphaCiv implements Game {
     }
 
     public Player getWinner() {
-        if (age >= -3000) {
-            return Player.RED;
-        }
-        else {
-            return null;
-        }
+        return this.winnerStrategy.getWinner(this);
     }
 
     public int getAge() {
-        return age;
+        return this.age;
     }
 
     public boolean moveUnit(Position from, Position to) {
@@ -118,11 +120,11 @@ public class AlphaCiv implements Game {
                 return false;
             }
         }
-        
+
         if (getCityAt(to) != null && getCityAt(to).getOwner() != playerTurn ) {
-        	getCityAt(to).setOwner(playerTurn); 
+            getCityAt(to).setOwner(playerTurn);
         }
-        
+
         movedUnits.add(unit);
 
         // Moves the unit.
@@ -151,7 +153,7 @@ public class AlphaCiv implements Game {
     }
     private void endOfRound() {
         // Aging the world.
-        age += 100;
+        this.age = agingStrategy.getNewAge(this);
 
         // Making the Cities produce something and make the units they can.
         for (Map.Entry<Position, CityImpl> cityEntry : gameWorld.getCityEntrySet()) {

@@ -1,7 +1,7 @@
-package hotciv.standard.units;
+package hotciv.common.units;
 
 import hotciv.framework.*;
-import hotciv.standard.UnitImpl;
+import hotciv.common.UnitImpl;
 
 public class Legion extends UnitImpl {
 	public Legion(Player owner) {

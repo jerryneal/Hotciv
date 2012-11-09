@@ -1,16 +1,16 @@
-package hotciv.standard.units;
+package hotciv.common.units;
 
 import hotciv.framework.*;
-import hotciv.standard.UnitImpl;
+import hotciv.common.UnitImpl;
 
-public class Settler extends UnitImpl {
-	public Settler(Player owner) {
+public class Archer extends UnitImpl {
+	public Archer(Player owner) {
 		super(1, owner);
 	}
 
 	@Override
 	public String getTypeString() {
-		return GameConstants.SETTLER;
+		return GameConstants.ARCHER;
 	}
 	
 	@Override

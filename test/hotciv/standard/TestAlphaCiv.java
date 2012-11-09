@@ -1,5 +1,6 @@
 package hotciv.standard;
 
+import hotciv.variants.AlphaCiv;
 import hotciv.framework.*;
 
 import org.junit.*;
@@ -28,7 +29,7 @@ public class TestAlphaCiv {
     /** Fixture for alphaciv testing. */
 	@Before
 	public void setUp() {
-		game = new AlphaCiv();
+		game = AlphaCiv.getGame();
 	}
 
 	private void goToNextRound() {
