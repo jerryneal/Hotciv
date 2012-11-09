@@ -23,12 +23,5 @@ public abstract class UnitImpl implements Unit {
 	public int getMoveCount() {
 		return currentMoveCount;
 	}
-	
-	/**
-	 * Is called when the round ends. 
-	 * This method makes sure the getMoveCount() is reset.  
-	 */
-	protected void roundEnded() {
-		this.currentMoveCount = initialMoveCount;
-	}
+
 }

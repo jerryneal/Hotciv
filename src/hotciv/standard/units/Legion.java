@@ -9,7 +9,7 @@ public class Legion extends UnitImpl {
 	}
 
 	@Override
-	public String getTypeString() {
+	public final String getTypeString() {
 		return GameConstants.LEGION;
 	}
 	

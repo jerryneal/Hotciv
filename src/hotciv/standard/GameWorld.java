@@ -11,8 +11,8 @@ import java.util.*;
  * Date: 04-11-12, 13:51
  */
 public class GameWorld<UnitImpl extends Unit, TileImpl extends Tile, CityImpl extends City> {
-    Map<Position, UnitImpl> unitMap = new HashMap<Position, UnitImpl>();
-    Map<Position, TileImpl> tileMap = new HashMap<Position, TileImpl>();
+    private Map<Position, UnitImpl> unitMap = new HashMap<Position, UnitImpl>();
+    private Map<Position, TileImpl> tileMap = new HashMap<Position, TileImpl>();
     private Map<Position, CityImpl> cityMap = new HashMap<Position, CityImpl>();
 
     /**
@@ -35,43 +35,11 @@ public class GameWorld<UnitImpl extends Unit, TileImpl extends Tile, CityImpl ex
             unitMap.put(position, unit);
         }
         else {
-            int orgRow = position.getRow();
-            int orgCol = position.getColumn();
-            Position north = new Position(orgRow - 1, orgCol);
-            Position northEast = new Position(orgRow - 1, orgCol + 1);
-            Position East = new Position(orgRow, orgCol + 1);
-            Position southEast = new Position(orgRow + 1, orgCol + 1);
-            Position south = new Position(orgRow + 1, orgCol);
-            Position southWest = new Position(orgRow + 1, orgCol - 1);
-            Position west = new Position(orgRow, orgCol - 1);
-            Position northWest = new Position(orgRow - 1, orgCol - 1);
-            if (canPlaceUnitAt(north)) {
-                unitMap.put(north, unit);
-            }
-            else if (canPlaceUnitAt(northEast)) {
-                unitMap.put(northEast, unit);
-            }
-            else if (canPlaceUnitAt(East)) {
-                unitMap.put(East, unit);
-            }
-            else if (canPlaceUnitAt(southEast)) {
-                unitMap.put(southEast, unit);
-            }
-            else if (canPlaceUnitAt(south)) {
-                unitMap.put(south, unit);
-            }
-            else if (canPlaceUnitAt(southWest)) {
-                unitMap.put(southWest, unit);
-            }
-            else if (canPlaceUnitAt(west)) {
-                unitMap.put(west, unit);
-            }
-            else if (canPlaceUnitAt(northWest)) {
-                unitMap.put(northWest, unit);
-            }
-            else {
-                // TODO: Do something else when a unit cannot be placed.
-                throw new RuntimeException("Could not place a new unit near: " + position);
+            for (Position aroundPosition : position.getAroundIterable()) {
+                if (canPlaceUnitAt(aroundPosition)) {
+                    unitMap.put(aroundPosition, unit);
+                    break;
+                }
             }
         }
     }

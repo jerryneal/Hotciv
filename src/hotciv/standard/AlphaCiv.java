@@ -24,6 +24,8 @@ public class AlphaCiv implements Game {
 
     private Player playerTurn;
 
+    private Set<Unit> movedUnits = new HashSet<Unit>();
+
     private int age = -4000;
     public AlphaCiv() {
         setupTiles();
@@ -84,7 +86,6 @@ public class AlphaCiv implements Game {
         return age;
     }
 
-    private Set<Unit> movedUnits = new HashSet<Unit>();
     public boolean moveUnit(Position from, Position to) {
         UnitImpl unit = getUnitAt(from);
 
@@ -151,11 +152,6 @@ public class AlphaCiv implements Game {
     private void endOfRound() {
         // Aging the world.
         age += 100;
-
-        // Telling all unites that the round has ended, so they can reset their moveCount.
-        for (Map.Entry<Position, UnitImpl> unitEntry : gameWorld.getUnitsEntrySet()) {
-            unitEntry.getValue().roundEnded();
-        }
 
         // Making the Cities produce something and make the units they can.
         for (Map.Entry<Position, CityImpl> cityEntry : gameWorld.getCityEntrySet()) {
