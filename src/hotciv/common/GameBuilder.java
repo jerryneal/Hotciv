@@ -4,6 +4,7 @@ import hotciv.common.strategy.NewAgeCalculator;
 import hotciv.common.strategy.UnitFactory;
 import hotciv.common.strategy.GetWinner;
 import hotciv.common.strategy.UnitAction;
+import hotciv.common.strategy.WorldLayoutStrategy;
 
 /**
  * This class build a Game instance, by setting the strategies the game should use, and inserts defaults for the rest.
@@ -15,6 +16,7 @@ public class GameBuilder {
     private NewAgeCalculator newAgeCalculator;
     private UnitAction unitAction;
     private UnitFactory unitFactory;
+    private WorldLayoutStrategy worldLayoutStrategy;
 
     public GameBuilder() {
 
@@ -35,6 +37,10 @@ public class GameBuilder {
         this.unitFactory = unitFactory;
         return this;
     }
+    public GameBuilder setWorldLayoutStrategy(WorldLayoutStrategy worldLayoutStrategy) {
+        this.worldLayoutStrategy = worldLayoutStrategy;
+        return this;
+    }
 
     public BaseGame build() {
         // Inserting defaults.
@@ -50,7 +56,10 @@ public class GameBuilder {
         if (this.unitFactory == null) {
             this.unitFactory = BaseGame.DefaultStrategies.getUnitFactory();
         }
+        if (this.worldLayoutStrategy == null) {
+            this.worldLayoutStrategy = BaseGame.DefaultStrategies.getWorldLayoutStrategy();
+        }
 
-        return new BaseGame(getWinner, newAgeCalculator, unitAction, unitFactory);
+        return new BaseGame(getWinner, newAgeCalculator, unitAction, unitFactory, worldLayoutStrategy);
     }
 }

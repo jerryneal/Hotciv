@@ -4,6 +4,7 @@ import hotciv.common.strategy.NewAgeCalculator;
 import hotciv.common.strategy.UnitFactory;
 import hotciv.common.strategy.GetWinner;
 import hotciv.common.strategy.UnitAction;
+import hotciv.common.strategy.WorldLayoutStrategy;
 import hotciv.common.units.Archer;
 import hotciv.common.units.Legion;
 import hotciv.common.units.Settler;
@@ -32,27 +33,24 @@ public final class BaseGame implements Game {
     private NewAgeCalculator newAgeCalculator;
     private UnitAction unitAction;
     private UnitFactory unitFactory;
+    private WorldLayoutStrategy worldLayoutStrategy;
 
-    protected BaseGame(GetWinner getWinner, NewAgeCalculator newAgeCalculator, UnitAction unitAction, UnitFactory unitFactory) {
+    protected BaseGame(GetWinner getWinner, NewAgeCalculator newAgeCalculator, UnitAction unitAction, UnitFactory unitFactory, WorldLayoutStrategy worldLayoutStrategy) {
         // First strategies
         this.getWinner = getWinner;
         this.newAgeCalculator = newAgeCalculator;
         this.unitAction = unitAction;
         this.unitFactory = unitFactory;
-
+        this.worldLayoutStrategy = worldLayoutStrategy;
 
         setupTiles();
         // Player starts
         playerTurn = Player.RED;
-        // Red has a city at (1,1)
-        gameWorld.placeCity(new Position(1, 1), new CityImpl(Player.RED));
+        
         // Red has a archer at (2,0)
         gameWorld.placeUnit(new Position(2, 0), makeArcher(Player.RED));
         // Red has a settler at (4,3)
         gameWorld.placeUnit(new Position(4, 3), makeSettler(Player.RED));
-
-        // Blue has a city at (4,1)
-        gameWorld.placeCity(new Position(4, 1), new CityImpl(Player.BLUE));
         // Blue has a legion at (3,2)
         gameWorld.placeUnit(new Position(3, 2), makeLegion(Player.BLUE));
     }
@@ -66,18 +64,7 @@ public final class BaseGame implements Game {
         return unitFactory.makeUnit(this, GameConstants.LEGION, owner);
     }
     private void setupTiles() {
-        // Default is plains.
-        for (int i = 0; i < 16; i++) {
-            for (int j = 0; j < 16; j++) {
-                gameWorld.placeTile(new Position(i, j), new TileConstant(new Position(i, j), GameConstants.PLAINS));
-            }
-        }
-        // Ocean at 1,0
-        gameWorld.placeTile(new Position(1, 0), new TileConstant(new Position(1, 0), GameConstants.OCEANS));
-        // Hills at 0,1
-        gameWorld.placeTile(new Position(0, 1), new TileConstant(new Position(1, 0), GameConstants.HILLS));
-        // Mountain at 2,2
-        gameWorld.placeTile(new Position(2, 2), new TileConstant(new Position(2, 2), GameConstants.MOUNTAINS));
+        worldLayoutStrategy.createWorldLayout(gameWorld);
     }
     public Tile getTileAt(Position position) {
         return gameWorld.getTile(position);
@@ -277,6 +264,29 @@ public final class BaseGame implements Game {
                     }
                 }
             };
+        }
+        
+        public static WorldLayoutStrategy getWorldLayoutStrategy() {
+        	return new WorldLayoutStrategy() {
+        		public void createWorldLayout(GameWorld<UnitImpl, TileConstant, CityImpl> gameWorld) {
+        			// Default is plains.
+        	        for (int i = 0; i < 16; i++) {
+        	            for (int j = 0; j < 16; j++) {
+        	                gameWorld.placeTile(new Position(i, j), new TileConstant(new Position(i, j), GameConstants.PLAINS));
+        	            }
+        	        }
+        	        // Ocean at 1,0
+        	        gameWorld.placeTile(new Position(1, 0), new TileConstant(new Position(1, 0), GameConstants.OCEANS));
+        	        // Hills at 0,1
+        	        gameWorld.placeTile(new Position(0, 1), new TileConstant(new Position(1, 0), GameConstants.HILLS));
+        	        // Mountain at 2,2
+        	        gameWorld.placeTile(new Position(2, 2), new TileConstant(new Position(2, 2), GameConstants.MOUNTAINS));
+        	        // Red has a city at (1,1)
+        	        gameWorld.placeCity(new Position(1, 1), new CityImpl(Player.RED));
+        	        // Blue has a city at (4,1)
+        	        gameWorld.placeCity(new Position(4, 1), new CityImpl(Player.BLUE));
+        		}
+        	};
         }
     }
 }
