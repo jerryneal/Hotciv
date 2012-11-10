@@ -1,6 +1,5 @@
 package hotciv.standard;
 
-import hotciv.variants.AlphaCiv;
 import hotciv.framework.*;
 
 import hotciv.variants.BetaCiv;

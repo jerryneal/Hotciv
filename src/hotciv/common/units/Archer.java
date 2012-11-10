@@ -15,12 +15,12 @@ public class Archer extends UnitImpl {
 	
 	@Override
 	public int getDefensiveStrength() {
-		return 0;
+		return 3;
 	}
 
 	@Override
 	public int getAttackingStrength() {
-		return 0;
+		return 2;
 	}
 
 }

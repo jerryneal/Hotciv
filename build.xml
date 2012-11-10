@@ -119,6 +119,8 @@ HotCiv build management.
   <target name="test"  depends="build-all">
     <java classname="org.junit.runner.JUnitCore">
       <arg value="hotciv.standard.TestAlphaCiv"/>
+	  <arg value="hotciv.standard.TestBetaCiv"/>
+	  <arg value="hotciv.standard.TestGammaCiv"/>
       <classpath refid="class-path"/>
     </java>
   </target>

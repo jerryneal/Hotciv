@@ -1,8 +1,9 @@
 package hotciv.common;
 
-import hotciv.common.strategy.AgingStrategy;
-import hotciv.common.strategy.GetWinnerStrategy;
-import hotciv.framework.Player;
+import hotciv.common.strategy.NewAgeCalculator;
+import hotciv.common.strategy.UnitFactory;
+import hotciv.common.strategy.GetWinner;
+import hotciv.common.strategy.UnitAction;
 
 /**
  * This class build a Game instance, by setting the strategies the game should use, and inserts defaults for the rest.
@@ -10,51 +11,46 @@ import hotciv.framework.Player;
  * Date: 09-11-12, 11:20
  */
 public class GameBuilder {
-    GetWinnerStrategy winnerStrategy;
-    AgingStrategy agingStrategy;
+    private GetWinner getWinner;
+    private NewAgeCalculator newAgeCalculator;
+    private UnitAction unitAction;
+    private UnitFactory unitFactory;
+
     public GameBuilder() {
 
     }
-    public GameBuilder setWinnerStrategy(GetWinnerStrategy winnerStrategy) {
-        this.winnerStrategy = winnerStrategy;
+    public GameBuilder setWinnerStrategy(GetWinner getWinner) {
+        this.getWinner = getWinner;
         return this;
     }
-    public GameBuilder setAgingStrategy(AgingStrategy agingStrategy) {
-        this.agingStrategy = agingStrategy;
+    public GameBuilder setAgingStrategy(NewAgeCalculator newAgeCalculator) {
+        this.newAgeCalculator = newAgeCalculator;
         return this;
     }
+    public GameBuilder setUnitActionStrategy(UnitAction unitAction) {
+        this.unitAction = unitAction;
+        return this;
+    }
+    public GameBuilder setUnitFactoryStrategy(UnitFactory unitFactory) {
+        this.unitFactory = unitFactory;
+        return this;
+    }
+
     public BaseGame build() {
-        // Inserting default where appropriate.
-        if (this.winnerStrategy == null) {
-            this.winnerStrategy = getDefaultWinnerStrategy();
+        // Inserting defaults.
+        if (this.getWinner == null) {
+            this.getWinner = BaseGame.DefaultStrategies.getWinnerStrategy();
         }
-        if (this.agingStrategy == null) {
-            this.agingStrategy = getDefaultAgingStrategy();
+        if (this.newAgeCalculator == null) {
+            this.newAgeCalculator = BaseGame.DefaultStrategies.getAgingStrategy();
         }
-        BaseGame res = new BaseGame(winnerStrategy, agingStrategy);
-        return res;
-    }
+        if (this.unitAction == null) {
+            this.unitAction = BaseGame.DefaultStrategies.getUnitActionStrategy();
+        }
+        if (this.unitFactory == null) {
+            this.unitFactory = BaseGame.DefaultStrategies.getUnitFactoryStrategy();
+        }
 
-    private AgingStrategy getDefaultAgingStrategy() {
-        return new AgingStrategy() {
-            @Override
-            public int getNewAge(BaseGame game) {
-                return game.getAge() + 100;
-            }
-        };
-    }
-
-    private static GetWinnerStrategy getDefaultWinnerStrategy() {
-        return new GetWinnerStrategy() {
-            @Override
-            public Player getWinner(BaseGame game) {
-                if (game.getAge() >= -3000) {
-                    return Player.RED;
-                }
-                else {
-                    return null;
-                }
-            }
-        };
+        return new BaseGame(getWinner, newAgeCalculator, unitAction, unitFactory);
     }
 }

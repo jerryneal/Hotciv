@@ -8,7 +8,7 @@ import hotciv.framework.Player;
  * @author : Erik
  * Date: 09-11-12, Time: 11:26
  */
-public interface GetWinnerStrategy {
+public interface GetWinner {
     public Player getWinner(BaseGame game);
 }
 

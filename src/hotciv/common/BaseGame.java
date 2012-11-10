@@ -1,7 +1,9 @@
 package hotciv.common;
 
-import hotciv.common.strategy.AgingStrategy;
-import hotciv.common.strategy.GetWinnerStrategy;
+import hotciv.common.strategy.NewAgeCalculator;
+import hotciv.common.strategy.UnitFactory;
+import hotciv.common.strategy.GetWinner;
+import hotciv.common.strategy.UnitAction;
 import hotciv.common.units.Archer;
 import hotciv.common.units.Legion;
 import hotciv.common.units.Settler;
@@ -16,7 +18,7 @@ import java.util.Set;
  * @author : Erik
  * Date: 09-11-12, 11:22
  */
-public class BaseGame implements Game {
+public final class BaseGame implements Game {
     private GameWorld<UnitImpl, TileConstant, CityImpl> gameWorld = new GameWorld<UnitImpl, TileConstant, CityImpl>();
 
     private Player playerTurn;
@@ -26,13 +28,17 @@ public class BaseGame implements Game {
     private int age = -4000;
 
     // Strategies
-    GetWinnerStrategy winnerStrategy;
-    AgingStrategy agingStrategy;
+    private GetWinner getWinner;
+    private NewAgeCalculator newAgeCalculator;
+    private UnitAction unitAction;
+    private UnitFactory unitFactory;
 
-    protected BaseGame(GetWinnerStrategy winnerStrategy, AgingStrategy agingStrategy) {
+    protected BaseGame(GetWinner getWinner, NewAgeCalculator newAgeCalculator, UnitAction unitAction, UnitFactory unitFactory) {
         // First strategies
-        this.winnerStrategy = winnerStrategy;
-        this.agingStrategy = agingStrategy;
+        this.getWinner = getWinner;
+        this.newAgeCalculator = newAgeCalculator;
+        this.unitAction = unitAction;
+        this.unitFactory = unitFactory;
 
 
         setupTiles();
@@ -41,14 +47,23 @@ public class BaseGame implements Game {
         // Red has a city at (1,1)
         gameWorld.placeCity(new Position(1, 1), new CityImpl(Player.RED));
         // Red has a archer at (2,0)
-        gameWorld.placeUnit(new Position(2, 0), new Archer(Player.RED));
+        gameWorld.placeUnit(new Position(2, 0), makeArcher(Player.RED));
         // Red has a settler at (4,3)
-        gameWorld.placeUnit(new Position(4, 3), new Settler(Player.RED));
+        gameWorld.placeUnit(new Position(4, 3), makeSettler(Player.RED));
 
         // Blue has a city at (4,1)
         gameWorld.placeCity(new Position(4, 1), new CityImpl(Player.BLUE));
         // Blue has a legion at (3,2)
-        gameWorld.placeUnit(new Position(3, 2), new Legion(Player.BLUE));
+        gameWorld.placeUnit(new Position(3, 2), makeLegion(Player.BLUE));
+    }
+    private UnitImpl makeArcher(Player owner) {
+        return unitFactory.makeUnit(GameConstants.ARCHER, owner);
+    }
+    private UnitImpl makeSettler(Player owner) {
+        return unitFactory.makeUnit(GameConstants.SETTLER, owner);
+    }
+    private UnitImpl makeLegion(Player owner) {
+        return unitFactory.makeUnit(GameConstants.LEGION, owner);
     }
     private void setupTiles() {
         // Default is plains.
@@ -64,16 +79,25 @@ public class BaseGame implements Game {
         // Mountain at 2,2
         gameWorld.placeTile(new Position(2, 2), new TileConstant(new Position(2, 2), GameConstants.MOUNTAINS));
     }
-    public Tile getTileAt(Position p) {
-        return gameWorld.getTile(p);
+    public Tile getTileAt(Position position) {
+        return gameWorld.getTile(position);
     }
 
-    public UnitImpl getUnitAt(Position p) {
-        return gameWorld.getUnit(p);
+    public UnitImpl getUnitAt(Position position) {
+        return gameWorld.getUnit(position);
+    }
+    public void removeUnitAt(Position position) {
+        gameWorld.removeUnit(position);
+    }
+    public void placeUnitAt(Position position, UnitImpl unit) {
+        gameWorld.placeUnit(position, unit);
     }
 
-    public CityImpl getCityAt(Position p) {
-        return gameWorld.getCity(p);
+    public CityImpl getCityAt(Position position) {
+        return gameWorld.getCity(position);
+    }
+    public void placeCityAt(Position position, CityImpl city) {
+        gameWorld.placeCity(position, city);
     }
 
     public Player getPlayerInTurn() {
@@ -81,7 +105,7 @@ public class BaseGame implements Game {
     }
 
     public Player getWinner() {
-        return this.winnerStrategy.getWinner(this);
+        return this.getWinner.getWinner(this);
     }
 
     public int getAge() {
@@ -114,7 +138,7 @@ public class BaseGame implements Game {
         if (unitAtTarget != null ) {
             if (unitAtTarget.getOwner() != unit.getOwner()) {
                 // Attacking unit always win in AlphaCiv.
-                gameWorld.removeUnit(to);
+                removeUnitAt(to);
             }
             else /* if (unitAtTarget.getOwner() == unit.getOwner())*/ {
                 return false;
@@ -128,8 +152,8 @@ public class BaseGame implements Game {
         movedUnits.add(unit);
 
         // Moves the unit.
-        gameWorld.removeUnit(from);
-        gameWorld.placeUnit(to, unit);
+        removeUnitAt(from);
+        placeUnitAt(to, unit);
         return true;
 
     }
@@ -153,7 +177,7 @@ public class BaseGame implements Game {
     }
     private void endOfRound() {
         // Aging the world.
-        this.age = agingStrategy.getNewAge(this);
+        this.age = newAgeCalculator.getNewAge(this);
 
         // Making the Cities produce something and make the units they can.
         for (Map.Entry<Position, CityImpl> cityEntry : gameWorld.getCityEntrySet()) {
@@ -194,8 +218,65 @@ public class BaseGame implements Game {
     }
 
     public void changeProductionInCityAt(Position p, String unitType) {
+        City city = gameWorld.getCity(p);
+        city.setProduction(unitType);
     }
 
     public void performUnitActionAt(Position p) {
+        // First see if its the right players turn.
+        UnitImpl unit = getUnitAt(p);
+        if (unit != null && unit.getOwner() != getPlayerInTurn()){
+            return;
+        }
+        unitAction.performAction(this, p);
+    }
+
+    // Holds the default strategies for the game.
+    public static final class DefaultStrategies {
+        public static NewAgeCalculator getAgingStrategy() {
+            return new NewAgeCalculator() {
+                public int getNewAge(BaseGame game) {
+                    return game.getAge() + 100;
+                }
+            };
+        }
+        public static GetWinner getWinnerStrategy() {
+            return new GetWinner() {
+                public Player getWinner(BaseGame game) {
+                    if (game.getAge() >= -3000) {
+                        return Player.RED;
+                    }
+                    else {
+                        return null;
+                    }
+                }
+            };
+        }
+        public static UnitAction getUnitActionStrategy() {
+            return new UnitAction() {
+                public void performAction(BaseGame game, Position position) {
+                    // Empty pr. design.
+                }
+            };
+        }
+
+        public static UnitFactory getUnitFactoryStrategy() {
+            return new UnitFactory() {
+                public UnitImpl makeUnit(String typeString, Player owner) {
+                    if (GameConstants.ARCHER.equals(typeString)) {
+                        return new Archer(owner);
+                    }
+                    else if (GameConstants.SETTLER.equals(typeString)) {
+                        return new Settler(owner);
+                    }
+                    else if (GameConstants.LEGION.equals(typeString)) {
+                        return new Legion(owner);
+                    }
+                    else {
+                        throw new RuntimeException("Unrecognized unit type: " + typeString);
+                    }
+                }
+            };
+        }
     }
 }

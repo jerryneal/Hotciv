@@ -2,10 +2,8 @@ package hotciv.variants;
 
 import hotciv.common.BaseGame;
 import hotciv.common.GameBuilder;
-import hotciv.common.strategy.AgingStrategy;
-import hotciv.common.strategy.GetWinnerStrategy;
+import hotciv.common.strategy.NewAgeCalculator;
 import hotciv.framework.Game;
-import hotciv.framework.Player;
 
 /**
  * @author: Erik
@@ -16,7 +14,7 @@ public class BetaCiv {
 
     }
     public static Game getGame() {
-        return new GameBuilder().setAgingStrategy(new AgingStrategy() {
+        return new GameBuilder().setAgingStrategy(new NewAgeCalculator() {
             @Override
             public int getNewAge(BaseGame game) {
                 int age = game.getAge();

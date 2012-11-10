@@ -15,7 +15,7 @@ public class Settler extends UnitImpl {
 	
 	@Override
 	public int getDefensiveStrength() {
-		return 0;
+		return 3;
 	}
 
 	@Override

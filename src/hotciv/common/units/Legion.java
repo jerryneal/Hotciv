@@ -15,12 +15,12 @@ public class Legion extends UnitImpl {
 	
 	@Override
 	public int getDefensiveStrength() {
-		return 0;
+		return 2;
 	}
 
 	@Override
 	public int getAttackingStrength() {
-		return 0;
+		return 4;
 	}
 
 }
