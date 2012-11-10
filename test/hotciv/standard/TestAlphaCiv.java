@@ -3,6 +3,9 @@ package hotciv.standard;
 import hotciv.variants.AlphaCiv;
 import hotciv.framework.*;
 
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.junit.*;
 import static org.junit.Assert.*;
 
@@ -349,13 +352,16 @@ public class TestAlphaCiv {
         goToNextRound();
         assertEquals("At this point there should be a settler at north west of the city",
                 GameConstants.SETTLER, game.getUnitAt(redCityPosition.getNorthWest()).getTypeString());
+        goToNextRound(5);
+        assertEquals("At this point there should be a settler 1 north and 2 east of the city",
+                GameConstants.SETTLER, game.getUnitAt(redCityPosition.getNorthEast().getEast()).getTypeString());
     }
     @Test
     public void citiesCanProduceArchers() {
         City city = game.getCityAt(redCityPosition);
-        city.setProduction(GameConstants.ARCHER);
         assertNull(game.getUnitAt(redCityPosition));
         assertEquals(Player.RED, city.getOwner());
+        game.changeProductionInCityAt(redCityPosition, GameConstants.ARCHER);
         goToNextRound(5);
         assertEquals("After 5 rounds there should be a ARCHER on the city, because we specified it. ",
                 GameConstants.ARCHER, game.getUnitAt(redCityPosition).getTypeString());
@@ -364,8 +370,8 @@ public class TestAlphaCiv {
     @Test
     public void citiesCanProduceLegions() {
         City city = game.getCityAt(redCityPosition);
-        city.setProduction(GameConstants.LEGION);
         assertNull(game.getUnitAt(redCityPosition));
+        game.changeProductionInCityAt(redCityPosition, GameConstants.LEGION);
         assertEquals(Player.RED, city.getOwner());
         goToNextRound(5);
         assertEquals("After 5 rounds there should be a LEGION on the city, because we specified it. ",

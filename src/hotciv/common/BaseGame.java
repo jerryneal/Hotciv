@@ -57,13 +57,13 @@ public final class BaseGame implements Game {
         gameWorld.placeUnit(new Position(3, 2), makeLegion(Player.BLUE));
     }
     private UnitImpl makeArcher(Player owner) {
-        return unitFactory.makeUnit(GameConstants.ARCHER, owner);
+        return unitFactory.makeUnit(this, GameConstants.ARCHER, owner);
     }
     private UnitImpl makeSettler(Player owner) {
-        return unitFactory.makeUnit(GameConstants.SETTLER, owner);
+        return unitFactory.makeUnit(this, GameConstants.SETTLER, owner);
     }
     private UnitImpl makeLegion(Player owner) {
-        return unitFactory.makeUnit(GameConstants.LEGION, owner);
+        return unitFactory.makeUnit(this, GameConstants.LEGION, owner);
     }
     private void setupTiles() {
         // Default is plains.
@@ -193,19 +193,19 @@ public final class BaseGame implements Game {
             if (produces.equals(GameConstants.SETTLER)) {
                 if (productionAmount >= 30) {
                     city.decreaseProductionAmount(30);
-                    unit = new Settler(city.getOwner());
+                    unit = unitFactory.makeUnit(this, GameConstants.SETTLER, city.getOwner());
                 }
             }
             else if (produces.equals(GameConstants.ARCHER)) {
                 if (productionAmount >= 10) {
                     city.decreaseProductionAmount(10);
-                    unit = new Archer(city.getOwner());
+                    unit = unitFactory.makeUnit(this, GameConstants.ARCHER, city.getOwner());
                 }
             }
             else if (produces.equals(GameConstants.LEGION)) {
                 if (productionAmount >= 15) {
                     city.decreaseProductionAmount(15);
-                    unit = new Legion(city.getOwner());
+                    unit = unitFactory.makeUnit(this, GameConstants.LEGION, city.getOwner());
                 }
             }
             if (unit != null) {
@@ -233,14 +233,14 @@ public final class BaseGame implements Game {
 
     // Holds the default strategies for the game.
     public static final class DefaultStrategies {
-        public static NewAgeCalculator getAgingStrategy() {
+        public static NewAgeCalculator getNewAgeCalculator() {
             return new NewAgeCalculator() {
                 public int getNewAge(BaseGame game) {
                     return game.getAge() + 100;
                 }
             };
         }
-        public static GetWinner getWinnerStrategy() {
+        public static GetWinner getWinner() {
             return new GetWinner() {
                 public Player getWinner(BaseGame game) {
                     if (game.getAge() >= -3000) {
@@ -252,7 +252,7 @@ public final class BaseGame implements Game {
                 }
             };
         }
-        public static UnitAction getUnitActionStrategy() {
+        public static UnitAction getUnitAction() {
             return new UnitAction() {
                 public void performAction(BaseGame game, Position position) {
                     // Empty pr. design.
@@ -260,9 +260,9 @@ public final class BaseGame implements Game {
             };
         }
 
-        public static UnitFactory getUnitFactoryStrategy() {
+        public static UnitFactory getUnitFactory() {
             return new UnitFactory() {
-                public UnitImpl makeUnit(String typeString, Player owner) {
+                public UnitImpl makeUnit(BaseGame game, String typeString, Player owner) {
                     if (GameConstants.ARCHER.equals(typeString)) {
                         return new Archer(owner);
                     }

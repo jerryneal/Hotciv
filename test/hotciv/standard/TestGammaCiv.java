@@ -107,4 +107,77 @@ public class TestGammaCiv {
         goToNextRound();
         assertTrue(game.moveUnit(redArcherPosition, redArcherPosition.getEast()));
     }
+
+    @Test
+    public void archerActionOnProducedArcher() {
+        City city = game.getCityAt(redCityPosition);
+        assertNull(game.getUnitAt(redCityPosition));
+        assertEquals(Player.RED, city.getOwner());
+        game.changeProductionInCityAt(redCityPosition, GameConstants.ARCHER);
+        goToNextRound(5);
+        assertEquals("After 5 rounds there should be a ARCHER on the city, because we specified it. ",
+                GameConstants.ARCHER, game.getUnitAt(redCityPosition).getTypeString());
+
+        Position redArcherPosition = redCityPosition;
+        Unit archer = game.getUnitAt(redArcherPosition);
+        assertNotNull(archer);
+        assertEquals(Player.RED, archer.getOwner());
+        int beforeDefensive = archer.getDefensiveStrength();
+
+        // Making the action.
+        game.performUnitActionAt(redArcherPosition);
+
+        assertEquals(beforeDefensive * 2, game.getUnitAt(redArcherPosition).getDefensiveStrength());
+        assertFalse(game.moveUnit(redArcherPosition, redArcherPosition.getEast()));
+    }
+
+    @Test
+    public void settlerActionOnProducedSettler()  {
+        City city = game.getCityAt(redCityPosition);
+        assertNull(game.getUnitAt(redCityPosition));
+        assertEquals(Player.RED, city.getOwner());
+        goToNextRound(5);
+        assertEquals("After 5 rounds there should be a SETTLER on the city",
+                GameConstants.SETTLER, game.getUnitAt(redCityPosition).getTypeString());
+
+        game.moveUnit(redCityPosition, redCityPosition.getEast());
+        Position redSettlerPosition = redCityPosition.getEast();
+
+        Unit settler = game.getUnitAt(redSettlerPosition);
+        assertNotNull(settler);
+        assertEquals(Player.RED, settler.getOwner());
+        assertNull(game.getCityAt(redSettlerPosition));
+
+        // Making the action
+        game.performUnitActionAt(redSettlerPosition);
+
+        assertNull(game.getUnitAt(redSettlerPosition));
+        City settlerCity = game.getCityAt(redSettlerPosition);
+        assertNotNull(settlerCity);
+        assertEquals(Player.RED, settlerCity.getOwner());
+
+    }
+
+    @Test
+    public void settlerCannotBuildCityOnACity() {
+        City city = game.getCityAt(redCityPosition);
+        assertNull(game.getUnitAt(redCityPosition));
+        assertEquals(Player.RED, city.getOwner());
+        goToNextRound(5);
+        assertEquals("After 5 rounds there should be a SETTLER on the city",
+                GameConstants.SETTLER, game.getUnitAt(redCityPosition).getTypeString());
+
+        Position redSettlerPosition = redCityPosition;
+
+        Unit settler = game.getUnitAt(redSettlerPosition);
+        assertNotNull(settler);
+        assertEquals(Player.RED, settler.getOwner());
+
+        // Trying to make a city, where the already is a city. Resulting in the settler staying put.
+        game.performUnitActionAt(redSettlerPosition);
+
+        settler = game.getUnitAt(redSettlerPosition);
+        assertNotNull(settler);
+        assertEquals(Player.RED, settler.getOwner());
+    }
 }

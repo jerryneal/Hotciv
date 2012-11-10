@@ -39,16 +39,16 @@ public class GameBuilder {
     public BaseGame build() {
         // Inserting defaults.
         if (this.getWinner == null) {
-            this.getWinner = BaseGame.DefaultStrategies.getWinnerStrategy();
+            this.getWinner = BaseGame.DefaultStrategies.getWinner();
         }
         if (this.newAgeCalculator == null) {
-            this.newAgeCalculator = BaseGame.DefaultStrategies.getAgingStrategy();
+            this.newAgeCalculator = BaseGame.DefaultStrategies.getNewAgeCalculator();
         }
         if (this.unitAction == null) {
-            this.unitAction = BaseGame.DefaultStrategies.getUnitActionStrategy();
+            this.unitAction = BaseGame.DefaultStrategies.getUnitAction();
         }
         if (this.unitFactory == null) {
-            this.unitFactory = BaseGame.DefaultStrategies.getUnitFactoryStrategy();
+            this.unitFactory = BaseGame.DefaultStrategies.getUnitFactory();
         }
 
         return new BaseGame(getWinner, newAgeCalculator, unitAction, unitFactory);

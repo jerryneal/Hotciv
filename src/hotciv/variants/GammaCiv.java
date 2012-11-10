@@ -22,12 +22,12 @@ public class GammaCiv {
 
     public static Game getGame() {
         return new GameBuilder().setUnitFactoryStrategy(new UnitFactory() {
-            public UnitImpl makeUnit(String typeString, Player owner) {
+            public UnitImpl makeUnit(BaseGame game, String typeString, Player owner) {
                 if (GameConstants.ARCHER.equals(typeString)) {
                     return new GammaArcher(owner);
                 } else {
                     // Return default implementation.
-                    return BaseGame.DefaultStrategies.getUnitFactoryStrategy().makeUnit(typeString, owner);
+                    return BaseGame.DefaultStrategies.getUnitFactory().makeUnit(game, typeString, owner);
                 }
             }
         })
@@ -44,6 +44,9 @@ public class GammaCiv {
                         throw new RuntimeException("I expect an archer to be instanceof GammaArcher, since i specified it with the unitfactory. ");
                     }
                 } else if (GameConstants.SETTLER.equals(typeString)) {
+                    // Move is invalid if there is already a city.
+                    if (game.getCityAt(position) != null)
+                        return;
                     // Remove the settler.
                     Unit settler = game.getUnitAt(position);
                     Player owner = settler.getOwner();

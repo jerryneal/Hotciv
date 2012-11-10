@@ -51,7 +51,13 @@ public class GameWorld<UnitImpl extends Unit, TileImpl extends Tile, CityImpl ex
      * @return Whether or not a unit can be placed on the without conflicts.
      */
     private boolean canPlaceUnitAt(Position position) {
-        // First seeing if a unit conflicts.
+        // First see if its a valid position.
+        if (position.getColumn() < 0 || position.getRow() < 0 || position.getColumn() > 15 || position.getRow() > 15) {
+            return false;
+        }
+
+
+        // Checking for a unit conflicts.
         if (unitMap.get(position) != null)
         {
             return false;

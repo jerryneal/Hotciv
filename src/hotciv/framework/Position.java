@@ -1,13 +1,14 @@
 package hotciv.framework;
 
-import java.util.Arrays;
 import java.util.Iterator;
+
 
 /**
  * Position on the world map.
  * <p/>
  * Responsibilities:
  * 1) Know a specific location (row,column).
+ * 2) Calculate what positions are around the position.
  * <p/>
  * This source code is from the book
  * "Flexible, Reliable Software:
@@ -108,11 +109,84 @@ public class Position {
     public Position getNorthWest() {
         return new Position(this.r - 1, this.c - 1);
     }
+
+    /**
+     * This method returns an iterable that iterates around the position, going clockwise in increasing distances.
+     * Not that it does not return the current position (this), the first position the iterator returns is the position just north of "this".
+     * This iterable doesn't care if the positions are out of bounds, it just returns the positions going clockwise.
+     * The hasNext method of the iterator always return true, so there is an unlimited number of Positions in the iterator.
+     * @return the iterable.
+     */
     public Iterable<Position> getAroundIterable() {
-        // For now really simple
-        // TODO: More positions.
-        return Arrays.asList(getNorth(), getNorthEast(), getEast(), getSouthEast(), getSouth(), getSouthWest(), getWest(), getNorthWest());
+        final Position center = this;
+        return new Iterable<Position>() {
+            @Override
+            public Iterator<Position> iterator() {
+                return new Iterator<Position>() {
+                    Position position = center.getNorth();
+                    Position startNextDistanceIterationPosition = position;
+                    int currentDistance = 1;
+                    Direction direction = Direction.RIGHT;
+
+                    @Override
+                    public boolean hasNext() {
+                        return true;
+                    }
+
+                    @Override
+                    public Position next() {
+                        Position result = position;
+
+                        Position next = getNextInDirection(direction, position);
+                        if (getDistance(center, next) > currentDistance) {
+                            direction = getNextClockwiseDirection(direction);
+                            next = getNextInDirection(direction, position);
+                        }
+                        if (next.equals(startNextDistanceIterationPosition)) {
+                            next = next.getNorth();
+                            startNextDistanceIterationPosition = next;
+                            currentDistance += 1;
+                        }
+                        position = next;
+
+                        return result;
+                    }
+
+                    private Position getNextInDirection(Direction direction, Position position) {
+                        switch (direction) {
+                            case UP: return position.getNorth();
+                            case RIGHT: return position.getEast();
+                            case DOWN: return position.getSouth();
+                            case LEFT: return position.getWest();
+                            default:
+                                throw new RuntimeException("Unrecognized direction: " + direction);
+                        }
+                    }
+
+                    private Direction getNextClockwiseDirection(Direction direction) {
+                        switch (direction) {
+                            case UP: return Direction.RIGHT;
+                            case RIGHT: return Direction.DOWN;
+                            case DOWN: return Direction.LEFT;
+                            case LEFT: return Direction.UP;
+                            default:
+                                throw new RuntimeException("Unrecognized direction: " + direction);
+                        }
+                    }
+
+                    @Override
+                    public void remove() {
+                        throw new UnsupportedOperationException("Remove is not supported");
+                    }
+
+                };
+            }
+        };
     }
-
-
+    private enum Direction {
+        UP,
+        RIGHT,
+        DOWN,
+        LEFT
+    }
 }
