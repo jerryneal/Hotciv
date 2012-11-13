@@ -4,6 +4,11 @@ import hotciv.framework.*;
 import hotciv.common.UnitImpl;
 
 public class Legion extends UnitImpl {
+    /**
+     * The constructor for a legion.
+     * This constructor is only to be called through a UnitFactory!
+     * @param owner The owner of the archer.
+     */
 	public Legion(Player owner) {
 		super(1, owner);
 	}

@@ -1,10 +1,6 @@
 package hotciv.variants;
 
-import hotciv.common.CityImpl;
-import hotciv.common.GameBuilder;
-import hotciv.common.GameWorld;
-import hotciv.common.TileConstant;
-import hotciv.common.UnitImpl;
+import hotciv.common.*;
 import hotciv.common.strategy.*;
 import hotciv.framework.Game;
 import hotciv.framework.GameConstants;
@@ -24,16 +20,17 @@ public class DeltaCiv {
     public static Game getGame() {
         return new GameBuilder().setWorldLayoutStrategy(new WorldLayoutStrategy() {
             @Override
-            public void createWorldLayout(GameWorld<UnitImpl, TileConstant, CityImpl> gameWorld) {
+            public void createWorldLayout(GameWorld<UnitImpl, TileConstant, CityImpl> gameWorld, GameObjectFactory factory) {
             	// first and foremost red city at (8, 12), blue city at (4, 5)
-            	gameWorld.placeCity(new Position(8, 12), new CityImpl(Player.RED));
-            	gameWorld.placeCity(new Position(4, 5), new CityImpl(Player.BLUE));
+            	gameWorld.placeCity(new Position(8, 12), factory.makeCity(Player.RED));
+            	gameWorld.placeCity(new Position(4, 5), factory.makeCity(Player.BLUE));
             	
             	
             	// Now for terrain: lots of plains
             	for (int i = 0; i < 16; i++) {
                     for (int j = 0; j < 16; j++) {
-                        gameWorld.placeTile(new Position(i, j), new TileConstant(new Position(i, j), GameConstants.PLAINS));
+                        Position position = new Position(i, j);
+                        gameWorld.placeTile(position, factory.makeTile(position, GameConstants.PLAINS));
                     }
                 }
             	
@@ -177,16 +174,16 @@ public class DeltaCiv {
             	
             	// insert all terrain tiles
             	for (Position oceanPosition : oceans) {
-            		gameWorld.placeTile(oceanPosition, new TileConstant(oceanPosition, GameConstants.OCEANS));
+            		gameWorld.placeTile(oceanPosition, factory.makeTile(oceanPosition, GameConstants.OCEANS));
             	}
             	for (Position forestPosition : forests) {
-            		gameWorld.placeTile(forestPosition, new TileConstant(forestPosition, GameConstants.FOREST));
+            		gameWorld.placeTile(forestPosition, factory.makeTile(forestPosition, GameConstants.FOREST));
             	}
             	for (Position mountainPosition : mountains) {
-            		gameWorld.placeTile(mountainPosition, new TileConstant(mountainPosition, GameConstants.MOUNTAINS));
+            		gameWorld.placeTile(mountainPosition, factory.makeTile(mountainPosition, GameConstants.MOUNTAINS));
             	}
             	for (Position hillPosition : hills) {
-            		gameWorld.placeTile(hillPosition, new TileConstant(hillPosition, GameConstants.HILLS));
+            		gameWorld.placeTile(hillPosition, factory.makeTile(hillPosition, GameConstants.HILLS));
             	}
             }
         }).build();

@@ -71,4 +71,31 @@ public class TestBetaCiv {
         assertEquals(1982, game.getAge());
 
     }
+
+    @Test
+    public void winsAfterConqueringAllCitiesRedConquers() {
+        assertNull(game.getWinner());
+        goToNextRound();
+        assertNull(game.getWinner());
+        // Now red conquers the blue city.
+        game.moveUnit(redArcherPosition, redArcherPosition.getSouthEast());
+        goToNextRound();
+        // Doesn't have it yet.
+        assertNull(game.getWinner());
+        // In this line, red wins.
+        game.moveUnit(redArcherPosition.getSouthEast(), redArcherPosition.getSouthEast().getSouth());
+        assertEquals(Player.RED, game.getWinner());
+    }
+    @Test
+    public void winsAfterConqueringAllCitiesBlueConquers() {
+        game.endOfTurn();
+        assertNull(game.getWinner());
+        game.moveUnit(blueLegionPosition, blueLegionPosition.getNorthWest());
+        goToNextRound();
+        game.endOfTurn();
+        assertNull(game.getWinner());
+        // Here blue conquers the red city.
+        game.moveUnit(blueLegionPosition.getNorthWest(), blueLegionPosition.getNorthWest().getNorth());
+        assertEquals(Player.BLUE, game.getWinner());
+    }
 }

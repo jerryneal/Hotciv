@@ -42,6 +42,10 @@ public class GameBuilder {
         return this;
     }
 
+    /**
+     * Builds the game based on the strategies set previously. It inserts defaults from BaseGame.DefaultStrategies if no other strategy was set.
+     * @return The new game instance.
+     */
     public BaseGame build() {
         // Inserting defaults.
         if (this.getWinner == null) {

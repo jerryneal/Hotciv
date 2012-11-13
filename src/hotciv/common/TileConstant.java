@@ -4,8 +4,8 @@ import hotciv.framework.Position;
 import hotciv.framework.Tile;
 
 public class TileConstant implements Tile{
-	Position position;
-	String type;
+	private Position position;
+	private String type;
 	public TileConstant(Position position, String type) {
 		this.position = position;
 		this.type = type;

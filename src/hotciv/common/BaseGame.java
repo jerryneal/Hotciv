@@ -19,7 +19,7 @@ import java.util.Set;
  * @author : Erik
  * Date: 09-11-12, 11:22
  */
-public final class BaseGame implements Game {
+public class BaseGame implements Game {
     private GameWorld<UnitImpl, TileConstant, CityImpl> gameWorld = new GameWorld<UnitImpl, TileConstant, CityImpl>();
 
     private Player playerTurn;
@@ -35,6 +35,13 @@ public final class BaseGame implements Game {
     private UnitFactory unitFactory;
     private WorldLayoutStrategy worldLayoutStrategy;
 
+    private GameObjectFactory factory;
+
+    /**
+     * The default and only constructor for BaseGame.
+     * The constructor is protected since only the GameBuilder is supposed to call it.
+     * All the parameters are the different strategies used by this BaseGame.
+     */
     protected BaseGame(GetWinner getWinner, NewAgeCalculator newAgeCalculator, UnitAction unitAction, UnitFactory unitFactory, WorldLayoutStrategy worldLayoutStrategy) {
         // First strategies
         this.getWinner = getWinner;
@@ -43,28 +50,16 @@ public final class BaseGame implements Game {
         this.unitFactory = unitFactory;
         this.worldLayoutStrategy = worldLayoutStrategy;
 
-        setupTiles();
+        // Creating the factory.
+        this.factory = new GameObjectFactory(this, unitFactory);
+
         // Player starts
         playerTurn = Player.RED;
-        
-        // Red has a archer at (2,0)
-        gameWorld.placeUnit(new Position(2, 0), makeArcher(Player.RED));
-        // Red has a settler at (4,3)
-        gameWorld.placeUnit(new Position(4, 3), makeSettler(Player.RED));
-        // Blue has a legion at (3,2)
-        gameWorld.placeUnit(new Position(3, 2), makeLegion(Player.BLUE));
+
+        createWorld();
     }
-    private UnitImpl makeArcher(Player owner) {
-        return unitFactory.makeUnit(this, GameConstants.ARCHER, owner);
-    }
-    private UnitImpl makeSettler(Player owner) {
-        return unitFactory.makeUnit(this, GameConstants.SETTLER, owner);
-    }
-    private UnitImpl makeLegion(Player owner) {
-        return unitFactory.makeUnit(this, GameConstants.LEGION, owner);
-    }
-    private void setupTiles() {
-        worldLayoutStrategy.createWorldLayout(gameWorld);
+    private void createWorld() {
+        worldLayoutStrategy.createWorldLayout(gameWorld, factory);
     }
     public Tile getTileAt(Position position) {
         return gameWorld.getTile(position);
@@ -73,18 +68,17 @@ public final class BaseGame implements Game {
     public UnitImpl getUnitAt(Position position) {
         return gameWorld.getUnit(position);
     }
-    public void removeUnitAt(Position position) {
-        gameWorld.removeUnit(position);
-    }
-    public void placeUnitAt(Position position, UnitImpl unit) {
-        gameWorld.placeUnit(position, unit);
-    }
 
     public CityImpl getCityAt(Position position) {
         return gameWorld.getCity(position);
     }
-    public void placeCityAt(Position position, CityImpl city) {
-        gameWorld.placeCity(position, city);
+
+    public GameWorld<UnitImpl, TileConstant, CityImpl> getGameWorld() {
+        return gameWorld;
+    }
+
+    public GameObjectFactory getFactory () {
+        return this.factory;
     }
 
     public Player getPlayerInTurn() {
@@ -125,7 +119,7 @@ public final class BaseGame implements Game {
         if (unitAtTarget != null ) {
             if (unitAtTarget.getOwner() != unit.getOwner()) {
                 // Attacking unit always win in AlphaCiv.
-                removeUnitAt(to);
+                gameWorld.removeUnit(to);
             }
             else /* if (unitAtTarget.getOwner() == unit.getOwner())*/ {
                 return false;
@@ -139,8 +133,8 @@ public final class BaseGame implements Game {
         movedUnits.add(unit);
 
         // Moves the unit.
-        removeUnitAt(from);
-        placeUnitAt(to, unit);
+        gameWorld.removeUnit(from);
+        gameWorld.placeUnit(to, unit);
         return true;
 
     }
@@ -219,7 +213,7 @@ public final class BaseGame implements Game {
     }
 
     // Holds the default strategies for the game.
-    public static final class DefaultStrategies {
+    public static class DefaultStrategies {
         public static NewAgeCalculator getNewAgeCalculator() {
             return new NewAgeCalculator() {
                 public int getNewAge(BaseGame game) {
@@ -268,23 +262,31 @@ public final class BaseGame implements Game {
         
         public static WorldLayoutStrategy getWorldLayoutStrategy() {
         	return new WorldLayoutStrategy() {
-        		public void createWorldLayout(GameWorld<UnitImpl, TileConstant, CityImpl> gameWorld) {
+        		public void createWorldLayout(GameWorld<UnitImpl, TileConstant, CityImpl> gameWorld, GameObjectFactory factory) {
         			// Default is plains.
         	        for (int i = 0; i < 16; i++) {
         	            for (int j = 0; j < 16; j++) {
-        	                gameWorld.placeTile(new Position(i, j), new TileConstant(new Position(i, j), GameConstants.PLAINS));
+                            Position position = new Position(i, j);
+                            gameWorld.placeTile(position, factory.makeTile(position, GameConstants.PLAINS));
         	            }
         	        }
         	        // Ocean at 1,0
-        	        gameWorld.placeTile(new Position(1, 0), new TileConstant(new Position(1, 0), GameConstants.OCEANS));
+        	        gameWorld.placeTile(new Position(1, 0), factory.makeTile(new Position(1, 0), GameConstants.OCEANS));
         	        // Hills at 0,1
-        	        gameWorld.placeTile(new Position(0, 1), new TileConstant(new Position(1, 0), GameConstants.HILLS));
+        	        gameWorld.placeTile(new Position(0, 1), factory.makeTile(new Position(1, 0), GameConstants.HILLS));
         	        // Mountain at 2,2
-        	        gameWorld.placeTile(new Position(2, 2), new TileConstant(new Position(2, 2), GameConstants.MOUNTAINS));
+        	        gameWorld.placeTile(new Position(2, 2), factory.makeTile(new Position(2, 2), GameConstants.MOUNTAINS));
         	        // Red has a city at (1,1)
-        	        gameWorld.placeCity(new Position(1, 1), new CityImpl(Player.RED));
+        	        gameWorld.placeCity(new Position(1, 1), factory.makeCity(Player.RED));
         	        // Blue has a city at (4,1)
-        	        gameWorld.placeCity(new Position(4, 1), new CityImpl(Player.BLUE));
+        	        gameWorld.placeCity(new Position(4, 1), factory.makeCity(Player.BLUE));
+
+                    // Red has a archer at (2,0)
+                    gameWorld.placeUnit(new Position(2, 0), factory.makeArcher(Player.RED));
+                    // Red has a settler at (4,3)
+                    gameWorld.placeUnit(new Position(4, 3), factory.makeSettler(Player.RED));
+                    // Blue has a legion at (3,2)
+                    gameWorld.placeUnit(new Position(3, 2), factory.makeLegion(Player.BLUE));
         		}
         	};
         }

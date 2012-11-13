@@ -1,9 +1,6 @@
 package hotciv.variants;
 
-import hotciv.common.BaseGame;
-import hotciv.common.CityImpl;
-import hotciv.common.GameBuilder;
-import hotciv.common.UnitImpl;
+import hotciv.common.*;
 import hotciv.common.strategy.UnitAction;
 import hotciv.common.strategy.UnitFactory;
 import hotciv.common.units.Archer;
@@ -21,7 +18,8 @@ public class GammaCiv {
     }
 
     public static Game getGame() {
-        return new GameBuilder().setUnitFactoryStrategy(new UnitFactory() {
+        return new GameBuilder()
+        .setUnitFactoryStrategy(new UnitFactory() {
             public UnitImpl makeUnit(BaseGame game, String typeString, Player owner) {
                 if (GameConstants.ARCHER.equals(typeString)) {
                     return new GammaArcher(owner);
@@ -34,6 +32,8 @@ public class GammaCiv {
         .setUnitActionStrategy(new UnitAction() {
             @Override
             public void performAction(BaseGame game, Position position) {
+                GameWorld<UnitImpl, TileConstant, CityImpl> gameWorld = game.getGameWorld();
+                GameObjectFactory factory = game.getFactory();
                 Unit unit = game.getUnitAt(position);
                 String typeString = unit.getTypeString();
                 if (GameConstants.ARCHER.equals(typeString)) {
@@ -50,10 +50,10 @@ public class GammaCiv {
                     // Remove the settler.
                     Unit settler = game.getUnitAt(position);
                     Player owner = settler.getOwner();
-                    game.removeUnitAt(position);
+                    gameWorld.removeUnit(position);
 
                     // Place a city with same owner.
-                    game.placeCityAt(position, new CityImpl(owner));
+                    gameWorld.placeCity(position, factory.makeCity(owner));
                 } else {
                     // Do nothing!
                 }

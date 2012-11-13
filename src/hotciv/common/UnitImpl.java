@@ -4,14 +4,11 @@ import hotciv.framework.Player;
 import hotciv.framework.Unit;
 
 public abstract class UnitImpl implements Unit {
-	int initialMoveCount;
-	int currentMoveCount;
+	int moveCount;
 	
 	Player owner;
 	public UnitImpl(int initialMoveCount, Player owner) {
-		this.initialMoveCount = initialMoveCount;
-		this.currentMoveCount = initialMoveCount;
-		
+		this.moveCount = initialMoveCount;
 		this.owner = owner;
 	}
 	@Override
@@ -21,7 +18,7 @@ public abstract class UnitImpl implements Unit {
 
 	@Override
 	public int getMoveCount() {
-		return currentMoveCount;
+		return moveCount;
 	}
 
 }
