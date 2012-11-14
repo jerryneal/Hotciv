@@ -9,8 +9,10 @@ public interface WorldLayoutStrategy {
     /**
      * Creates the gameworld by putting tiles, cities and units where they belong.
      * The GameObjectFactory must always be used to create the objects that are out on the GameWorld.
-     * @param gameWorld The world to put stuff on.
-     * @param factory The factory to create stuff from.
+     *
+     * Remember to get the relevant factory from the BaseGame if you want to create units.
+     *
+     * @param game The game to put stuff in. Get the world using game.getGameWorld.
      */
-	public void createWorldLayout(GameWorld<UnitImpl, CityImpl> gameWorld, GameObjectFactory factory);
+	public void createWorldLayout(BaseGame game);
 }

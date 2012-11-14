@@ -20,12 +20,14 @@ public class DeltaCiv {
     public static Game getGame() {
         return new GameBuilder().setWorldLayoutStrategy(new WorldLayoutStrategy() {
             @Override
-            public void createWorldLayout(GameWorld<UnitImpl, CityImpl> gameWorld, GameObjectFactory factory) {
-                // first and foremost red city at (8, 12), blue city at (4, 5)
-                gameWorld.placeCity(new Position(8, 12), factory.makeCity(Player.RED));
-                gameWorld.placeCity(new Position(4, 5), factory.makeCity(Player.BLUE));
+            public void createWorldLayout(BaseGame game) {
+                GameWorld<UnitImpl, CityImpl> gameWorld = game.getGameWorld();
 
-                String[] worldLayout = new String[] {
+                // first and foremost red city at (8, 12), blue city at (4, 5)
+                gameWorld.placeCity(new Position(8, 12), new CityImpl(Player.RED));
+                gameWorld.placeCity(new Position(4, 5), new CityImpl(Player.BLUE));
+
+                String[] worldLayout = new String[]{
                         "OOOPPMPPPPPOOOOO",
                         "OOPHHPPPPFFFPPOO",
                         "OPPPPPMPPPOOOPPO",
@@ -43,7 +45,7 @@ public class DeltaCiv {
                         "OOPPPHHPPOOOOOOO",
                         "OOOOOPPPPPPPPPOO"
                 };
-                gameWorld.populateWorld(worldLayout, factory);
+                gameWorld.populateWorld(worldLayout);
             }
         }).build();
     }

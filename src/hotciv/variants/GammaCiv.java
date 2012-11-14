@@ -33,7 +33,6 @@ public class GammaCiv {
             @Override
             public void performAction(BaseGame game, Position position) {
                 GameWorld<UnitImpl, CityImpl> gameWorld = game.getGameWorld();
-                GameObjectFactory factory = game.getFactory();
                 Unit unit = game.getUnitAt(position);
                 String typeString = unit.getTypeString();
                 if (GameConstants.ARCHER.equals(typeString)) {
@@ -53,7 +52,7 @@ public class GammaCiv {
                     gameWorld.removeUnit(position);
 
                     // Place a city with same owner.
-                    gameWorld.placeCity(position, factory.makeCity(owner));
+                    gameWorld.placeCity(position, new CityImpl(owner));
                 } else {
                     // Do nothing!
                 }

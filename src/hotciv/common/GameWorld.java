@@ -125,10 +125,10 @@ public class GameWorld<UnitImpl extends Unit, CityImpl extends City> {
      * Populates the GameWorld based on the strings given. In a string 1 character equals 1 tile.
      * The options for tiles are O (ocean), P (plains), M (mountain), F (forest), H (hills).
      * If a character in the string does not equal one of the above the method will throw an IllegalArgumentException.
+     *
      * @param worldLayout The layout described in a array of strings.
-     * @param factory The factory to produce the tiles from.
      */
-    public void populateWorld(String[] worldLayout, GameObjectFactory factory) {
+    public void populateWorld(String[] worldLayout) {
         for (int i = 0; i < worldLayout.length; i++) {
             String line = worldLayout[i].toUpperCase();
             for (int j = 0; j < worldLayout.length; j++) {

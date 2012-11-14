@@ -35,8 +35,6 @@ public class BaseGame implements Game {
     private UnitFactory unitFactory;
     private WorldLayoutStrategy worldLayoutStrategy;
 
-    private GameObjectFactory factory;
-
     /**
      * The default and only constructor for BaseGame.
      * The constructor is protected since only the GameBuilder is supposed to call it.
@@ -50,16 +48,13 @@ public class BaseGame implements Game {
         this.unitFactory = unitFactory;
         this.worldLayoutStrategy = worldLayoutStrategy;
 
-        // Creating the factory.
-        this.factory = new GameObjectFactory(this, unitFactory);
-
         // Player starts
         playerTurn = Player.RED;
 
         createWorld();
     }
     private void createWorld() {
-        worldLayoutStrategy.createWorldLayout(gameWorld, factory);
+        worldLayoutStrategy.createWorldLayout(this);
     }
     public Tile getTileAt(Position position) {
         return gameWorld.getTile(position);
@@ -75,10 +70,6 @@ public class BaseGame implements Game {
 
     public GameWorld<UnitImpl, CityImpl> getGameWorld() {
         return gameWorld;
-    }
-
-    public GameObjectFactory getFactory () {
-        return this.factory;
     }
 
     public Player getPlayerInTurn() {
@@ -212,6 +203,10 @@ public class BaseGame implements Game {
         unitAction.performAction(this, p);
     }
 
+    public UnitFactory getUnitFactory() {
+        return unitFactory;
+    }
+
     // Holds the default strategies for the game.
     public static class DefaultStrategies {
         public static NewAgeCalculator getNewAgeCalculator() {
@@ -262,7 +257,8 @@ public class BaseGame implements Game {
         
         public static WorldLayoutStrategy getWorldLayoutStrategy() {
         	return new WorldLayoutStrategy() {
-        		public void createWorldLayout(GameWorld<UnitImpl, CityImpl> gameWorld, GameObjectFactory factory) {
+        		public void createWorldLayout(BaseGame game) {
+                    GameWorld<UnitImpl, CityImpl> gameWorld = game.getGameWorld();
                     String[] worldLayout = new String[] {
                             "PHPPPPPPPPPPPPPP",
                             "OPPPPPPPPPPPPPPP",
@@ -281,19 +277,21 @@ public class BaseGame implements Game {
                             "PPPPPPPPPPPPPPPP",
                             "PPPPPPPPPPPPPPPP",
                     };
-                    gameWorld.populateWorld(worldLayout, factory);
+                    gameWorld.populateWorld(worldLayout);
 
                     // Red has a city at (1,1)
-                    gameWorld.placeCity(new Position(1, 1), factory.makeCity(Player.RED));
+                    gameWorld.placeCity(new Position(1, 1), new CityImpl(Player.RED));
                     // Blue has a city at (4,1)
-                    gameWorld.placeCity(new Position(4, 1), factory.makeCity(Player.BLUE));
+                    gameWorld.placeCity(new Position(4, 1), new CityImpl(Player.BLUE));
+
+                    UnitFactory unitFactory = game.getUnitFactory();
 
                     // Red has a archer at (2,0)
-                    gameWorld.placeUnit(new Position(2, 0), factory.makeArcher(Player.RED));
+                    gameWorld.placeUnit(new Position(2, 0), unitFactory.makeUnit(game, GameConstants.ARCHER, Player.RED));
                     // Red has a settler at (4,3)
-                    gameWorld.placeUnit(new Position(4, 3), factory.makeSettler(Player.RED));
+                    gameWorld.placeUnit(new Position(4, 3), unitFactory.makeUnit(game, GameConstants.SETTLER, Player.RED));
                     // Blue has a legion at (3,2)
-                    gameWorld.placeUnit(new Position(3, 2), factory.makeLegion(Player.BLUE));
+                    gameWorld.placeUnit(new Position(3, 2), unitFactory.makeUnit(game, GameConstants.LEGION, Player.BLUE));
         		}
         	};
         }
