@@ -3,10 +3,10 @@ package hotciv.common;
 import hotciv.framework.Position;
 import hotciv.framework.Tile;
 
-public class TileConstant implements Tile{
+public class StandardTile implements Tile{
 	private Position position;
 	private String type;
-	public TileConstant(Position position, String type) {
+	public StandardTile(Position position, String type) {
 		this.position = position;
 		this.type = type;
 	}

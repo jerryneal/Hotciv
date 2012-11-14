@@ -32,7 +32,7 @@ public class GammaCiv {
         .setUnitActionStrategy(new UnitAction() {
             @Override
             public void performAction(BaseGame game, Position position) {
-                GameWorld<UnitImpl, TileConstant, CityImpl> gameWorld = game.getGameWorld();
+                GameWorld<UnitImpl, CityImpl> gameWorld = game.getGameWorld();
                 GameObjectFactory factory = game.getFactory();
                 Unit unit = game.getUnitAt(position);
                 String typeString = unit.getTypeString();

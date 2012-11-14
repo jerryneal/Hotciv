@@ -12,5 +12,5 @@ public interface WorldLayoutStrategy {
      * @param gameWorld The world to put stuff on.
      * @param factory The factory to create stuff from.
      */
-	public void createWorldLayout(GameWorld<UnitImpl, TileConstant, CityImpl> gameWorld, GameObjectFactory factory);
+	public void createWorldLayout(GameWorld<UnitImpl, CityImpl> gameWorld, GameObjectFactory factory);
 }

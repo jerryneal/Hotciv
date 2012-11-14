@@ -10,9 +10,9 @@ import java.util.*;
  * @author : Erik
  * Date: 04-11-12, 13:51
  */
-public class GameWorld<UnitImpl extends Unit, TileImpl extends Tile, CityImpl extends City> {
+public class GameWorld<UnitImpl extends Unit, CityImpl extends City> {
     private Map<Position, UnitImpl> unitMap = new HashMap<Position, UnitImpl>();
-    private Map<Position, TileImpl> tileMap = new HashMap<Position, TileImpl>();
+    private Map<Position, Tile> tileMap = new HashMap<Position, Tile>();
     private Map<Position, CityImpl> cityMap = new HashMap<Position, CityImpl>();
 
     /**
@@ -64,7 +64,7 @@ public class GameWorld<UnitImpl extends Unit, TileImpl extends Tile, CityImpl ex
         }
 
         // Now if a piece of terrain conflicts.
-        TileImpl tile = getTile(position);
+        Tile tile = getTile(position);
         if (tile != null) {
             String tileType = tile.getTypeString();
             if (tileType.equals(GameConstants.OCEANS) || tileType.equals(GameConstants.MOUNTAINS)) {
@@ -105,11 +105,11 @@ public class GameWorld<UnitImpl extends Unit, TileImpl extends Tile, CityImpl ex
         this.cityMap.put(position, city);
     }
 
-    public void placeTile(Position position, TileImpl tile) {
+    public void placeTile(Position position, Tile tile) {
         this.tileMap.put(position, tile);
     }
 
-    public TileImpl getTile(Position p) {
+    public Tile getTile(Position p) {
         return tileMap.get(p);
     }
 
@@ -119,5 +119,45 @@ public class GameWorld<UnitImpl extends Unit, TileImpl extends Tile, CityImpl ex
 
     public Set<Map.Entry<Position, CityImpl>> getCityEntrySet() {
         return cityMap.entrySet();
+    }
+
+    /**
+     * Populates the GameWorld based on the strings given. In a string 1 character equals 1 tile.
+     * The options for tiles are O (ocean), P (plains), M (mountain), F (forest), H (hills).
+     * If a character in the string does not equal one of the above the method will throw an IllegalArgumentException.
+     * @param worldLayout The layout described in a array of strings.
+     * @param factory The factory to produce the tiles from.
+     */
+    public void populateWorld(String[] worldLayout, GameObjectFactory factory) {
+        for (int i = 0; i < worldLayout.length; i++) {
+            String line = worldLayout[i].toUpperCase();
+            for (int j = 0; j < worldLayout.length; j++) {
+                ShortLayoutType type = ShortLayoutType.valueOf("" + line.charAt(j));
+                String typeString;
+                switch (type) {
+                    case O: typeString = GameConstants.OCEANS; break;
+                    case P: typeString = GameConstants.PLAINS; break;
+                    case M: typeString = GameConstants.MOUNTAINS; break;
+                    case F: typeString = GameConstants.FOREST; break;
+                    case H: typeString = GameConstants.HILLS; break;
+                    default:
+                        throw new RuntimeException("Unrecognized ShortLayoutType.");
+                }
+                Position p = new Position(i,j);
+                this.placeTile(p, new StandardTile(p, typeString));
+            }
+        }
+    }
+    private static enum ShortLayoutType {
+        // Ocean
+        O,
+        // Plains
+        P,
+        // Mountains
+        M,
+        // Forest
+        F,
+        // Hills
+        H
     }
 }

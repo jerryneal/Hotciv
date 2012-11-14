@@ -30,9 +30,6 @@ public class GameObjectFactory {
     public UnitImpl makeLegion(Player owner) {
         return unitFactory.makeUnit(game, GameConstants.LEGION, owner);
     }
-    public TileConstant makeTile(Position position, String typeString) {
-        return new TileConstant(position, typeString);
-    }
     public CityImpl makeCity(Player owner) {
         return new CityImpl(owner);
     }

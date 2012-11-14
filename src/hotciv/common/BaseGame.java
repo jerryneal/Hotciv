@@ -20,7 +20,7 @@ import java.util.Set;
  * Date: 09-11-12, 11:22
  */
 public class BaseGame implements Game {
-    private GameWorld<UnitImpl, TileConstant, CityImpl> gameWorld = new GameWorld<UnitImpl, TileConstant, CityImpl>();
+    private GameWorld<UnitImpl, CityImpl> gameWorld = new GameWorld<UnitImpl, CityImpl>();
 
     private Player playerTurn;
 
@@ -73,7 +73,7 @@ public class BaseGame implements Game {
         return gameWorld.getCity(position);
     }
 
-    public GameWorld<UnitImpl, TileConstant, CityImpl> getGameWorld() {
+    public GameWorld<UnitImpl, CityImpl> getGameWorld() {
         return gameWorld;
     }
 
@@ -262,24 +262,31 @@ public class BaseGame implements Game {
         
         public static WorldLayoutStrategy getWorldLayoutStrategy() {
         	return new WorldLayoutStrategy() {
-        		public void createWorldLayout(GameWorld<UnitImpl, TileConstant, CityImpl> gameWorld, GameObjectFactory factory) {
-        			// Default is plains.
-        	        for (int i = 0; i < 16; i++) {
-        	            for (int j = 0; j < 16; j++) {
-                            Position position = new Position(i, j);
-                            gameWorld.placeTile(position, factory.makeTile(position, GameConstants.PLAINS));
-        	            }
-        	        }
-        	        // Ocean at 1,0
-        	        gameWorld.placeTile(new Position(1, 0), factory.makeTile(new Position(1, 0), GameConstants.OCEANS));
-        	        // Hills at 0,1
-        	        gameWorld.placeTile(new Position(0, 1), factory.makeTile(new Position(1, 0), GameConstants.HILLS));
-        	        // Mountain at 2,2
-        	        gameWorld.placeTile(new Position(2, 2), factory.makeTile(new Position(2, 2), GameConstants.MOUNTAINS));
-        	        // Red has a city at (1,1)
-        	        gameWorld.placeCity(new Position(1, 1), factory.makeCity(Player.RED));
-        	        // Blue has a city at (4,1)
-        	        gameWorld.placeCity(new Position(4, 1), factory.makeCity(Player.BLUE));
+        		public void createWorldLayout(GameWorld<UnitImpl, CityImpl> gameWorld, GameObjectFactory factory) {
+                    String[] worldLayout = new String[] {
+                            "PHPPPPPPPPPPPPPP",
+                            "OPPPPPPPPPPPPPPP",
+                            "PPMPPPPPPPPPPPPP",
+                            "PPPPPPPPPPPPPPPP",
+                            "PPPPPPPPPPPPPPPP",
+                            "PPPPPPPPPPPPPPPP",
+                            "PPPPPPPPPPPPPPPP",
+                            "PPPPPPPPPPPPPPPP",
+                            "PPPPPPPPPPPPPPPP",
+                            "PPPPPPPPPPPPPPPP",
+                            "PPPPPPPPPPPPPPPP",
+                            "PPPPPPPPPPPPPPPP",
+                            "PPPPPPPPPPPPPPPP",
+                            "PPPPPPPPPPPPPPPP",
+                            "PPPPPPPPPPPPPPPP",
+                            "PPPPPPPPPPPPPPPP",
+                    };
+                    gameWorld.populateWorld(worldLayout, factory);
+
+                    // Red has a city at (1,1)
+                    gameWorld.placeCity(new Position(1, 1), factory.makeCity(Player.RED));
+                    // Blue has a city at (4,1)
+                    gameWorld.placeCity(new Position(4, 1), factory.makeCity(Player.BLUE));
 
                     // Red has a archer at (2,0)
                     gameWorld.placeUnit(new Position(2, 0), factory.makeArcher(Player.RED));
