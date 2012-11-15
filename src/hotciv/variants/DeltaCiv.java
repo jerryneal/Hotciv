@@ -17,6 +17,11 @@ public class DeltaCiv {
     private DeltaCiv() {
 
     }
+
+    /**
+     * Returns a game instance that behaves according to the rules of DeltaCiv.
+     * @return The game.
+     */
     public static Game getGame() {
         return new GameBuilder().setWorldLayoutStrategy(new WorldLayoutStrategy() {
             @Override

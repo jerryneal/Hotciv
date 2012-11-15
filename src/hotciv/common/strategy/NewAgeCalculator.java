@@ -3,6 +3,8 @@ package hotciv.common.strategy;
 import hotciv.common.BaseGame;
 
 /**
+ * This strategy calculates the new age of the game after each round.
+ *
  * @author : Erik
  * Date: 09-11-12, 11:46
  */

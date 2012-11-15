@@ -21,6 +21,10 @@ public class BetaCiv {
 
     }
 
+    /**
+     * Returns a game instance that behaves according to the rules of BetaCiv.
+     * @return The game.
+     */
     public static Game getGame() {
         return new GameBuilder().setWinnerStrategy(new GetWinner() {
             Player winner = null;

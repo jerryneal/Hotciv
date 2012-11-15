@@ -17,15 +17,20 @@ public class GammaCiv {
 
     }
 
+    /**
+     * Returns a game instance that behaves according to the rules of GammaCiv.
+     * @return The game.
+     */
     public static Game getGame() {
         return new GameBuilder()
         .setUnitFactoryStrategy(new UnitFactory() {
+            UnitFactory defaultFactory = BaseGame.DefaultStrategies.getUnitFactory();
             public UnitImpl makeUnit(BaseGame game, String typeString, Player owner) {
                 if (GameConstants.ARCHER.equals(typeString)) {
                     return new GammaArcher(owner);
                 } else {
                     // Return default implementation.
-                    return BaseGame.DefaultStrategies.getUnitFactory().makeUnit(game, typeString, owner);
+                    return defaultFactory.makeUnit(game, typeString, owner);
                 }
             }
         })

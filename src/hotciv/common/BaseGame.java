@@ -53,9 +53,14 @@ public class BaseGame implements Game {
 
         createWorld();
     }
+
+    /**
+     * Creates the world, based on the worldLayoutStrategy.
+     */
     private void createWorld() {
         worldLayoutStrategy.createWorldLayout(this);
     }
+
     public Tile getTileAt(Position position) {
         return gameWorld.getTile(position);
     }
@@ -68,6 +73,10 @@ public class BaseGame implements Game {
         return gameWorld.getCity(position);
     }
 
+    /**
+     * Gets the GameWorld in this BaseGame. The GameWorld is the internal representation of the world.
+     * @return The GameWorld
+     */
     public GameWorld<UnitImpl, CityImpl> getGameWorld() {
         return gameWorld;
     }
@@ -86,6 +95,9 @@ public class BaseGame implements Game {
 
     public boolean moveUnit(Position from, Position to) {
         UnitImpl unit = getUnitAt(from);
+        if (unit == null) {
+            throw new IllegalArgumentException("There has to be a unit at the specified from position: " + from);
+        }
 
         // Can only move my own unit
         if (unit.getOwner() != playerTurn) {
@@ -147,6 +159,11 @@ public class BaseGame implements Game {
                 throw new RuntimeException("Unrecognized player: " + playerTurn);
         }
     }
+
+    /**
+     * Ends the round, with everything that includes.
+     * This produces unit and increases the age.
+     */
     private void endOfRound() {
         // Aging the world.
         this.age = newAgeCalculator.getNewAge(this);
@@ -163,20 +180,20 @@ public class BaseGame implements Game {
             UnitImpl unit = null;
 
             if (produces.equals(GameConstants.SETTLER)) {
-                if (productionAmount >= 30) {
-                    city.decreaseProductionAmount(30);
+                if (productionAmount >= GameConstants.SETTLER_PRICE) {
+                    city.decreaseProductionAmount(GameConstants.SETTLER_PRICE);
                     unit = unitFactory.makeUnit(this, GameConstants.SETTLER, city.getOwner());
                 }
             }
             else if (produces.equals(GameConstants.ARCHER)) {
-                if (productionAmount >= 10) {
-                    city.decreaseProductionAmount(10);
+                if (productionAmount >= GameConstants.ARCHER_PRICE) {
+                    city.decreaseProductionAmount(GameConstants.ARCHER_PRICE);
                     unit = unitFactory.makeUnit(this, GameConstants.ARCHER, city.getOwner());
                 }
             }
             else if (produces.equals(GameConstants.LEGION)) {
-                if (productionAmount >= 15) {
-                    city.decreaseProductionAmount(15);
+                if (productionAmount >= GameConstants.LEGION_PRICE) {
+                    city.decreaseProductionAmount(GameConstants.LEGION_PRICE);
                     unit = unitFactory.makeUnit(this, GameConstants.LEGION, city.getOwner());
                 }
             }
@@ -187,10 +204,14 @@ public class BaseGame implements Game {
     }
 
     public void changeWorkForceFocusInCityAt(Position p, String balance) {
+        throw new UnsupportedOperationException();
     }
 
     public void changeProductionInCityAt(Position p, String unitType) {
         City city = gameWorld.getCity(p);
+        if (city == null) {
+            throw new IllegalArgumentException("Called changeProduction on a position with no city: " + p);
+        }
         city.setProduction(unitType);
     }
 
@@ -207,8 +228,15 @@ public class BaseGame implements Game {
         return unitFactory;
     }
 
-    // Holds the default strategies for the game.
+    /**
+     * This class holds all the default strategies for the game.
+     * When using the GameBuilder to make a game, these are inserted as defaults when no other strategy is specified.
+     */
     public static class DefaultStrategies {
+        /**
+         * Gets an instance of the default strategy to calculate the new age of the game after each round.
+         * @return the default NewAgeCalculator
+         */
         public static NewAgeCalculator getNewAgeCalculator() {
             return new NewAgeCalculator() {
                 public int getNewAge(BaseGame game) {
@@ -216,6 +244,10 @@ public class BaseGame implements Game {
                 }
             };
         }
+        /**
+         * Gets an instance of the default strategy to calculate the winner of the game.
+         * @return The default GetWinner
+         */
         public static GetWinner getWinner() {
             return new GetWinner() {
                 public Player getWinner(BaseGame game) {
@@ -228,6 +260,11 @@ public class BaseGame implements Game {
                 }
             };
         }
+        /**
+         * Gets an instance of the default strategy for performing unit actions.
+         * This strategy contains no code, as the default is no implementation for unit actions.
+         * @return An empty UnitAction strategy.
+         */
         public static UnitAction getUnitAction() {
             return new UnitAction() {
                 public void performAction(BaseGame game, Position position) {
@@ -236,6 +273,10 @@ public class BaseGame implements Game {
             };
         }
 
+        /**
+         * Gets an instance of the default strategy for making units.
+         * @return the default UnitFactory.
+         */
         public static UnitFactory getUnitFactory() {
             return new UnitFactory() {
                 public UnitImpl makeUnit(BaseGame game, String typeString, Player owner) {
@@ -254,7 +295,11 @@ public class BaseGame implements Game {
                 }
             };
         }
-        
+
+        /**
+         * Gets an instance of the default strategy for creating the world.
+         * @return the default WorldLayoutStrategy.
+         */
         public static WorldLayoutStrategy getWorldLayoutStrategy() {
         	return new WorldLayoutStrategy() {
         		public void createWorldLayout(BaseGame game) {

@@ -11,6 +11,11 @@ public class AlphaCiv {
     private AlphaCiv() {
 
     }
+
+    /**
+     * Returns a game instance that behaves according to the rules of AlphaCiv.
+     * @return The game.
+     */
     public static Game getGame() {
         return new GameBuilder().build();
     }

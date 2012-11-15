@@ -7,6 +7,7 @@ import java.util.*;
 /**
  * The UnitMap represents store all units on a map,
  * and is responsible for placing a unit when a city has produced one.
+ *
  * @author : Erik
  * Date: 04-11-12, 13:51
  */
@@ -17,6 +18,7 @@ public class GameWorld<UnitImpl extends Unit, CityImpl extends City> {
 
     /**
      * Places a unit on the map, under the precondition that the spot where the unit is placed is empty.
+     *
      * @param position The position
      * @param unit The unit to place.
      */
@@ -27,19 +29,19 @@ public class GameWorld<UnitImpl extends Unit, CityImpl extends City> {
     /**
      * Places the given unit as near as possible to the given position.
      * It first tried to insert on the specified position, if its non-empty then it tried to insert it clockwise around the position starting north.
+     *
      * @param position The position to insert the unit near.
      * @param unit The unit.
      */
     public void placeUnitNear(Position position, UnitImpl unit) {
-        if (unitMap.get(position) == null) {
+        if (canPlaceUnitAt(position)) {
             unitMap.put(position, unit);
+            return;
         }
-        else {
-            for (Position aroundPosition : position.getAroundIterable()) {
-                if (canPlaceUnitAt(aroundPosition)) {
-                    unitMap.put(aroundPosition, unit);
-                    break;
-                }
+        for (Position aroundPosition : position.getAroundIterable()) {
+            if (canPlaceUnitAt(aroundPosition)) {
+                unitMap.put(aroundPosition, unit);
+                return;
             }
         }
     }
@@ -47,6 +49,7 @@ public class GameWorld<UnitImpl extends Unit, CityImpl extends City> {
     /**
      * Returns true if the given position is available for unit placement.
      * That means that the position is both free from other units an on a type of terrain that units can be placed on.
+     *
      * @param position The position
      * @return Whether or not a unit can be placed on the without conflicts.
      */
@@ -78,6 +81,7 @@ public class GameWorld<UnitImpl extends Unit, CityImpl extends City> {
     /**
      * Returns the unit on the specified position.
      * Or null if there's no unit.
+     *
      * @param p The position.
      * @return The unit on the position.
      */
@@ -87,6 +91,7 @@ public class GameWorld<UnitImpl extends Unit, CityImpl extends City> {
 
     /**
      * Removes and returns the unit at a specified position.
+     *
      * @param position The position.
      * @return The unit that was removed, or null if there wasn't a unit.
      */
@@ -95,28 +100,54 @@ public class GameWorld<UnitImpl extends Unit, CityImpl extends City> {
     }
 
     /**
-     * @return A collection of all units in this UnitMap.
+     * Gets an entrySet of all the units, with their position as the key.
+     * @return An entrySet of units.
      */
     public Set<Map.Entry<Position, UnitImpl>> getUnitsEntrySet() {
         return unitMap.entrySet();
     }
 
+    /**
+     * Places a city on the specified position. This will replace any existing city on that position.
+     * Precondition: The position is valid for placing a city.
+     * @param position The position to place the city.
+     * @param city The city.
+     */
     public void placeCity(Position position, CityImpl city) {
         this.cityMap.put(position, city);
     }
 
+    /**
+     * Places the tile on the specified position. Replacing any existing tile on that position.
+     * @param position The position to place the tile on.
+     * @param tile The tile.
+     */
     public void placeTile(Position position, Tile tile) {
         this.tileMap.put(position, tile);
     }
 
-    public Tile getTile(Position p) {
-        return tileMap.get(p);
+    /**
+     * Gets the tile at the specified position. Or null if none specified.
+     * @param position The position.
+     * @return The tile at the position.
+     */
+    public Tile getTile(Position position) {
+        return tileMap.get(position);
     }
 
-    public CityImpl getCity(Position p) {
-        return cityMap.get(p);
+    /**
+     * Gets the city at the specified position. Or null if no city.
+     * @param position The position.
+     * @return The city at the position.
+     */
+    public CityImpl getCity(Position position) {
+        return cityMap.get(position);
     }
 
+    /**
+     * Gets an entrySet of all the cities on the GameWorld, with their positions as keys.
+     * @return An entrySet of all cities in this GameWorld.
+     */
     public Set<Map.Entry<Position, CityImpl>> getCityEntrySet() {
         return cityMap.entrySet();
     }

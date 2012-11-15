@@ -5,43 +5,41 @@ import hotciv.framework.GameConstants;
 import hotciv.framework.Player;
 
 public class CityImpl implements City {
-	private Player owner;
-	private String produces;
+    private Player owner;
+    private String produces;
     private int productionAmount;
-	
-	public CityImpl(Player owner) {
-		this.owner = owner;
+
+    public CityImpl(Player owner) {
+        this.owner = owner;
         // We set a city to pr. default produce settlers.
         this.produces = GameConstants.SETTLER;
         this.productionAmount = 0;
-	}
+    }
 
-	@Override
-	public Player getOwner() {
-		return owner;
-	}
-	
-	public void setOwner(Player owner)
-	{
-		this.owner = owner;
-	}
+    @Override
+    public Player getOwner() {
+        return owner;
+    }
 
-	@Override
-	public int getSize() {
-		return 1;
-	}
+    public void setOwner(Player owner) {
+        this.owner = owner;
+    }
 
-	@Override
-	public String getProduction() {
-		return produces;
-	}
+    @Override
+    public int getSize() {
+        return 1;
+    }
+
+    @Override
+    public String getProduction() {
+        return produces;
+    }
 
     @Override
     public void setProduction(String production) {
         if (production.equals(GameConstants.SETTLER) || production.equals(GameConstants.ARCHER) || production.equals(GameConstants.LEGION)) {
             this.produces = production;
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("The set production unit should be a Settler, archer or legion");
         }
     }
@@ -53,6 +51,7 @@ public class CityImpl implements City {
 
     /**
      * Increases the production amount in this city by the specified amount.
+     *
      * @param increase The amount.
      */
     protected void increaseProductionAmount(int increase) {
@@ -61,6 +60,7 @@ public class CityImpl implements City {
 
     /**
      * Decreases the production amount in this city by the specified amount.
+     *
      * @param amount
      */
     public void decreaseProductionAmount(int amount) {
@@ -68,9 +68,8 @@ public class CityImpl implements City {
     }
 
     @Override
-	public String getWorkforceFocus() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    public String getWorkforceFocus() {
+        throw new UnsupportedOperationException();
+    }
 
 }

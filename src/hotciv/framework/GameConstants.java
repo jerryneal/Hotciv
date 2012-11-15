@@ -35,4 +35,8 @@ public class GameConstants {
   // Valid production balance types
   public static final String productionFocus = "hammer";
   public static final String foodFocus = "apple";
+  // Unit prices
+  public static final int SETTLER_PRICE = 30;
+  public static final int ARCHER_PRICE = 10;
+  public static final int LEGION_PRICE = 15;
 }

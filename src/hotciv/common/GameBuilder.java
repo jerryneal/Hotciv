@@ -18,25 +18,58 @@ public class GameBuilder {
     private UnitFactory unitFactory;
     private WorldLayoutStrategy worldLayoutStrategy;
 
+    /**
+     * Constructs a new GameBuilder.
+     */
     public GameBuilder() {
 
     }
+
+    /**
+     * Sets the GetWinner strategy.
+     * @param getWinner The strategy.
+     * @return This GameBuilder.
+     */
     public GameBuilder setWinnerStrategy(GetWinner getWinner) {
         this.getWinner = getWinner;
         return this;
     }
+
+    /**
+     * Sets the NewAgeCalculator strategy.
+     * @param newAgeCalculator The strategy.
+     * @return This GameBuilder.
+     */
     public GameBuilder setAgingStrategy(NewAgeCalculator newAgeCalculator) {
         this.newAgeCalculator = newAgeCalculator;
         return this;
     }
+
+    /**
+     * Sets the UnitAction strategy.
+     * @param unitAction The strategy.
+     * @return The GameBuilder.
+     */
     public GameBuilder setUnitActionStrategy(UnitAction unitAction) {
         this.unitAction = unitAction;
         return this;
     }
+
+    /**
+     * Sets the UnitFactory strategy.
+     * @param unitFactory The strategy.
+     * @return This GameBuilder.
+     */
     public GameBuilder setUnitFactoryStrategy(UnitFactory unitFactory) {
         this.unitFactory = unitFactory;
         return this;
     }
+
+    /**
+     * Sets the WorldLayoutStrategy.
+     * @param worldLayoutStrategy The strategy.
+     * @return this GameBuilder.
+     */
     public GameBuilder setWorldLayoutStrategy(WorldLayoutStrategy worldLayoutStrategy) {
         this.worldLayoutStrategy = worldLayoutStrategy;
         return this;
