@@ -28,4 +28,9 @@ public class Legion extends UnitImpl {
 		return 4;
 	}
 
+    @Override
+    public void performAction() {
+        // Empty
+    }
+
 }

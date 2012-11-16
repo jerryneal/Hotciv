@@ -3,7 +3,6 @@ package hotciv.common;
 import hotciv.common.strategy.NewAgeCalculator;
 import hotciv.common.strategy.UnitFactory;
 import hotciv.common.strategy.GetWinner;
-import hotciv.common.strategy.UnitAction;
 import hotciv.common.strategy.WorldLayoutStrategy;
 import hotciv.framework.Game;
 
@@ -15,7 +14,6 @@ import hotciv.framework.Game;
 public class GameBuilder {
     private GetWinner getWinner;
     private NewAgeCalculator newAgeCalculator;
-    private UnitAction unitAction;
     private UnitFactory unitFactory;
     private WorldLayoutStrategy worldLayoutStrategy;
 
@@ -43,16 +41,6 @@ public class GameBuilder {
      */
     public GameBuilder setAgingStrategy(NewAgeCalculator newAgeCalculator) {
         this.newAgeCalculator = newAgeCalculator;
-        return this;
-    }
-
-    /**
-     * Sets the UnitAction strategy.
-     * @param unitAction The strategy.
-     * @return The GameBuilder.
-     */
-    public GameBuilder setUnitActionStrategy(UnitAction unitAction) {
-        this.unitAction = unitAction;
         return this;
     }
 
@@ -88,9 +76,6 @@ public class GameBuilder {
         if (this.newAgeCalculator == null) {
             this.newAgeCalculator = BaseGame.DefaultStrategies.getNewAgeCalculator();
         }
-        if (this.unitAction == null) {
-            this.unitAction = BaseGame.DefaultStrategies.getUnitAction();
-        }
         if (this.unitFactory == null) {
             this.unitFactory = BaseGame.DefaultStrategies.getUnitFactory();
         }
@@ -98,6 +83,6 @@ public class GameBuilder {
             this.worldLayoutStrategy = BaseGame.DefaultStrategies.getWorldLayoutStrategy();
         }
 
-        return new BaseGame(getWinner, newAgeCalculator, unitAction, unitFactory, worldLayoutStrategy);
+        return new BaseGame(getWinner, newAgeCalculator, unitFactory, worldLayoutStrategy);
     }
 }

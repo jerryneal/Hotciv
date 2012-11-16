@@ -15,8 +15,9 @@ import java.util.Map;
  * @author: Erik
  * Created: 16-11-12, 10:26
  */
-public class ConquerWinnerStrategy implements GetWinner{
+public class ConquerWinnerStrategy implements GetWinner {
     Player winner = null;
+
     @Override
     public Player getWinner(BaseGame game) {
         // The winner is the player that first conquers all cities in the world.
@@ -29,8 +30,7 @@ public class ConquerWinnerStrategy implements GetWinner{
                 }
                 if (potentialWinner == city.getOwner()) {
                     winner = potentialWinner;
-                }
-                else {
+                } else {
                     winner = null;
                     break;
                 }

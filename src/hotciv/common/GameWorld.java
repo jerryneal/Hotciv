@@ -1,6 +1,7 @@
 package hotciv.common;
 
 import hotciv.framework.*;
+import hotciv.variants.units.GammaSettler;
 
 import java.util.*;
 
@@ -179,6 +180,21 @@ public class GameWorld<UnitImpl extends Unit, CityImpl extends City> {
             }
         }
     }
+
+    /**
+     * Returns the position where the specified unit is located, or null if the unit was not found.
+     * @param unit The unit to find.
+     * @return the position of the unit.
+     */
+    public Position getUnitPosition(UnitImpl unit) {
+        for (Map.Entry<Position, UnitImpl> unitEntry : getUnitsEntrySet()) {
+            if (unit == unitEntry.getValue()) {
+                return unitEntry.getKey();
+            }
+        }
+        return null;
+    }
+
     private static enum ShortLayoutType {
         // Ocean
         O,

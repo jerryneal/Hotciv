@@ -1,7 +1,8 @@
 package hotciv.variants;
 
-import hotciv.common.*;
-import hotciv.framework.*;
+import hotciv.common.GameBuilder;
+import hotciv.framework.Game;
+import hotciv.framework.GameFactory;
 
 /**
  * @author: Erik
@@ -10,6 +11,7 @@ import hotciv.framework.*;
 public class AlphaCiv implements GameFactory {
     /**
      * Returns a game instance that behaves according to the rules of AlphaCiv.
+     *
      * @return The game.
      */
     public Game getGame() {

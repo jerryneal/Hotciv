@@ -9,7 +9,7 @@ import hotciv.common.strategy.NewAgeCalculator;
  * @author: Erik
  * Created: 16-11-12, 10:28
  */
-public class PeriodicAgingStrategy implements NewAgeCalculator{
+public class PeriodicAgingStrategy implements NewAgeCalculator {
     @Override
     public int getNewAge(BaseGame game) {
         int age = game.getAge();

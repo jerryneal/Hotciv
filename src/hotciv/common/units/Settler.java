@@ -28,4 +28,9 @@ public class Settler extends UnitImpl {
 		return 0;
 	}
 
+    @Override
+    public void performAction() {
+        // Empty
+    }
+
 }

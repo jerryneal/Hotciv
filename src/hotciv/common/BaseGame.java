@@ -3,7 +3,6 @@ package hotciv.common;
 import hotciv.common.strategy.NewAgeCalculator;
 import hotciv.common.strategy.UnitFactory;
 import hotciv.common.strategy.GetWinner;
-import hotciv.common.strategy.UnitAction;
 import hotciv.common.strategy.WorldLayoutStrategy;
 import hotciv.common.units.Archer;
 import hotciv.common.units.Legion;
@@ -31,7 +30,6 @@ public class BaseGame implements Game {
     // Strategies
     private GetWinner getWinner;
     private NewAgeCalculator newAgeCalculator;
-    private UnitAction unitAction;
     private UnitFactory unitFactory;
     private WorldLayoutStrategy worldLayoutStrategy;
 
@@ -40,11 +38,10 @@ public class BaseGame implements Game {
      * The constructor is protected since only the GameBuilder is supposed to call it.
      * All the parameters are the different strategies used by this BaseGame.
      */
-    protected BaseGame(GetWinner getWinner, NewAgeCalculator newAgeCalculator, UnitAction unitAction, UnitFactory unitFactory, WorldLayoutStrategy worldLayoutStrategy) {
+    protected BaseGame(GetWinner getWinner, NewAgeCalculator newAgeCalculator, UnitFactory unitFactory, WorldLayoutStrategy worldLayoutStrategy) {
         // First strategies
         this.getWinner = getWinner;
         this.newAgeCalculator = newAgeCalculator;
-        this.unitAction = unitAction;
         this.unitFactory = unitFactory;
         this.worldLayoutStrategy = worldLayoutStrategy;
 
@@ -221,7 +218,7 @@ public class BaseGame implements Game {
         if (unit != null && unit.getOwner() != getPlayerInTurn()){
             return;
         }
-        unitAction.performAction(this, p);
+        unit.performAction();
     }
 
     public UnitFactory getUnitFactory() {
@@ -257,18 +254,6 @@ public class BaseGame implements Game {
                     else {
                         return null;
                     }
-                }
-            };
-        }
-        /**
-         * Gets an instance of the default strategy for performing unit actions.
-         * This strategy contains no code, as the default is no implementation for unit actions.
-         * @return An empty UnitAction strategy.
-         */
-        public static UnitAction getUnitAction() {
-            return new UnitAction() {
-                public void performAction(BaseGame game, Position position) {
-                    // Empty pr. design.
                 }
             };
         }

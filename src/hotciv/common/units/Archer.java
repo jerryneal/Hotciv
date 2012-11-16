@@ -28,4 +28,9 @@ public class Archer extends UnitImpl {
 		return 2;
 	}
 
+    @Override
+    public void performAction() {
+        // Empty.
+    }
+
 }
