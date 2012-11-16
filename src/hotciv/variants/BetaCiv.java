@@ -7,8 +7,8 @@ import hotciv.variants.strategies.ConquerWinnerStrategy;
 import hotciv.variants.strategies.PeriodicAgingStrategy;
 
 /**
- * @author: Erik
- * Date: 09-11-12, Time: 11:38
+ * @author Erik
+ *         Date: 09-11-12, Time: 11:38
  */
 public class BetaCiv implements GameFactory {
     /**

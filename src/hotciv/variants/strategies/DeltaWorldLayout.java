@@ -9,10 +9,10 @@ import hotciv.framework.Player;
 import hotciv.framework.Position;
 
 /**
- * //TODO: Doc
+ * Creates the world layout specified by DeltaCiv.
  *
- * @author: Erik
- * Created: 16-11-12, 10:25
+ * @author Erik
+ *         Created: 16-11-12, 10:25
  */
 public class DeltaWorldLayout implements WorldLayoutStrategy {
     @Override

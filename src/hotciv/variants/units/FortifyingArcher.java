@@ -4,15 +4,15 @@ import hotciv.common.units.Archer;
 import hotciv.framework.Player;
 
 /**
- * // TODO: Doc.
+ * An archer that toggles its fortified status when performAction is called.
  *
- * @author: Erik
- * Created: 16-11-12, Time: 10:18
+ * @author Erik
+ *         Created: 16-11-12, Time: 10:18
  */
-public class GammaArcher extends Archer {
+public class FortifyingArcher extends Archer {
     private boolean fortified;
 
-    public GammaArcher(Player owner) {
+    public FortifyingArcher(Player owner) {
         super(owner);
         this.fortified = false;
     }

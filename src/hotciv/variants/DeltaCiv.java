@@ -6,8 +6,8 @@ import hotciv.framework.GameFactory;
 import hotciv.variants.strategies.DeltaWorldLayout;
 
 /**
- * @author: Erik
- * Date: 09-11-12, Time: 11:38
+ * @author Erik
+ *         Date: 09-11-12, Time: 11:38
  */
 public class DeltaCiv implements GameFactory {
     /**

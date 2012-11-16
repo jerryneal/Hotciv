@@ -1,6 +1,5 @@
 package hotciv.variants.units;
 
-import hotciv.common.AbstractUnit;
 import hotciv.common.BaseGame;
 import hotciv.common.CityImpl;
 import hotciv.common.GameWorld;
@@ -9,12 +8,12 @@ import hotciv.framework.Player;
 import hotciv.framework.Position;
 
 /**
- * //TODO: Doc
+ * A settler that replaces itself with a city when performAction is called.
  *
- * @author: Erik
- * Created: 16-11-12, 11:03
+ * @author Erik
+ *         Created: 16-11-12, 11:03
  */
-public class GammaSettler extends Settler {
+public class CityCreatingSettler extends Settler {
     private BaseGame game;
 
     /**
@@ -23,7 +22,7 @@ public class GammaSettler extends Settler {
      *
      * @param owner The owner of the archer.
      */
-    public GammaSettler(BaseGame game, Player owner) {
+    public CityCreatingSettler(BaseGame game, Player owner) {
         super(owner);
         this.game = game;
     }

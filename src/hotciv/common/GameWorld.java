@@ -1,17 +1,21 @@
 package hotciv.common;
 
 import hotciv.common.strategy.UnitFactory;
-import hotciv.framework.*;
-import hotciv.variants.units.GammaSettler;
+import hotciv.framework.GameConstants;
+import hotciv.framework.Player;
+import hotciv.framework.Position;
+import hotciv.framework.Tile;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * The UnitMap represents store all units on a map,
  * and is responsible for placing a unit when a city has produced one.
  *
  * @author : Erik
- * Date: 04-11-12, 13:51
+ *         Date: 04-11-12, 13:51
  */
 public class GameWorld {
     private Map<Position, AbstractUnit> unitMap = new HashMap<Position, AbstractUnit>();
@@ -29,7 +33,7 @@ public class GameWorld {
      * Places a unit on the map, under the precondition that the spot where the unit is placed is empty.
      *
      * @param position The position
-     * @param unit The unit to place.
+     * @param unit     The unit to place.
      */
     protected void placeUnit(Position position, AbstractUnit unit) {
         unitMap.put(position, unit);
@@ -37,9 +41,10 @@ public class GameWorld {
 
     /**
      * Places a new unit on the map, under the precondition that the spot where the unit is places is empty.
-     * @param position The position to place the unit.
+     *
+     * @param position   The position to place the unit.
      * @param typeString The string describing the unit. Valid strings are in GameConstants
-     * @param owner The owner of the new unit.
+     * @param owner      The owner of the new unit.
      */
     public void placeNewUnit(Position position, String typeString, Player owner) {
         placeUnit(position, unitFactory.makeUnit(game, typeString, owner));
@@ -50,7 +55,7 @@ public class GameWorld {
      * It first tried to insert on the specified position, if its non-empty then it tried to insert it clockwise around the position starting north.
      *
      * @param position The position to insert the unit near.
-     * @param unit The unit.
+     * @param unit     The unit.
      */
     public void placeUnitNear(Position position, AbstractUnit unit) {
         if (canPlaceUnitAt(position)) {
@@ -80,8 +85,7 @@ public class GameWorld {
 
 
         // Checking for a unit conflicts.
-        if (unitMap.get(position) != null)
-        {
+        if (unitMap.get(position) != null) {
             return false;
         }
 
@@ -120,6 +124,7 @@ public class GameWorld {
 
     /**
      * Gets an entrySet of all the units, with their position as the key.
+     *
      * @return An entrySet of units.
      */
     public Set<Map.Entry<Position, AbstractUnit>> getUnitsEntrySet() {
@@ -129,8 +134,9 @@ public class GameWorld {
     /**
      * Places a city on the specified position. This will replace any existing city on that position.
      * Precondition: The position is valid for placing a city.
+     *
      * @param position The position to place the city.
-     * @param city The city.
+     * @param city     The city.
      */
     public void placeCity(Position position, CityImpl city) {
         this.cityMap.put(position, city);
@@ -138,8 +144,9 @@ public class GameWorld {
 
     /**
      * Places the tile on the specified position. Replacing any existing tile on that position.
+     *
      * @param position The position to place the tile on.
-     * @param tile The tile.
+     * @param tile     The tile.
      */
     public void placeTile(Position position, Tile tile) {
         this.tileMap.put(position, tile);
@@ -147,6 +154,7 @@ public class GameWorld {
 
     /**
      * Gets the tile at the specified position. Or null if none specified.
+     *
      * @param position The position.
      * @return The tile at the position.
      */
@@ -156,6 +164,7 @@ public class GameWorld {
 
     /**
      * Gets the city at the specified position. Or null if no city.
+     *
      * @param position The position.
      * @return The city at the position.
      */
@@ -165,6 +174,7 @@ public class GameWorld {
 
     /**
      * Gets an entrySet of all the cities on the GameWorld, with their positions as keys.
+     *
      * @return An entrySet of all cities in this GameWorld.
      */
     public Set<Map.Entry<Position, CityImpl>> getCityEntrySet() {
@@ -185,15 +195,25 @@ public class GameWorld {
                 ShortLayoutType type = ShortLayoutType.valueOf("" + line.charAt(j));
                 String typeString;
                 switch (type) {
-                    case O: typeString = GameConstants.OCEANS; break;
-                    case P: typeString = GameConstants.PLAINS; break;
-                    case M: typeString = GameConstants.MOUNTAINS; break;
-                    case F: typeString = GameConstants.FOREST; break;
-                    case H: typeString = GameConstants.HILLS; break;
+                    case O:
+                        typeString = GameConstants.OCEANS;
+                        break;
+                    case P:
+                        typeString = GameConstants.PLAINS;
+                        break;
+                    case M:
+                        typeString = GameConstants.MOUNTAINS;
+                        break;
+                    case F:
+                        typeString = GameConstants.FOREST;
+                        break;
+                    case H:
+                        typeString = GameConstants.HILLS;
+                        break;
                     default:
                         throw new RuntimeException("Unrecognized ShortLayoutType.");
                 }
-                Position p = new Position(i,j);
+                Position p = new Position(i, j);
                 this.placeTile(p, new StandardTile(p, typeString));
             }
         }
@@ -201,6 +221,7 @@ public class GameWorld {
 
     /**
      * Returns the position where the specified unit is located, or null if the unit was not found.
+     *
      * @param unit The unit to find.
      * @return the position of the unit.
      */

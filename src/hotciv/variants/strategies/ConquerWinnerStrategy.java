@@ -10,10 +10,11 @@ import hotciv.framework.Position;
 import java.util.Map;
 
 /**
- * //TODO: Doc
+ * This strategy calculates the winner based on who has captured all existing cities. It returns null if no winner is found.
+ * If a winner is found, it will continue to return that winner. Even if a new city is created or something else.
  *
- * @author: Erik
- * Created: 16-11-12, 10:26
+ * @author Erik
+ *         Created: 16-11-12, 10:26
  */
 public class ConquerWinnerStrategy implements GetWinner {
     Player winner = null;

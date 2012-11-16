@@ -5,23 +5,24 @@ import hotciv.common.BaseGame;
 import hotciv.common.strategy.UnitFactory;
 import hotciv.framework.GameConstants;
 import hotciv.framework.Player;
-import hotciv.variants.units.GammaArcher;
-import hotciv.variants.units.GammaSettler;
+import hotciv.variants.units.CityCreatingSettler;
+import hotciv.variants.units.FortifyingArcher;
 
 /**
- * // TODO: Doc.
+ * This factory creates GammaArchers and GammaSettlers instead of the default units.
+ * If asked to create something that is not an archer or a settler, it will call the default factory.
  *
- * @author: Erik
- * Date: 16-11-12, 10:22
+ * @author Erik
+ *         Date: 16-11-12, 10:22
  */
 public class GammaUnitFactory implements UnitFactory {
     UnitFactory defaultFactory = BaseGame.DefaultStrategies.getUnitFactory();
 
     public AbstractUnit makeUnit(BaseGame game, String typeString, Player owner) {
         if (GameConstants.ARCHER.equals(typeString)) {
-            return new GammaArcher(owner);
+            return new FortifyingArcher(owner);
         } else if (GameConstants.SETTLER.equals(typeString)) {
-            return new GammaSettler(game, owner);
+            return new CityCreatingSettler(game, owner);
         } else {
             // Return default implementation.
             return defaultFactory.makeUnit(game, typeString, owner);

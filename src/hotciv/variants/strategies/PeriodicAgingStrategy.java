@@ -4,10 +4,10 @@ import hotciv.common.BaseGame;
 import hotciv.common.strategy.NewAgeCalculator;
 
 /**
- * //TODO: Doc
+ * Ages the game a differently based on what period we are in.
  *
- * @author: Erik
- * Created: 16-11-12, 10:28
+ * @author Erik
+ *         Created: 16-11-12, 10:28
  */
 public class PeriodicAgingStrategy implements NewAgeCalculator {
     @Override

@@ -8,8 +8,8 @@ import hotciv.variants.strategies.GammaUnitFactory;
 /**
  * This variant handles unit actions, that the settler can fortify and the archer can
  *
- * @author: Erik
- * Date: 09-11-12, 23:35
+ * @author Erik
+ *         Date: 09-11-12, 23:35
  */
 public class GammaCiv implements GameFactory {
     /**
