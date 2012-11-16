@@ -13,7 +13,7 @@ public class PeriodicAgingStrategy implements NewAgeCalculator {
     @Override
     public int getNewAge(BaseGame game) {
         int age = game.getAge();
-        if (age >= -4000 && age < -100) {
+        if (-4000 <= age && age < -100) {
             return age + 100;
         } else if (age < 50) {
             switch (age) {

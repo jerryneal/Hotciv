@@ -1,5 +1,6 @@
 package hotciv.common;
 
+import hotciv.common.strategy.UnitFactory;
 import hotciv.framework.*;
 import hotciv.variants.units.GammaSettler;
 
@@ -12,10 +13,17 @@ import java.util.*;
  * @author : Erik
  * Date: 04-11-12, 13:51
  */
-public class GameWorld<UnitImpl extends Unit, CityImpl extends City> {
-    private Map<Position, UnitImpl> unitMap = new HashMap<Position, UnitImpl>();
+public class GameWorld {
+    private Map<Position, AbstractUnit> unitMap = new HashMap<Position, AbstractUnit>();
     private Map<Position, Tile> tileMap = new HashMap<Position, Tile>();
     private Map<Position, CityImpl> cityMap = new HashMap<Position, CityImpl>();
+    private UnitFactory unitFactory;
+    private BaseGame game;
+
+    public GameWorld(BaseGame game) {
+        this.game = game;
+        this.unitFactory = game.getUnitFactory();
+    }
 
     /**
      * Places a unit on the map, under the precondition that the spot where the unit is placed is empty.
@@ -23,8 +31,18 @@ public class GameWorld<UnitImpl extends Unit, CityImpl extends City> {
      * @param position The position
      * @param unit The unit to place.
      */
-    public void placeUnit(Position position, UnitImpl unit) {
+    protected void placeUnit(Position position, AbstractUnit unit) {
         unitMap.put(position, unit);
+    }
+
+    /**
+     * Places a new unit on the map, under the precondition that the spot where the unit is places is empty.
+     * @param position The position to place the unit.
+     * @param typeString The string describing the unit. Valid strings are in GameConstants
+     * @param owner The owner of the new unit.
+     */
+    public void placeNewUnit(Position position, String typeString, Player owner) {
+        placeUnit(position, unitFactory.makeUnit(game, typeString, owner));
     }
 
     /**
@@ -34,7 +52,7 @@ public class GameWorld<UnitImpl extends Unit, CityImpl extends City> {
      * @param position The position to insert the unit near.
      * @param unit The unit.
      */
-    public void placeUnitNear(Position position, UnitImpl unit) {
+    public void placeUnitNear(Position position, AbstractUnit unit) {
         if (canPlaceUnitAt(position)) {
             unitMap.put(position, unit);
             return;
@@ -86,7 +104,7 @@ public class GameWorld<UnitImpl extends Unit, CityImpl extends City> {
      * @param p The position.
      * @return The unit on the position.
      */
-    public UnitImpl getUnit(Position p) {
+    public AbstractUnit getUnit(Position p) {
         return this.unitMap.get(p);
     }
 
@@ -96,7 +114,7 @@ public class GameWorld<UnitImpl extends Unit, CityImpl extends City> {
      * @param position The position.
      * @return The unit that was removed, or null if there wasn't a unit.
      */
-    public UnitImpl removeUnit(Position position) {
+    public AbstractUnit removeUnit(Position position) {
         return this.unitMap.remove(position);
     }
 
@@ -104,7 +122,7 @@ public class GameWorld<UnitImpl extends Unit, CityImpl extends City> {
      * Gets an entrySet of all the units, with their position as the key.
      * @return An entrySet of units.
      */
-    public Set<Map.Entry<Position, UnitImpl>> getUnitsEntrySet() {
+    public Set<Map.Entry<Position, AbstractUnit>> getUnitsEntrySet() {
         return unitMap.entrySet();
     }
 
@@ -186,8 +204,8 @@ public class GameWorld<UnitImpl extends Unit, CityImpl extends City> {
      * @param unit The unit to find.
      * @return the position of the unit.
      */
-    public Position getUnitPosition(UnitImpl unit) {
-        for (Map.Entry<Position, UnitImpl> unitEntry : getUnitsEntrySet()) {
+    public Position getUnitPosition(AbstractUnit unit) {
+        for (Map.Entry<Position, AbstractUnit> unitEntry : getUnitsEntrySet()) {
             if (unit == unitEntry.getValue()) {
                 return unitEntry.getKey();
             }

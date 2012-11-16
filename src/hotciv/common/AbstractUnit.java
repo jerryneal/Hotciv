@@ -3,11 +3,11 @@ package hotciv.common;
 import hotciv.framework.Player;
 import hotciv.framework.Unit;
 
-public abstract class UnitImpl implements Unit {
+public abstract class AbstractUnit implements Unit {
 	int moveCount;
 	
 	Player owner;
-	public UnitImpl(int initialMoveCount, Player owner) {
+	public AbstractUnit(int initialMoveCount, Player owner) {
 		this.moveCount = initialMoveCount;
 		this.owner = owner;
 	}
@@ -21,4 +21,8 @@ public abstract class UnitImpl implements Unit {
 		return moveCount;
 	}
 
+    @Override
+    public void performAction() {
+        // Empty
+    }
 }

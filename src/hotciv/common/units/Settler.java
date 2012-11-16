@@ -1,9 +1,9 @@
 package hotciv.common.units;
 
+import hotciv.common.AbstractUnit;
 import hotciv.framework.*;
-import hotciv.common.UnitImpl;
 
-public class Settler extends UnitImpl {
+public class Settler extends AbstractUnit {
     /**
      * The constructor for a settler.
      * This constructor is only to be called through a UnitFactory!
@@ -27,10 +27,5 @@ public class Settler extends UnitImpl {
 	public int getAttackingStrength() {
 		return 0;
 	}
-
-    @Override
-    public void performAction() {
-        // Empty
-    }
 
 }

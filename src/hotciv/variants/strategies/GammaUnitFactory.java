@@ -1,7 +1,7 @@
 package hotciv.variants.strategies;
 
+import hotciv.common.AbstractUnit;
 import hotciv.common.BaseGame;
-import hotciv.common.UnitImpl;
 import hotciv.common.strategy.UnitFactory;
 import hotciv.framework.GameConstants;
 import hotciv.framework.Player;
@@ -17,7 +17,7 @@ import hotciv.variants.units.GammaSettler;
 public class GammaUnitFactory implements UnitFactory {
     UnitFactory defaultFactory = BaseGame.DefaultStrategies.getUnitFactory();
 
-    public UnitImpl makeUnit(BaseGame game, String typeString, Player owner) {
+    public AbstractUnit makeUnit(BaseGame game, String typeString, Player owner) {
         if (GameConstants.ARCHER.equals(typeString)) {
             return new GammaArcher(owner);
         } else if (GameConstants.SETTLER.equals(typeString)) {

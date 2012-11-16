@@ -1,13 +1,12 @@
 package hotciv.variants.units;
 
+import hotciv.common.AbstractUnit;
 import hotciv.common.BaseGame;
 import hotciv.common.CityImpl;
 import hotciv.common.GameWorld;
-import hotciv.common.UnitImpl;
 import hotciv.common.units.Settler;
 import hotciv.framework.Player;
 import hotciv.framework.Position;
-import hotciv.framework.Unit;
 
 /**
  * //TODO: Doc
@@ -31,7 +30,7 @@ public class GammaSettler extends Settler {
 
     @Override
     public void performAction() {
-        GameWorld<UnitImpl, CityImpl> gameWorld = game.getGameWorld();
+        GameWorld gameWorld = game.getGameWorld();
         Position position = gameWorld.getUnitPosition(this);
         // Move is invalid if there is already a city.
         if (game.getCityAt(position) != null)

@@ -1,9 +1,9 @@
 package hotciv.common.units;
 
+import hotciv.common.AbstractUnit;
 import hotciv.framework.*;
-import hotciv.common.UnitImpl;
 
-public class Legion extends UnitImpl {
+public class Legion extends AbstractUnit {
     /**
      * The constructor for a legion.
      * This constructor is only to be called through a UnitFactory!
@@ -27,10 +27,5 @@ public class Legion extends UnitImpl {
 	public int getAttackingStrength() {
 		return 4;
 	}
-
-    @Override
-    public void performAction() {
-        // Empty
-    }
 
 }

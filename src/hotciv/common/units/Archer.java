@@ -1,9 +1,9 @@
 package hotciv.common.units;
 
+import hotciv.common.AbstractUnit;
 import hotciv.framework.*;
-import hotciv.common.UnitImpl;
 
-public class Archer extends UnitImpl {
+public class Archer extends AbstractUnit {
     /**
      * The constructor for an archer.
      * This constructor is only to be called through a UnitFactory!
@@ -27,10 +27,5 @@ public class Archer extends UnitImpl {
 	public int getAttackingStrength() {
 		return 2;
 	}
-
-    @Override
-    public void performAction() {
-        // Empty.
-    }
 
 }

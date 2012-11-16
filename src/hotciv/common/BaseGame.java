@@ -19,7 +19,7 @@ import java.util.Set;
  * Date: 09-11-12, 11:22
  */
 public class BaseGame implements Game {
-    private GameWorld<UnitImpl, CityImpl> gameWorld = new GameWorld<UnitImpl, CityImpl>();
+    private GameWorld gameWorld;
 
     private Player playerTurn;
 
@@ -48,6 +48,8 @@ public class BaseGame implements Game {
         // Player starts
         playerTurn = Player.RED;
 
+        // Gameworld
+        this.gameWorld = new GameWorld(this);
         createWorld();
     }
 
@@ -62,7 +64,7 @@ public class BaseGame implements Game {
         return gameWorld.getTile(position);
     }
 
-    public UnitImpl getUnitAt(Position position) {
+    public AbstractUnit getUnitAt(Position position) {
         return gameWorld.getUnit(position);
     }
 
@@ -74,7 +76,7 @@ public class BaseGame implements Game {
      * Gets the GameWorld in this BaseGame. The GameWorld is the internal representation of the world.
      * @return The GameWorld
      */
-    public GameWorld<UnitImpl, CityImpl> getGameWorld() {
+    public GameWorld getGameWorld() {
         return gameWorld;
     }
 
@@ -91,7 +93,7 @@ public class BaseGame implements Game {
     }
 
     public boolean moveUnit(Position from, Position to) {
-        UnitImpl unit = getUnitAt(from);
+        AbstractUnit unit = getUnitAt(from);
         if (unit == null) {
             throw new IllegalArgumentException("There has to be a unit at the specified from position: " + from);
         }
@@ -101,7 +103,7 @@ public class BaseGame implements Game {
             return false;
         }
 
-        UnitImpl unitAtTarget = getUnitAt(to);
+        AbstractUnit unitAtTarget = getUnitAt(to);
         Tile targetTile = getTileAt(to);
 
         // Tests if we try to move to far.
@@ -174,7 +176,7 @@ public class BaseGame implements Game {
             int productionAmount = city.getProductionAmount();
             String produces = city.getProduction();
 
-            UnitImpl unit = null;
+            AbstractUnit unit = null;
 
             if (produces.equals(GameConstants.SETTLER)) {
                 if (productionAmount >= GameConstants.SETTLER_PRICE) {
@@ -214,7 +216,7 @@ public class BaseGame implements Game {
 
     public void performUnitActionAt(Position p) {
         // First see if its the right players turn.
-        UnitImpl unit = getUnitAt(p);
+        AbstractUnit unit = getUnitAt(p);
         if (unit != null && unit.getOwner() != getPlayerInTurn()){
             return;
         }
@@ -264,7 +266,7 @@ public class BaseGame implements Game {
          */
         public static UnitFactory getUnitFactory() {
             return new UnitFactory() {
-                public UnitImpl makeUnit(BaseGame game, String typeString, Player owner) {
+                public AbstractUnit makeUnit(BaseGame game, String typeString, Player owner) {
                     if (GameConstants.ARCHER.equals(typeString)) {
                         return new Archer(owner);
                     }
@@ -288,7 +290,7 @@ public class BaseGame implements Game {
         public static WorldLayoutStrategy getWorldLayoutStrategy() {
         	return new WorldLayoutStrategy() {
         		public void createWorldLayout(BaseGame game) {
-                    GameWorld<UnitImpl, CityImpl> gameWorld = game.getGameWorld();
+                    GameWorld gameWorld = game.getGameWorld();
                     String[] worldLayout = new String[] {
                             "PHPPPPPPPPPPPPPP",
                             "OPPPPPPPPPPPPPPP",
@@ -317,11 +319,11 @@ public class BaseGame implements Game {
                     UnitFactory unitFactory = game.getUnitFactory();
 
                     // Red has a archer at (2,0)
-                    gameWorld.placeUnit(new Position(2, 0), unitFactory.makeUnit(game, GameConstants.ARCHER, Player.RED));
+                    gameWorld.placeNewUnit(new Position(2, 0), GameConstants.ARCHER, Player.RED);
                     // Red has a settler at (4,3)
-                    gameWorld.placeUnit(new Position(4, 3), unitFactory.makeUnit(game, GameConstants.SETTLER, Player.RED));
+                    gameWorld.placeNewUnit(new Position(4, 3), GameConstants.SETTLER, Player.RED);
                     // Blue has a legion at (3,2)
-                    gameWorld.placeUnit(new Position(3, 2), unitFactory.makeUnit(game, GameConstants.LEGION, Player.BLUE));
+                    gameWorld.placeNewUnit(new Position(3, 2), GameConstants.LEGION, Player.BLUE);
         		}
         	};
         }
