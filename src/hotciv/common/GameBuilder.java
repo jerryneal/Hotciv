@@ -5,6 +5,7 @@ import hotciv.common.strategy.UnitFactory;
 import hotciv.common.strategy.GetWinner;
 import hotciv.common.strategy.UnitAction;
 import hotciv.common.strategy.WorldLayoutStrategy;
+import hotciv.framework.Game;
 
 /**
  * This class build a Game instance, by setting the strategies the game should use, and inserts defaults for the rest.
@@ -79,7 +80,7 @@ public class GameBuilder {
      * Builds the game based on the strategies set previously. It inserts defaults from BaseGame.DefaultStrategies if no other strategy was set.
      * @return The new game instance.
      */
-    public BaseGame build() {
+    public Game build() {
         // Inserting defaults.
         if (this.getWinner == null) {
             this.getWinner = BaseGame.DefaultStrategies.getWinner();

@@ -5,6 +5,9 @@ import hotciv.common.strategy.UnitAction;
 import hotciv.common.strategy.UnitFactory;
 import hotciv.common.units.Archer;
 import hotciv.framework.*;
+import hotciv.variants.strategies.GammaUnitAction;
+import hotciv.variants.strategies.GammaUnitFactory;
+import hotciv.variants.units.GammaArcher;
 
 /**
  * This variant handles unit actions, that the settler can fortify and the archer can
@@ -19,75 +22,8 @@ public class GammaCiv implements GameFactory{
      */
     public Game getGame() {
         return new GameBuilder()
-        .setUnitFactoryStrategy(new UnitFactory() {
-            UnitFactory defaultFactory = BaseGame.DefaultStrategies.getUnitFactory();
-            public UnitImpl makeUnit(BaseGame game, String typeString, Player owner) {
-                if (GameConstants.ARCHER.equals(typeString)) {
-                    return new GammaArcher(owner);
-                } else {
-                    // Return default implementation.
-                    return defaultFactory.makeUnit(game, typeString, owner);
-                }
-            }
-        })
-        .setUnitActionStrategy(new UnitAction() {
-            @Override
-            public void performAction(BaseGame game, Position position) {
-                GameWorld<UnitImpl, CityImpl> gameWorld = game.getGameWorld();
-                Unit unit = game.getUnitAt(position);
-                String typeString = unit.getTypeString();
-                if (GameConstants.ARCHER.equals(typeString)) {
-                    if (unit instanceof GammaArcher) {
-                        GammaArcher archer = (GammaArcher) unit;
-                        archer.switchFortify();
-                    } else {
-                        throw new RuntimeException("I expect an archer to be instanceof GammaArcher, since i specified it with the unitfactory. ");
-                    }
-                } else if (GameConstants.SETTLER.equals(typeString)) {
-                    // Move is invalid if there is already a city.
-                    if (game.getCityAt(position) != null)
-                        return;
-                    // Remove the settler.
-                    Unit settler = game.getUnitAt(position);
-                    Player owner = settler.getOwner();
-                    gameWorld.removeUnit(position);
-
-                    // Place a city with same owner.
-                    gameWorld.placeCity(position, new CityImpl(owner));
-                } else {
-                    // Do nothing!
-                }
-
-            }
-        }).build();
-    }
-
-    private class GammaArcher extends Archer {
-        private boolean fortified;
-        public GammaArcher(Player owner) {
-            super(owner);
-            this.fortified = false;
-        }
-        private void switchFortify() {
-            fortified = !fortified;
-        }
-        @Override
-        public int getMoveCount() {
-            if (fortified) {
-                return 0;
-            }
-            else {
-                return super.getMoveCount();
-            }
-        }
-        @Override
-        public int getDefensiveStrength() {
-            if (fortified) {
-                return super.getDefensiveStrength() * 2;
-            }
-            else {
-                return super.getDefensiveStrength();
-            }
-        }
+        .setUnitFactoryStrategy(new GammaUnitFactory())
+        .setUnitActionStrategy(new GammaUnitAction())
+        .build();
     }
 }
