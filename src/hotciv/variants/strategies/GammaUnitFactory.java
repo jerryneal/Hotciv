@@ -21,7 +21,7 @@ public class GammaUnitFactory implements UnitFactory {
         if (GameConstants.ARCHER.equals(typeString)) {
             return new GammaArcher(owner);
         } else if (GameConstants.SETTLER.equals(typeString)) {
-            return new GammaSettler(owner);
+            return new GammaSettler(game, owner);
         } else {
             // Return default implementation.
             return defaultFactory.makeUnit(game, typeString, owner);

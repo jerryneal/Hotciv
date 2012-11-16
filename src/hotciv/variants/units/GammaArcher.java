@@ -17,10 +17,6 @@ public class GammaArcher extends Archer {
         this.fortified = false;
     }
 
-    public void switchFortify() {
-        fortified = !fortified;
-    }
-
     @Override
     public int getMoveCount() {
         if (fortified) {
@@ -37,5 +33,10 @@ public class GammaArcher extends Archer {
         } else {
             return super.getDefensiveStrength();
         }
+    }
+
+    @Override
+    public void performAction() {
+        fortified = !fortified;
     }
 }
