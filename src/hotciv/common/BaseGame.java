@@ -1,22 +1,21 @@
 package hotciv.common;
 
-import hotciv.common.strategy.NewAgeCalculator;
-import hotciv.common.strategy.UnitFactory;
-import hotciv.common.strategy.GetWinner;
-import hotciv.common.strategy.WorldLayoutStrategy;
+import hotciv.common.strategy.*;
 import hotciv.common.units.Archer;
 import hotciv.common.units.Legion;
 import hotciv.common.units.Settler;
 import hotciv.framework.*;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 /**
  * This is a game instance, that does the most basic behaviour, and has a big constructor that specifies all the strategies this game uses.
+ *
  * @author : Erik
- * Date: 09-11-12, 11:22
+ *         Date: 09-11-12, 11:22
  */
 public class BaseGame implements Game {
     private GameWorld gameWorld;
@@ -32,18 +31,24 @@ public class BaseGame implements Game {
     private NewAgeCalculator newAgeCalculator;
     private UnitFactory unitFactory;
     private WorldLayoutStrategy worldLayoutStrategy;
+    private AttackResolver attackResolver;
+
+    private Map<Player, Integer> attackWonCounter = new HashMap<Player, Integer>();
+
+    private int roundCount = 1;
 
     /**
      * The default and only constructor for BaseGame.
      * The constructor is protected since only the GameBuilder is supposed to call it.
      * All the parameters are the different strategies used by this BaseGame.
      */
-    protected BaseGame(GetWinner getWinner, NewAgeCalculator newAgeCalculator, UnitFactory unitFactory, WorldLayoutStrategy worldLayoutStrategy) {
+    protected BaseGame(GetWinner getWinner, NewAgeCalculator newAgeCalculator, UnitFactory unitFactory, WorldLayoutStrategy worldLayoutStrategy, AttackResolver attackResolver) {
         // First strategies
         this.getWinner = getWinner;
         this.newAgeCalculator = newAgeCalculator;
         this.unitFactory = unitFactory;
         this.worldLayoutStrategy = worldLayoutStrategy;
+        this.attackResolver = attackResolver;
 
         // Player starts
         playerTurn = Player.RED;
@@ -74,6 +79,7 @@ public class BaseGame implements Game {
 
     /**
      * Gets the GameWorld in this BaseGame. The GameWorld is the internal representation of the world.
+     *
      * @return The GameWorld
      */
     public GameWorld getGameWorld() {
@@ -118,27 +124,44 @@ public class BaseGame implements Game {
         }
 
         //If there is a unit at the target, if it is an enemy, attack it, if it is the players unit, reject move.
-        if (unitAtTarget != null ) {
+        if (unitAtTarget != null) {
             if (unitAtTarget.getOwner() != unit.getOwner()) {
-                // Attacking unit always win in AlphaCiv.
-                gameWorld.removeUnit(to);
-            }
-            else /* if (unitAtTarget.getOwner() == unit.getOwner())*/ {
+                if (attackResolver.doesAttackerWin(this, unit, unitAtTarget)) {
+                    gameWorld.removeUnit(to);
+                    Integer attacksWon = attackWonCounter.get(unit.getOwner());
+                    if (attacksWon == null) {
+                        attackWonCounter.put(unit.getOwner(), 1);
+                    } else {
+                        attackWonCounter.put(unit.getOwner(), attacksWon + 1);
+                    }
+                } else {
+                    gameWorld.removeUnit(from);
+                    return true; // move was valid.
+                }
+            } else /* if (unitAtTarget.getOwner() == unit.getOwner())*/ {
                 return false;
             }
         }
 
-        if (getCityAt(to) != null && getCityAt(to).getOwner() != playerTurn ) {
+        // TODO: is taking a city an attack?
+        if (getCityAt(to) != null && getCityAt(to).getOwner() != playerTurn) {
             getCityAt(to).setOwner(playerTurn);
         }
 
         movedUnits.add(unit);
 
-        // Moves the unit.
         gameWorld.removeUnit(from);
         gameWorld.placeUnit(to, unit);
         return true;
 
+    }
+
+    public int getAttacksWon(Player player) {
+        Integer attacksWon = attackWonCounter.get(player);
+        if (attacksWon == null) {
+            return 0;
+        }
+        return attacksWon;
     }
 
     public void endOfTurn() {
@@ -167,6 +190,8 @@ public class BaseGame implements Game {
         // Aging the world.
         this.age = newAgeCalculator.getNewAge(this);
 
+        roundCount++;
+
         // Making the Cities produce something and make the units they can.
         for (Map.Entry<Position, CityImpl> cityEntry : gameWorld.getCityEntrySet()) {
             CityImpl city = cityEntry.getValue();
@@ -183,14 +208,12 @@ public class BaseGame implements Game {
                     city.decreaseProductionAmount(GameConstants.SETTLER_PRICE);
                     unit = unitFactory.makeUnit(this, GameConstants.SETTLER, city.getOwner());
                 }
-            }
-            else if (produces.equals(GameConstants.ARCHER)) {
+            } else if (produces.equals(GameConstants.ARCHER)) {
                 if (productionAmount >= GameConstants.ARCHER_PRICE) {
                     city.decreaseProductionAmount(GameConstants.ARCHER_PRICE);
                     unit = unitFactory.makeUnit(this, GameConstants.ARCHER, city.getOwner());
                 }
-            }
-            else if (produces.equals(GameConstants.LEGION)) {
+            } else if (produces.equals(GameConstants.LEGION)) {
                 if (productionAmount >= GameConstants.LEGION_PRICE) {
                     city.decreaseProductionAmount(GameConstants.LEGION_PRICE);
                     unit = unitFactory.makeUnit(this, GameConstants.LEGION, city.getOwner());
@@ -217,7 +240,7 @@ public class BaseGame implements Game {
     public void performUnitActionAt(Position p) {
         // First see if its the right players turn.
         AbstractUnit unit = getUnitAt(p);
-        if (unit != null && unit.getOwner() != getPlayerInTurn()){
+        if (unit != null && unit.getOwner() != getPlayerInTurn()) {
             return;
         }
         unit.performAction();
@@ -227,6 +250,14 @@ public class BaseGame implements Game {
         return unitFactory;
     }
 
+    public void resetAttacksWon() {
+        this.attackWonCounter.clear();
+    }
+
+    public int getRoundCount() {
+        return roundCount;
+    }
+
     /**
      * This class holds all the default strategies for the game.
      * When using the GameBuilder to make a game, these are inserted as defaults when no other strategy is specified.
@@ -234,6 +265,7 @@ public class BaseGame implements Game {
     public static class DefaultStrategies {
         /**
          * Gets an instance of the default strategy to calculate the new age of the game after each round.
+         *
          * @return the default NewAgeCalculator
          */
         public static NewAgeCalculator getNewAgeCalculator() {
@@ -243,8 +275,10 @@ public class BaseGame implements Game {
                 }
             };
         }
+
         /**
          * Gets an instance of the default strategy to calculate the winner of the game.
+         *
          * @return The default GetWinner
          */
         public static GetWinner getWinner() {
@@ -252,8 +286,7 @@ public class BaseGame implements Game {
                 public Player getWinner(BaseGame game) {
                     if (game.getAge() >= -3000) {
                         return Player.RED;
-                    }
-                    else {
+                    } else {
                         return null;
                     }
                 }
@@ -262,6 +295,7 @@ public class BaseGame implements Game {
 
         /**
          * Gets an instance of the default strategy for making units.
+         *
          * @return the default UnitFactory.
          */
         public static UnitFactory getUnitFactory() {
@@ -269,14 +303,11 @@ public class BaseGame implements Game {
                 public AbstractUnit makeUnit(BaseGame game, String typeString, Player owner) {
                     if (GameConstants.ARCHER.equals(typeString)) {
                         return new Archer(owner);
-                    }
-                    else if (GameConstants.SETTLER.equals(typeString)) {
+                    } else if (GameConstants.SETTLER.equals(typeString)) {
                         return new Settler(owner);
-                    }
-                    else if (GameConstants.LEGION.equals(typeString)) {
+                    } else if (GameConstants.LEGION.equals(typeString)) {
                         return new Legion(owner);
-                    }
-                    else {
+                    } else {
                         throw new RuntimeException("Unrecognized unit type: " + typeString);
                     }
                 }
@@ -285,13 +316,14 @@ public class BaseGame implements Game {
 
         /**
          * Gets an instance of the default strategy for creating the world.
+         *
          * @return the default WorldLayoutStrategy.
          */
         public static WorldLayoutStrategy getWorldLayoutStrategy() {
-        	return new WorldLayoutStrategy() {
-        		public void createWorldLayout(BaseGame game) {
+            return new WorldLayoutStrategy() {
+                public void createWorldLayout(BaseGame game) {
                     GameWorld gameWorld = game.getGameWorld();
-                    String[] worldLayout = new String[] {
+                    String[] worldLayout = new String[]{
                             "PHPPPPPPPPPPPPPP",
                             "OPPPPPPPPPPPPPPP",
                             "PPMPPPPPPPPPPPPP",
@@ -324,8 +356,22 @@ public class BaseGame implements Game {
                     gameWorld.placeNewUnit(new Position(4, 3), GameConstants.SETTLER, Player.RED);
                     // Blue has a legion at (3,2)
                     gameWorld.placeNewUnit(new Position(3, 2), GameConstants.LEGION, Player.BLUE);
-        		}
-        	};
+                }
+            };
+        }
+
+        /**
+         * TODO Doc.
+         *
+         * @return
+         */
+        public static AttackResolver getAttackResolver() {
+            return new AttackResolver() {
+                @Override
+                public boolean doesAttackerWin(BaseGame game, AbstractUnit attacker, AbstractUnit defender) {
+                    return true;
+                }
+            };
         }
     }
 }
