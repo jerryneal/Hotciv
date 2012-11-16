@@ -2,10 +2,7 @@ package hotciv.variants;
 
 import hotciv.common.*;
 import hotciv.common.strategy.*;
-import hotciv.framework.Game;
-import hotciv.framework.GameConstants;
-import hotciv.framework.Player;
-import hotciv.framework.Position;
+import hotciv.framework.*;
 
 import java.util.HashSet;
 
@@ -13,16 +10,12 @@ import java.util.HashSet;
  * @author: Erik
  * Date: 09-11-12, Time: 11:38
  */
-public class DeltaCiv {
-    private DeltaCiv() {
-
-    }
-
+public class DeltaCiv implements GameFactory{
     /**
      * Returns a game instance that behaves according to the rules of DeltaCiv.
      * @return The game.
      */
-    public static Game getGame() {
+    public Game getGame() {
         return new GameBuilder().setWorldLayoutStrategy(new WorldLayoutStrategy() {
             @Override
             public void createWorldLayout(BaseGame game) {

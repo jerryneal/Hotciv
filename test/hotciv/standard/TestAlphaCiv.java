@@ -11,7 +11,8 @@ import static org.junit.Assert.*;
 
 public class TestAlphaCiv {
 	private Game game;
-    Position redArcherPosition = new Position(2,0);
+
+    private Position redArcherPosition = new Position(2,0);
     private Position redCityPosition = new Position(1,1);
     private Position blueCityPosition = new Position(4,1);
     private Position blueLegionPosition= new Position(3, 2);
@@ -20,7 +21,7 @@ public class TestAlphaCiv {
     /** Fixture for alphaciv testing. */
 	@Before
 	public void setUp() {
-		game = AlphaCiv.getGame();
+		game = new AlphaCiv().getGame();
 	}
 
 	private void goToNextRound() {

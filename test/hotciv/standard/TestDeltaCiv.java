@@ -12,11 +12,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class TestDeltaCiv {
-	Game game;
+	private Game game;
 	
 	@Before
     public void setUp() {
-        game = DeltaCiv.getGame();
+        game = new DeltaCiv().getGame();
     }
 	
 	@Test

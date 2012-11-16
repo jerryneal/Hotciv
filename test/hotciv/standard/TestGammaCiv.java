@@ -14,9 +14,9 @@ import static org.junit.Assert.*;
  * Date: 09-11-12, 11:38
  */
 public class TestGammaCiv {
-    Game game;
+    private Game game;
 
-    Position redArcherPosition = new Position(2,0);
+    private Position redArcherPosition = new Position(2,0);
     private Position redCityPosition = new Position(1,1);
     private Position blueCityPosition = new Position(4,1);
     private Position blueLegionPosition= new Position(3, 2);
@@ -24,8 +24,7 @@ public class TestGammaCiv {
 
     @Before
     public void setUp() {
-        game = GammaCiv.getGame();
-        System.out.println();
+        game = new GammaCiv().getGame();
     }
 
     private void goToNextRound() {

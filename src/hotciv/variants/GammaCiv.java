@@ -12,16 +12,12 @@ import hotciv.framework.*;
  * @author: Erik
  * Date: 09-11-12, 23:35
  */
-public class GammaCiv {
-    private GammaCiv() {
-
-    }
-
-    /**
+public class GammaCiv implements GameFactory{
+   /**
      * Returns a game instance that behaves according to the rules of GammaCiv.
      * @return The game.
      */
-    public static Game getGame() {
+    public Game getGame() {
         return new GameBuilder()
         .setUnitFactoryStrategy(new UnitFactory() {
             UnitFactory defaultFactory = BaseGame.DefaultStrategies.getUnitFactory();
@@ -66,7 +62,7 @@ public class GammaCiv {
         }).build();
     }
 
-    private static class GammaArcher extends Archer {
+    private class GammaArcher extends Archer {
         private boolean fortified;
         public GammaArcher(Player owner) {
             super(owner);

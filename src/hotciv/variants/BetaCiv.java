@@ -5,10 +5,7 @@ import hotciv.common.CityImpl;
 import hotciv.common.GameBuilder;
 import hotciv.common.strategy.GetWinner;
 import hotciv.common.strategy.NewAgeCalculator;
-import hotciv.framework.City;
-import hotciv.framework.Game;
-import hotciv.framework.Player;
-import hotciv.framework.Position;
+import hotciv.framework.*;
 
 import java.util.Map;
 
@@ -16,16 +13,12 @@ import java.util.Map;
  * @author: Erik
  * Date: 09-11-12, Time: 11:38
  */
-public class BetaCiv {
-    private BetaCiv() {
-
-    }
-
+public class BetaCiv implements GameFactory{
     /**
      * Returns a game instance that behaves according to the rules of BetaCiv.
      * @return The game.
      */
-    public static Game getGame() {
+    public Game getGame() {
         return new GameBuilder().setWinnerStrategy(new GetWinner() {
             Player winner = null;
             @Override

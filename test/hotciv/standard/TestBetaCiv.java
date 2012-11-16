@@ -21,7 +21,7 @@ public class TestBetaCiv {
 
     @Before
     public void setUp() {
-        game = BetaCiv.getGame();
+        game = new BetaCiv().getGame();
     }
 
     private void goToNextRound() {

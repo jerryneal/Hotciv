@@ -7,16 +7,12 @@ import hotciv.framework.*;
  * @author: Erik
  * Date: 06-11-12, Time: 12:52
  */
-public class AlphaCiv {
-    private AlphaCiv() {
-
-    }
-
+public class AlphaCiv implements GameFactory {
     /**
      * Returns a game instance that behaves according to the rules of AlphaCiv.
      * @return The game.
      */
-    public static Game getGame() {
+    public Game getGame() {
         return new GameBuilder().build();
     }
 
