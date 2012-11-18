@@ -11,6 +11,9 @@ import hotciv.variants.DeltaCiv;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * JUnit test class for the DeltaCiv specification.
+ */
 public class TestDeltaCiv {
 	private Game game;
 	

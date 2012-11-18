@@ -5,7 +5,7 @@ import hotciv.common.strategy.GetWinner;
 import hotciv.framework.Player;
 
 /**
- * //TODO: Doc
+ * This strategy is an implementation of the EpsilonCiv and ZetaCiv winner strategies. It returns the player who first gets 3 battle wins.
  *
  * @author Erik
  *         Created: 16-11-12, 16:42

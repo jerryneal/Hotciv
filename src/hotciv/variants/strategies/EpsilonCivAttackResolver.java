@@ -11,7 +11,7 @@ import hotciv.framework.Tile;
 import java.security.SecureRandom;
 
 /**
- * //TODO: Doc
+ * This strategy implements the EpsilonCiv battle-outcome calculation algorithm, using SecureRandom to simulate die rolls.
  *
  * @author Erik
  *         Created: 16-11-12, 15:43

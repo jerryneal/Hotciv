@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * //TODO: Doc
+ * JUnit test class for the ZetaCiv specification.
  *
  * @author Erik
  *         Created: 16-11-12, 17:23

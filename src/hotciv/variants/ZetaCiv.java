@@ -6,7 +6,7 @@ import hotciv.framework.GameFactory;
 import hotciv.variants.strategies.ZetaCivWinnerStrategy;
 
 /**
- * //TODO: Doc
+ * Instance of the ZetaCiv specification, a identical to AlphaCiv except in regards to how winning the game is handled.
  *
  * @author Erik
  *         Created: 16-11-12, 17:13

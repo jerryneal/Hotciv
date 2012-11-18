@@ -5,7 +5,9 @@ import hotciv.common.strategy.GetWinner;
 import hotciv.framework.Player;
 
 /**
- * //TODO: Doc
+ * This strategy is an implemetation of the ZetaCiv specification, it uses the ConquerWinnerStrategy and the TripleWinnerWinsStrategy in tandem,
+ * if less than twenty rounds have passed, the player to conquer all cities wins, if twenty rounds have passed, whoever wins 3 battles first wins,
+ * counting from the twentyfirst round onwards.
  *
  * @author Erik
  *         Created: 16-11-12, 17:14
