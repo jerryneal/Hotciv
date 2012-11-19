@@ -1,4 +1,4 @@
-package hotciv.variants;
+package hotciv.standard.strategies;
 
 import hotciv.variants.strategies.Dice;
 

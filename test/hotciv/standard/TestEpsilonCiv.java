@@ -7,8 +7,7 @@ import hotciv.framework.Game;
 import hotciv.framework.GameConstants;
 import hotciv.framework.Player;
 import hotciv.framework.Position;
-import hotciv.variants.EpsilonCiv;
-import hotciv.variants.FixedDice;
+import hotciv.standard.strategies.FixedDice;
 import hotciv.variants.strategies.EpsilonCivAttackResolver;
 import hotciv.variants.strategies.TripleWinnerWins;
 import org.junit.Before;
@@ -25,6 +24,7 @@ import static org.junit.Assert.assertNull;
  */
 public class TestEpsilonCiv {
     private Game game;
+    private FixedDice fixedDice;
 
     private Position redArcherPosition = new Position(2, 0);
     private Position redCityPosition = new Position(1, 1);
@@ -34,7 +34,11 @@ public class TestEpsilonCiv {
 
     @Before
     public void setUp() {
-        game = new EpsilonCiv().getGame();
+        fixedDice = new FixedDice(1);
+        game = new GameBuilder()
+                .setAttackResolverStrategy(new EpsilonCivAttackResolver(fixedDice))
+                .setWinnerStrategy(new TripleWinnerWins())
+                .build();
     }
 
     /**
@@ -43,10 +47,7 @@ public class TestEpsilonCiv {
      * @param fixedDiceValue
      */
     private void setUpFixedEpsilonCiv(final int fixedDiceValue) {
-        game = new GameBuilder()
-                .setAttackResolverStrategy(new EpsilonCivAttackResolver(new FixedDice(1)))
-                .setWinnerStrategy(new TripleWinnerWins())
-                .build();
+
     }
 
     private void goToNextRound() {
