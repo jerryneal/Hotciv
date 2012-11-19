@@ -11,6 +11,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 /**
+ * JUnit test class for the BetaCiv specification.
+ * 
  * @author : Erik
  *         Date: 09-11-12, 11:38
  */

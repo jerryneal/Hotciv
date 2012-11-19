@@ -10,6 +10,8 @@ import static org.junit.Assert.*;
 
 
 /**
+ * JUnit test class for the GammaCiv specification.
+ * 
  * @author : Erik
  *         Date: 09-11-12, 11:38
  */

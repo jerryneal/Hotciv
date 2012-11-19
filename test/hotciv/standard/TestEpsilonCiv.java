@@ -18,7 +18,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 /**
- * //TODO: Doc
+ * JUnit test class for the EpsilonCiv specification.
  *
  * @author Erik
  *         Created: 16-11-12, 15:50

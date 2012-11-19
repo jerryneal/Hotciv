@@ -7,7 +7,8 @@ import hotciv.variants.strategies.EpsilonCivAttackResolver;
 import hotciv.variants.strategies.TripleWinnerWins;
 
 /**
- * //TODO: Doc
+ * Conforming to the EpsilonCiv specification, this class creates an instance of a game where battles are resolves using the
+ * EpsilonCiv algorithm, and the winner of the game is whoever wins 3 battles first.
  *
  * @author Erik
  *         Created: 16-11-12, 15:38

@@ -7,6 +7,10 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+/**
+ * JUnit test class for the AlphaCiv specification.
+ */
+
 public class TestAlphaCiv {
     private Game game;
 
