@@ -16,7 +16,7 @@ public class EpsilonCiv implements GameFactory {
     @Override
     public Game getGame() {
         return new GameBuilder()
-                .setAttackResolverStrategy(new EpsilonCivAttackResolver())
+                .setAttackResolverStrategy(new EpsilonCivAttackResolver(new RandomDice()))
                 .setWinnerStrategy(new TripleWinnerWins())
                 .build();
     }

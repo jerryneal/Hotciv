@@ -1,53 +1,54 @@
 package hotciv.standard;
 
-import hotciv.variants.AlphaCiv;
 import hotciv.framework.*;
+import hotciv.variants.AlphaCiv;
+import org.junit.Before;
+import org.junit.Test;
 
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
-import org.junit.*;
 import static org.junit.Assert.*;
 
 public class TestAlphaCiv {
-	private Game game;
+    private Game game;
 
-    private Position redArcherPosition = new Position(2,0);
-    private Position redCityPosition = new Position(1,1);
-    private Position blueCityPosition = new Position(4,1);
-    private Position blueLegionPosition= new Position(3, 2);
+    private Position redArcherPosition = new Position(2, 0);
+    private Position redCityPosition = new Position(1, 1);
+    private Position blueCityPosition = new Position(4, 1);
+    private Position blueLegionPosition = new Position(3, 2);
     private Position redSettlerPosition = new Position(4, 3);
 
-    /** Fixture for alphaciv testing. */
-	@Before
-	public void setUp() {
-		game = new AlphaCiv().getGame();
-	}
+    /**
+     * Fixture for alphaciv testing.
+     */
+    @Before
+    public void setUp() {
+        game = new AlphaCiv().getGame();
+    }
 
-	private void goToNextRound() {
-		// Goes to the next round in the game, or terminates after 100 tries.
-		for (int i = 0; i < 4; i++) {
-			game.endOfTurn();
-			if (game.getPlayerInTurn() == Player.RED)
-				break;
-		}
+    private void goToNextRound() {
+        // Goes to the next round in the game, or terminates after 100 tries.
+        for (int i = 0; i < 4; i++) {
+            game.endOfTurn();
+            if (game.getPlayerInTurn() == Player.RED)
+                break;
+        }
         if (game.getPlayerInTurn() != Player.RED) {
             throw new RuntimeException("The player wasn't red when it was supposed to be, or endOfTurn() doesn't work");
         }
-	}
+    }
+
     private void goToNextRound(int n) {
         for (int i = 0; i < n; i++) {
             goToNextRound();
         }
     }
 
-	@Test
-	public void shouldHaveRedCityAt1_1() {
-		City c = game.getCityAt(redCityPosition);
-		assertNotNull("There should be a city at (1,1)", c);
-		Player p = c.getOwner();
-		assertEquals("City at (1,1) should be owned by red", Player.RED, p);
-	}
+    @Test
+    public void shouldHaveRedCityAt1_1() {
+        City c = game.getCityAt(redCityPosition);
+        assertNotNull("There should be a city at (1,1)", c);
+        Player p = c.getOwner();
+        assertEquals("City at (1,1) should be owned by red", Player.RED, p);
+    }
 
     @Test
     public void shouldHaveBlueCityAt4_1() {
@@ -57,109 +58,111 @@ public class TestAlphaCiv {
         assertEquals("City at (4,1) should be owned by blue", Player.BLUE, p);
     }
 
-	@Test
-	public void redStartsFirst() {
-		assertEquals(Player.RED, game.getPlayerInTurn());
-	}
+    @Test
+    public void redStartsFirst() {
+        assertEquals(Player.RED, game.getPlayerInTurn());
+    }
 
-	@Test
-	public void allTilesProperlyInserted() {
-		assertEquals(game.getTileAt(new Position(1, 0)).getTypeString(), GameConstants.OCEANS);
+    @Test
+    public void allTilesProperlyInserted() {
+        assertEquals(game.getTileAt(new Position(1, 0)).getTypeString(), GameConstants.OCEANS);
         assertEquals(game.getTileAt(new Position(0, 1)).getTypeString(), GameConstants.HILLS);
         assertEquals(game.getTileAt(new Position(2, 2)).getTypeString(), GameConstants.MOUNTAINS);
-	}
+    }
 
-	@Test
-	public void endTurnResultsInOtherPlayerGettingTurn() {
-		game.endOfTurn();
-		assertEquals(Player.BLUE, game.getPlayerInTurn());
-		game.endOfTurn();
-		assertEquals(Player.RED, game.getPlayerInTurn());
-	}
+    @Test
+    public void endTurnResultsInOtherPlayerGettingTurn() {
+        game.endOfTurn();
+        assertEquals(Player.BLUE, game.getPlayerInTurn());
+        game.endOfTurn();
+        assertEquals(Player.RED, game.getPlayerInTurn());
+    }
 
-	@Test
-	public void ageStartsAt4000BC() {
-		assertEquals(-4000, game.getAge());
-	}
+    @Test
+    public void ageStartsAt4000BC() {
+        assertEquals(-4000, game.getAge());
+    }
 
-	@Test
-	public void whenRedHasSecondTurnAgeIs3900BC() {
-		goToNextRound();
-		assertEquals(-3900, game.getAge());
-	}
+    @Test
+    public void whenRedHasSecondTurnAgeIs3900BC() {
+        goToNextRound();
+        assertEquals(-3900, game.getAge());
+    }
 
-	@Test
-	public void ageIs3800BCafter2Rounds() {
-		goToNextRound(2);
-		assertEquals(-3800, game.getAge());
-	}
+    @Test
+    public void ageIs3800BCafter2Rounds() {
+        goToNextRound(2);
+        assertEquals(-3800, game.getAge());
+    }
 
-	@Test
-	public void noWinnerWhenStartGame() {
-		assertNull(game.getWinner());
-	}
+    @Test
+    public void noWinnerWhenStartGame() {
+        assertNull(game.getWinner());
+    }
 
-	@Test
-	public void redWinsIn3000BC() {
+    @Test
+    public void redWinsIn3000BC() {
         int breakCounter = 0;
-		while (game.getAge() < -3000 && breakCounter++ < 1000) {
-			game.endOfTurn();
-		}
-		assertEquals(Player.RED, game.getWinner());
-	}
+        while (game.getAge() < -3000 && breakCounter++ < 1000) {
+            game.endOfTurn();
+        }
+        assertEquals(Player.RED, game.getWinner());
+    }
 
-	@Test
-	public void cityAlwaysHasPopulation1() {
-		City city = game.getCityAt(redCityPosition);
-		assertEquals(1, city.getSize());
+    @Test
+    public void cityAlwaysHasPopulation1() {
+        City city = game.getCityAt(redCityPosition);
+        assertEquals(1, city.getSize());
         city = game.getCityAt(blueCityPosition);
         assertEquals(1, city.getSize());
-	}
+    }
 
-	@Test
-	public void allTilesPopulated() {
-		for (int i = 0; i < 16; i++) {
-			for (int j = 0; j < 16; j++) {
-				assertNotNull(game.getTileAt(new Position(i, j)));
-			}
-		}
-	}
+    @Test
+    public void allTilesPopulated() {
+        for (int i = 0; i < 16; i++) {
+            for (int j = 0; j < 16; j++) {
+                assertNotNull(game.getTileAt(new Position(i, j)));
+            }
+        }
+    }
 
     @Test
     public void unitCannotMoveToOcean() {
         assertFalse(game.moveUnit(redArcherPosition, redArcherPosition.getNorth()));
     }
 
-	@Test
-	public void UnitsCannotMoveOverMountains() {
-		// Mountain at (2,2)
-		assertEquals(game.getTileAt(new Position(2, 2)).getTypeString(),
-				GameConstants.MOUNTAINS); 
-		// Red archer at (2,0)
-		Unit archer = game.getUnitAt(redArcherPosition);
-		assertEquals(GameConstants.ARCHER, archer.getTypeString());
-		assertEquals(Player.RED, archer.getOwner());
-		// Move the archer 1 valid move.
-		assertEquals(true, game.moveUnit(redArcherPosition, redArcherPosition.getEast()));
-		// go to next round
-		goToNextRound();
-		// Move the archer to the mountain, should return false.
-		assertEquals(false, game.moveUnit(redArcherPosition.getEast(), redArcherPosition.getEast().getEast()));
-	}
-	@Test 
-	public void archerCannotMove2TilesIn1Turn() {
-		// Red archer at (2,0)
-		Unit archer = game.getUnitAt(redArcherPosition);
-		assertEquals(GameConstants.ARCHER, archer.getTypeString());
-		assertEquals(Player.RED, archer.getOwner());
-		// Try to move the archer 2 tiles. 
-		assertEquals(false, game.moveUnit(redArcherPosition, redArcherPosition.getEast().getEast()));
-		// Try to move the archer 2 tiles in 2 steps.
-		assertEquals(true, game.moveUnit(redArcherPosition, redArcherPosition.getSouth()));
-		assertEquals(false, game.moveUnit(redArcherPosition.getSouth(), redArcherPosition.getSouth().getSouth()));
-	}
-	@Test
-	public void archerCanMove2TilesIn2Turns() {
+    @Test
+    public void UnitsCannotMoveOverMountains() {
+        // Mountain at (2,2)
+        assertEquals(game.getTileAt(new Position(2, 2)).getTypeString(),
+                GameConstants.MOUNTAINS);
+        // Red archer at (2,0)
+        Unit archer = game.getUnitAt(redArcherPosition);
+        assertEquals(GameConstants.ARCHER, archer.getTypeString());
+        assertEquals(Player.RED, archer.getOwner());
+        // Move the archer 1 valid move.
+        assertEquals(true, game.moveUnit(redArcherPosition, redArcherPosition.getEast()));
+        // go to next round
+        goToNextRound();
+        // Move the archer to the mountain, should return false.
+        assertEquals(false, game.moveUnit(redArcherPosition.getEast(), redArcherPosition.getEast().getEast()));
+    }
+
+    @Test
+    public void archerCannotMove2TilesIn1Turn() {
+        // Red archer at (2,0)
+        Unit archer = game.getUnitAt(redArcherPosition);
+        assertEquals(GameConstants.ARCHER, archer.getTypeString());
+        assertEquals(Player.RED, archer.getOwner());
+        // Try to move the archer 2 tiles.
+        assertEquals(false, game.moveUnit(redArcherPosition, redArcherPosition.getEast().getEast()));
+        // Try to move the archer 2 tiles in 2 steps.
+        assertEquals(true, game.moveUnit(redArcherPosition, redArcherPosition.getSouth()));
+        assertEquals(false, game.moveUnit(redArcherPosition.getSouth(), redArcherPosition.getSouth().getSouth()));
+    }
+
+    @Test
+    public void archerCanMove2TilesIn2Turns() {
         // Red archer at (2,0)
         Unit archer = game.getUnitAt(redArcherPosition);
         assertEquals(GameConstants.ARCHER, archer.getTypeString());
@@ -168,43 +171,47 @@ public class TestAlphaCiv {
         assertEquals(true, game.moveUnit(redArcherPosition, redArcherPosition.getSouth()));
         goToNextRound();
         assertEquals(true, game.moveUnit(redArcherPosition.getSouth(), redArcherPosition.getSouth().getSouth()));
-	}
-	@Test
-	public void unitCanMoveDiagonal() {
+    }
+
+    @Test
+    public void unitCanMoveDiagonal() {
         // Red archer at (2,0)
         Unit archer = game.getUnitAt(redArcherPosition);
         assertEquals(GameConstants.ARCHER, archer.getTypeString());
         assertEquals(Player.RED, archer.getOwner());
         // Try to move the archer diagonal.
         assertEquals(true, game.moveUnit(redArcherPosition, redArcherPosition.getSouthEast()));
-	}
-	@Test
-	public void PositionCalculatesDistanceCorrectly() {
-		assertEquals(2, Position.getDistance(new Position(0,0), new Position(2,2)));
-        assertEquals(3, Position.getDistance(redCityPosition, new Position(3,4)));
-        assertEquals(1, Position.getDistance(new Position(0,0), new Position(1,0)));
-        assertEquals(1, Position.getDistance(new Position(2,2), new Position(3,3)));
-        assertEquals(2, Position.getDistance(new Position(1,10), new Position(3,10)));
-	}
-	@Test
-	public void allUnitsProperlyInserted() {
-		//Red archer at (2,0)
-		Unit archer = game.getUnitAt(redArcherPosition);
+    }
+
+    @Test
+    public void PositionCalculatesDistanceCorrectly() {
+        assertEquals(2, Position.getDistance(new Position(0, 0), new Position(2, 2)));
+        assertEquals(3, Position.getDistance(redCityPosition, new Position(3, 4)));
+        assertEquals(1, Position.getDistance(new Position(0, 0), new Position(1, 0)));
+        assertEquals(1, Position.getDistance(new Position(2, 2), new Position(3, 3)));
+        assertEquals(2, Position.getDistance(new Position(1, 10), new Position(3, 10)));
+    }
+
+    @Test
+    public void allUnitsProperlyInserted() {
+        //Red archer at (2,0)
+        Unit archer = game.getUnitAt(redArcherPosition);
         assertEquals(GameConstants.ARCHER, archer.getTypeString());
         assertEquals(Player.RED, archer.getOwner());
-		//Blue legion at (3,2)
+        //Blue legion at (3,2)
         Unit legion = game.getUnitAt(blueLegionPosition);
         assertEquals(GameConstants.LEGION, legion.getTypeString());
         assertEquals(Player.BLUE, legion.getOwner());
-		//Red Settler at (4,3)
+        //Red Settler at (4,3)
         Unit settler = game.getUnitAt(redSettlerPosition);
         assertEquals(GameConstants.SETTLER, settler.getTypeString());
         assertEquals(Player.RED, settler.getOwner());
-	}
-	@Test
-	public void battleEndsWithAttackersVictoryRedAttacks() {
-		//Red archer from (2,0) moves to and attacks blue legion at (3,2)
-		Unit archer = game.getUnitAt(redArcherPosition);
+    }
+
+    @Test
+    public void battleEndsWithAttackersVictoryRedAttacks() {
+        //Red archer from (2,0) moves to and attacks blue legion at (3,2)
+        Unit archer = game.getUnitAt(redArcherPosition);
         assertEquals(GameConstants.ARCHER, archer.getTypeString());
         assertEquals(Player.RED, archer.getOwner());
         assertEquals(true, game.moveUnit(redArcherPosition, redArcherPosition.getSouthEast()));
@@ -215,7 +222,7 @@ public class TestAlphaCiv {
         Unit archerAfterBattle = game.getUnitAt(blueLegionPosition);
         assertEquals(GameConstants.ARCHER, archerAfterBattle.getTypeString());
         assertEquals(Player.RED, archerAfterBattle.getOwner());
-	}
+    }
 
     @Test
     public void battleEndsWithAttackersVictoryBlueAttacks() {
@@ -243,42 +250,42 @@ public class TestAlphaCiv {
         game.endOfTurn();
         assertFalse(game.moveUnit(redArcherPosition, redArcherPosition.getSouthEast()));
     }
-    
+
     @Test
     public void movingToUnoccupiedEnemyCityGrantsMovingPlayerCity() {
-    	//Blue Legion attacks red city at (1,1)
-    	game.endOfTurn();
-    	Unit legion = game.getUnitAt(blueLegionPosition);
-    	game.moveUnit(blueLegionPosition, blueLegionPosition.getNorthWest());
-    	goToNextRound();
-    	game.endOfTurn();
-    	game.moveUnit(blueLegionPosition.getNorthWest(), blueLegionPosition.getNorthWest().getNorth());
-    	City city = game.getCityAt(redCityPosition);
-    	assertEquals(legion.getOwner(), city.getOwner());
+        //Blue Legion attacks red city at (1,1)
+        game.endOfTurn();
+        Unit legion = game.getUnitAt(blueLegionPosition);
+        game.moveUnit(blueLegionPosition, blueLegionPosition.getNorthWest());
+        goToNextRound();
+        game.endOfTurn();
+        game.moveUnit(blueLegionPosition.getNorthWest(), blueLegionPosition.getNorthWest().getNorth());
+        City city = game.getCityAt(redCityPosition);
+        assertEquals(legion.getOwner(), city.getOwner());
     }
-    
+
     @Test
     public void movingToOccupiedEnemyCityGrantsMovingPlayerCityAfterBattle() {
-    	//Red archer moves into city at (1,1)
-    	game.moveUnit(redArcherPosition, redArcherPosition.getNorthEast());
-    	game.endOfTurn();
-    	//Blue Legion attacks red city at (1,1)
-    	Unit legion = game.getUnitAt(blueLegionPosition);
-    	game.moveUnit(blueLegionPosition, blueLegionPosition.getNorthWest());
-    	goToNextRound();
-    	game.endOfTurn();
-    	game.moveUnit( blueLegionPosition.getNorthWest(),  blueLegionPosition.getNorthWest().getNorth());
-    	City city = game.getCityAt(redCityPosition);
-    	assertEquals(legion.getOwner(), city.getOwner());
+        //Red archer moves into city at (1,1)
+        game.moveUnit(redArcherPosition, redArcherPosition.getNorthEast());
+        game.endOfTurn();
+        //Blue Legion attacks red city at (1,1)
+        Unit legion = game.getUnitAt(blueLegionPosition);
+        game.moveUnit(blueLegionPosition, blueLegionPosition.getNorthWest());
+        goToNextRound();
+        game.endOfTurn();
+        game.moveUnit(blueLegionPosition.getNorthWest(), blueLegionPosition.getNorthWest().getNorth());
+        City city = game.getCityAt(redCityPosition);
+        assertEquals(legion.getOwner(), city.getOwner());
     }
-    
-    
+
+
     @Test
-    public void testCityProductionGrows6(){
-    	City city = game.getCityAt(redCityPosition);
-    	assertEquals(0, city.getProductionAmount());
-    	goToNextRound();
-    	assertEquals(6, city.getProductionAmount());
+    public void testCityProductionGrows6() {
+        City city = game.getCityAt(redCityPosition);
+        assertEquals(0, city.getProductionAmount());
+        goToNextRound();
+        assertEquals(6, city.getProductionAmount());
         goToNextRound();
         assertEquals(12, city.getProductionAmount());
     }
@@ -329,7 +336,7 @@ public class TestAlphaCiv {
         assertEquals("After 5 more rounds there should be a settler just northEast of the city",
                 GameConstants.SETTLER, game.getUnitAt(redCityPosition.getNorthEast()).getTypeString());
         assertNull("At this point there shouldn't be a unit at (1,2)",
-                game.getUnitAt(new Position(1,2)));
+                game.getUnitAt(new Position(1, 2)));
 
         goToNextRound(5);
         assertEquals("After 5 more rounds there should be a settler just East of the city",
@@ -337,7 +344,7 @@ public class TestAlphaCiv {
 
         goToNextRound(9);
         assertNull("At this point there shouldn't be a unit north west of the city",
-                game.getUnitAt(new Position(0,0)));
+                game.getUnitAt(new Position(0, 0)));
         goToNextRound();
         assertEquals("At this point there should be a settler at north west of the city",
                 GameConstants.SETTLER, game.getUnitAt(redCityPosition.getNorthWest()).getTypeString());
@@ -345,6 +352,7 @@ public class TestAlphaCiv {
         assertEquals("At this point there should be a settler 1 north and 2 east of the city",
                 GameConstants.SETTLER, game.getUnitAt(redCityPosition.getNorthEast().getEast()).getTypeString());
     }
+
     @Test
     public void citiesCanProduceArchers() {
         City city = game.getCityAt(redCityPosition);
@@ -366,6 +374,7 @@ public class TestAlphaCiv {
         assertEquals("After 5 rounds there should be a LEGION on the city, because we specified it. ",
                 GameConstants.LEGION, game.getUnitAt(redCityPosition).getTypeString());
     }
+
     @Test
     public void cannotMoveUnitToFriendlyUnit() {
         // Moving the red archer all the way to the red setler. Long way, but only way in AlphaCiv.

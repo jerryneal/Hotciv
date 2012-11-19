@@ -1,25 +1,25 @@
 package hotciv.standard;
 
 
-import hotciv.common.BaseGame;
 import hotciv.framework.*;
-
 import hotciv.variants.GammaCiv;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 
 /**
  * @author : Erik
- * Date: 09-11-12, 11:38
+ *         Date: 09-11-12, 11:38
  */
 public class TestGammaCiv {
     private Game game;
 
-    private Position redArcherPosition = new Position(2,0);
-    private Position redCityPosition = new Position(1,1);
-    private Position blueCityPosition = new Position(4,1);
-    private Position blueLegionPosition= new Position(3, 2);
+    private Position redArcherPosition = new Position(2, 0);
+    private Position redCityPosition = new Position(1, 1);
+    private Position blueCityPosition = new Position(4, 1);
+    private Position blueLegionPosition = new Position(3, 2);
     private Position redSettlerPosition = new Position(4, 3);
 
     @Before
@@ -38,6 +38,7 @@ public class TestGammaCiv {
             throw new RuntimeException("The player wasn't red when it was supposed to be, or endOfTurn() doesn't work");
         }
     }
+
     private void goToNextRound(int n) {
         for (int i = 0; i < n; i++) {
             goToNextRound();
@@ -131,7 +132,7 @@ public class TestGammaCiv {
     }
 
     @Test
-    public void settlerActionOnProducedSettler()  {
+    public void settlerActionOnProducedSettler() {
         City city = game.getCityAt(redCityPosition);
         assertNull(game.getUnitAt(redCityPosition));
         assertEquals(Player.RED, city.getOwner());

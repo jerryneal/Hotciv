@@ -1,12 +1,16 @@
 package hotciv.standard;
 
 import hotciv.common.BaseGame;
+import hotciv.common.GameBuilder;
 import hotciv.common.GameWorld;
 import hotciv.framework.Game;
 import hotciv.framework.GameConstants;
 import hotciv.framework.Player;
 import hotciv.framework.Position;
 import hotciv.variants.EpsilonCiv;
+import hotciv.variants.FixedDice;
+import hotciv.variants.strategies.EpsilonCivAttackResolver;
+import hotciv.variants.strategies.TripleWinnerWins;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,6 +37,18 @@ public class TestEpsilonCiv {
         game = new EpsilonCiv().getGame();
     }
 
+    /**
+     * Replaces the standard setup game, with a version of EpsilonCiv all dice rolls have a fixed preset value.
+     *
+     * @param fixedDiceValue
+     */
+    private void setUpFixedEpsilonCiv(final int fixedDiceValue) {
+        game = new GameBuilder()
+                .setAttackResolverStrategy(new EpsilonCivAttackResolver(new FixedDice(1)))
+                .setWinnerStrategy(new TripleWinnerWins())
+                .build();
+    }
+
     private void goToNextRound() {
         // Goes to the next round in the game, or terminates after 100 tries.
         for (int i = 0; i < 4; i++) {
@@ -51,37 +67,21 @@ public class TestEpsilonCiv {
         }
     }
 
-    @Test
-    public void attackerDoesNotAlwaysWin() {
-        // This test fails, if it loops infinitely.
-        Position redArcherPosition = new Position(10, 10);
-        Position blueArcherPosition = new Position(10, 11);
-
-        BaseGame game = (BaseGame) this.game;
-        GameWorld gameWorld = game.getGameWorld();
-
-        // TODO: Is a possible infinite loop ok?
-        while (true) {
-            gameWorld.removeUnit(redArcherPosition);
-            gameWorld.placeNewUnit(redArcherPosition, GameConstants.ARCHER, Player.RED);
-            gameWorld.removeUnit(blueArcherPosition);
-            gameWorld.placeNewUnit(blueArcherPosition, GameConstants.ARCHER, Player.BLUE);
-            game.moveUnit(redArcherPosition, blueArcherPosition);
-            if (game.getUnitAt(blueArcherPosition).getOwner() == Player.BLUE) {
-                return;
-            }
-        }
-    }
 
     @Test
     public void tripleWinnerWinsRedWins() {
+        setUpFixedEpsilonCiv(1);
+
         Position redArcherPosition = new Position(10, 10);
         Position blueArcherPosition = new Position(10, 11);
 
         BaseGame game = (BaseGame) this.game;
         GameWorld gameWorld = game.getGameWorld();
 
-        while (game.getAttacksWon(Player.RED) < 3) {
+        // Setting up support for red, so he always wins.
+        gameWorld.placeNewUnit(redArcherPosition.getNorth(), GameConstants.ARCHER, Player.RED);
+
+        for (int i = 0; i < 3; i++) {
             assertNull(game.getWinner());
             gameWorld.removeUnit(redArcherPosition);
             gameWorld.placeNewUnit(redArcherPosition, GameConstants.ARCHER, Player.RED);
@@ -94,14 +94,20 @@ public class TestEpsilonCiv {
 
     @Test
     public void tripleWinnerWinsBlueWins() {
+        setUpFixedEpsilonCiv(1);
+
+        game.endOfTurn();
+
         Position redArcherPosition = new Position(10, 10);
         Position blueArcherPosition = new Position(10, 11);
 
         BaseGame game = (BaseGame) this.game;
-        game.endOfTurn();
         GameWorld gameWorld = game.getGameWorld();
 
-        while (game.getAttacksWon(Player.BLUE) < 3) {
+        // Setting up support for blue, so he always wins.
+        gameWorld.placeNewUnit(blueArcherPosition.getNorth(), GameConstants.ARCHER, Player.BLUE);
+
+        for (int i = 0; i < 3; i++) {
             assertNull(game.getWinner());
             gameWorld.removeUnit(redArcherPosition);
             gameWorld.placeNewUnit(redArcherPosition, GameConstants.ARCHER, Player.RED);

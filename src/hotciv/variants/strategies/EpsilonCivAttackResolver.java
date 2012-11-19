@@ -8,8 +8,6 @@ import hotciv.framework.GameConstants;
 import hotciv.framework.Position;
 import hotciv.framework.Tile;
 
-import java.security.SecureRandom;
-
 /**
  * //TODO: Doc
  *
@@ -17,16 +15,18 @@ import java.security.SecureRandom;
  *         Created: 16-11-12, 15:43
  */
 public class EpsilonCivAttackResolver implements AttackResolver {
+    private Dice dice;
+
+    public EpsilonCivAttackResolver(Dice dice) {
+        this.dice = dice;
+    }
+
     @Override
     public boolean doesAttackerWin(BaseGame game, AbstractUnit attacker, AbstractUnit defender) {
         int attackStrength = getCombinedBattleStrength(game, attacker);
         int defendingStrength = getCombinedBattleStrength(game, defender);
 
-        SecureRandom random = new SecureRandom();
-        int dice1 = random.nextInt(32) % 6;
-        int dice2 = random.nextInt(32) % 6;
-
-        return attackStrength * dice1 > defendingStrength * dice2;
+        return attackStrength * dice.getNext() > defendingStrength * dice.getNext();
     }
 
     private int getCombinedBattleStrength(BaseGame game, AbstractUnit unit) {

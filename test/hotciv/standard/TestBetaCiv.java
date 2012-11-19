@@ -1,22 +1,26 @@
 package hotciv.standard;
 
-import hotciv.framework.*;
-
+import hotciv.framework.Game;
+import hotciv.framework.Player;
+import hotciv.framework.Position;
 import hotciv.variants.BetaCiv;
-import org.junit.*;
-import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * @author : Erik
- * Date: 09-11-12, 11:38
+ *         Date: 09-11-12, 11:38
  */
 public class TestBetaCiv {
     Game game;
 
-    Position redArcherPosition = new Position(2,0);
-    private Position redCityPosition = new Position(1,1);
-    private Position blueCityPosition = new Position(4,1);
-    private Position blueLegionPosition= new Position(3, 2);
+    Position redArcherPosition = new Position(2, 0);
+    private Position redCityPosition = new Position(1, 1);
+    private Position blueCityPosition = new Position(4, 1);
+    private Position blueLegionPosition = new Position(3, 2);
     private Position redSettlerPosition = new Position(4, 3);
 
     @Before
@@ -35,6 +39,7 @@ public class TestBetaCiv {
             throw new RuntimeException("The player wasn't red when it was supposed to be, or endOfTurn() doesn't work");
         }
     }
+
     private void goToNextRound(int n) {
         for (int i = 0; i < n; i++) {
             goToNextRound();
@@ -86,6 +91,7 @@ public class TestBetaCiv {
         game.moveUnit(redArcherPosition.getSouthEast(), redArcherPosition.getSouthEast().getSouth());
         assertEquals(Player.RED, game.getWinner());
     }
+
     @Test
     public void winsAfterConqueringAllCitiesBlueConquers() {
         game.endOfTurn();

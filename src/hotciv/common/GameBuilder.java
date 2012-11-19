@@ -2,6 +2,7 @@ package hotciv.common;
 
 import hotciv.common.strategy.*;
 import hotciv.framework.Game;
+import hotciv.variants.strategies.Dice;
 
 /**
  * This class build a Game instance, by setting the strategies the game should use, and inserts defaults for the rest.
@@ -15,6 +16,8 @@ public class GameBuilder {
     private UnitFactory unitFactory;
     private WorldLayoutStrategy worldLayoutStrategy;
     private AttackResolver attackResolver;
+
+    private Dice dice;
 
     /**
      * Constructs a new GameBuilder.
