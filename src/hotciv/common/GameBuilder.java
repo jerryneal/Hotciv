@@ -71,10 +71,10 @@ public class GameBuilder {
     }
 
     /**
-     * TODO: Doc.
+     * Sets the attackResolver.
      *
-     * @param resolver
-     * @return
+     * @param resolver The attackResolver
+     * @return this GameBuilder
      */
     public GameBuilder setAttackResolverStrategy(AttackResolver resolver) {
         this.attackResolver = resolver;

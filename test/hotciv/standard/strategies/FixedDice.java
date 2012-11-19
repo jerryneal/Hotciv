@@ -3,7 +3,8 @@ package hotciv.standard.strategies;
 import hotciv.variants.strategies.Dice;
 
 /**
- * //TODO: Doc
+ * Makes a dice that returns a fixed value.
+ * This value can be set using the setValue method.
  *
  * @author Erik
  *         Created: 19-11-12, 14:47

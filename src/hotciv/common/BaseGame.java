@@ -361,9 +361,9 @@ public class BaseGame implements Game {
         }
 
         /**
-         * TODO Doc.
+         * Gets the default attackResolver where the attacker always wins.
          *
-         * @return
+         * @return The attackResolver
          */
         public static AttackResolver getAttackResolver() {
             return new AttackResolver() {
