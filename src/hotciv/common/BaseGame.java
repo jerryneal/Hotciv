@@ -143,7 +143,6 @@ public class BaseGame implements Game {
             }
         }
 
-        // TODO: is taking a city an attack?
         if (getCityAt(to) != null && getCityAt(to).getOwner() != playerTurn) {
             getCityAt(to).setOwner(playerTurn);
         }

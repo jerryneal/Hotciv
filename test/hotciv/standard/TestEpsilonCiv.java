@@ -34,20 +34,12 @@ public class TestEpsilonCiv {
 
     @Before
     public void setUp() {
+        // Setting up a version of EpsilonCiv where the dice is replaced with a dice that always returns a specified value.
         fixedDice = new FixedDice(1);
         game = new GameBuilder()
                 .setAttackResolverStrategy(new EpsilonCivAttackResolver(fixedDice))
                 .setWinnerStrategy(new TripleWinnerWins())
                 .build();
-    }
-
-    /**
-     * Replaces the standard setup game, with a version of EpsilonCiv all dice rolls have a fixed preset value.
-     *
-     * @param fixedDiceValue
-     */
-    private void setUpFixedEpsilonCiv(final int fixedDiceValue) {
-
     }
 
     private void goToNextRound() {
@@ -71,8 +63,6 @@ public class TestEpsilonCiv {
 
     @Test
     public void tripleWinnerWinsRedWins() {
-        setUpFixedEpsilonCiv(1);
-
         Position redArcherPosition = new Position(10, 10);
         Position blueArcherPosition = new Position(10, 11);
 
@@ -95,8 +85,6 @@ public class TestEpsilonCiv {
 
     @Test
     public void tripleWinnerWinsBlueWins() {
-        setUpFixedEpsilonCiv(1);
-
         game.endOfTurn();
 
         Position redArcherPosition = new Position(10, 10);
@@ -117,6 +105,45 @@ public class TestEpsilonCiv {
             game.moveUnit(blueArcherPosition, redArcherPosition);
         }
         assertEquals(Player.BLUE, game.getWinner());
+    }
+
+    @Test
+    public void attackerCanLooseBlueLoose() {
+        Position redArcherPosition = new Position(10, 10);
+        Position blueArcherPosition = new Position(10, 11);
+
+        BaseGame game = (BaseGame) this.game;
+        GameWorld gameWorld = game.getGameWorld();
+
+        // Support
+        gameWorld.placeNewUnit(redArcherPosition.getNorth(), GameConstants.ARCHER, Player.RED);
+
+        gameWorld.placeNewUnit(redArcherPosition, GameConstants.ARCHER, Player.RED);
+        gameWorld.placeNewUnit(blueArcherPosition, GameConstants.ARCHER, Player.BLUE);
+
+        game.moveUnit(redArcherPosition, blueArcherPosition);
+
+        assertEquals(Player.RED, gameWorld.getUnit(blueArcherPosition).getOwner());
+    }
+
+    @Test
+    public void attackerCanLooseRedLoose() {
+        game.endOfTurn();
+        Position redArcherPosition = new Position(10, 10);
+        Position blueArcherPosition = new Position(10, 11);
+
+        BaseGame game = (BaseGame) this.game;
+        GameWorld gameWorld = game.getGameWorld();
+
+        // Support
+        gameWorld.placeNewUnit(blueArcherPosition.getNorth(), GameConstants.ARCHER, Player.BLUE);
+
+        gameWorld.placeNewUnit(redArcherPosition, GameConstants.ARCHER, Player.RED);
+        gameWorld.placeNewUnit(blueArcherPosition, GameConstants.ARCHER, Player.BLUE);
+
+        game.moveUnit(blueArcherPosition, redArcherPosition);
+
+        assertEquals(Player.BLUE, gameWorld.getUnit(redArcherPosition).getOwner());
     }
 
     @Test
