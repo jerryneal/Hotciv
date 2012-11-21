@@ -54,7 +54,7 @@ public class BaseGame implements Game {
         playerTurn = Player.RED;
 
         // Gameworld
-        this.gameWorld = new GameWorld(this);
+        this.gameWorld = new GameWorld(this, unitFactory);
         createWorld();
     }
 
@@ -155,12 +155,26 @@ public class BaseGame implements Game {
 
     }
 
+    /**
+     * Gets how many time the specified player has won an attack.
+     *
+     * @param player The player
+     * @return How many times the player has won an attack.
+     */
     public int getAttacksWon(Player player) {
         Integer attacksWon = attackWonCounter.get(player);
         if (attacksWon == null) {
             return 0;
         }
         return attacksWon;
+    }
+
+    /**
+     * Resets the counter that counts how many times each of the players has won.
+     * Note that this resets it for all players.
+     */
+    public void resetAttacksWon() {
+        this.attackWonCounter.clear();
     }
 
     public void endOfTurn() {
@@ -245,15 +259,12 @@ public class BaseGame implements Game {
         unit.performAction();
     }
 
-    public UnitFactory getUnitFactory() {
-        return unitFactory;
-    }
-
-    public void resetAttacksWon() {
-        this.attackWonCounter.clear();
-    }
-
-    public int getRoundCount() {
+    /**
+     * Gets what number round the current round is, starting from round 1.
+     *
+     * @return The number of the current round.
+     */
+    public int getCurrentRoundCount() {
         return roundCount;
     }
 
@@ -346,8 +357,6 @@ public class BaseGame implements Game {
                     gameWorld.placeCity(new Position(1, 1), new CityImpl(Player.RED));
                     // Blue has a city at (4,1)
                     gameWorld.placeCity(new Position(4, 1), new CityImpl(Player.BLUE));
-
-                    UnitFactory unitFactory = game.getUnitFactory();
 
                     // Red has a archer at (2,0)
                     gameWorld.placeNewUnit(new Position(2, 0), GameConstants.ARCHER, Player.RED);

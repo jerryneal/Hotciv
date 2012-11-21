@@ -24,9 +24,9 @@ public class GameWorld {
     private UnitFactory unitFactory;
     private BaseGame game;
 
-    public GameWorld(BaseGame game) {
+    public GameWorld(BaseGame game, UnitFactory unitFactory) {
         this.game = game;
-        this.unitFactory = game.getUnitFactory();
+        this.unitFactory = unitFactory;
     }
 
     /**

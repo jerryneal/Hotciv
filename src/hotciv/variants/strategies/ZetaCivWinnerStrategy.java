@@ -19,7 +19,7 @@ public class ZetaCivWinnerStrategy implements GetWinner {
 
     @Override
     public Player getWinner(BaseGame game) {
-        if (game.getRoundCount() <= 20) {
+        if (game.getCurrentRoundCount() <= 20) {
             return conquerWinnerStrategy.getWinner(game);
         } else {
             if (!moveCountHasBeenReset) {
