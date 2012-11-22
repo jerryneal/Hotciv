@@ -14,7 +14,7 @@ import hotciv.variants.strategies.ZetaCivWinnerStrategy;
 public class ZetaCiv implements GameFactory {
 
     @Override
-    public Game getGame() {
+    public Game newGame() {
         return new GameBuilder()
                 .setWinnerStrategy(new ZetaCivWinnerStrategy())
                 .build();

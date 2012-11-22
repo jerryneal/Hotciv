@@ -7,5 +7,5 @@ package hotciv.framework;
  *         Created: 16-11-12, Time: 09:49
  */
 public interface GameFactory {
-    public Game getGame();
+    public Game newGame();
 }

@@ -15,7 +15,7 @@ public class DeltaCiv implements GameFactory {
      *
      * @return The game.
      */
-    public Game getGame() {
+    public Game newGame() {
         return new GameBuilder()
                 .setWorldLayoutStrategy(new DeltaWorldLayout())
                 .build();

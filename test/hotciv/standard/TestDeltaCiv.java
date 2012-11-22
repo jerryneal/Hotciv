@@ -16,7 +16,7 @@ public class TestDeltaCiv {
 
     @Before
     public void setUp() {
-        game = new DeltaCiv().getGame();
+        game = new DeltaCiv().newGame();
     }
 
     @Test

@@ -16,15 +16,15 @@ import org.junit.Test;
 public class TestZetaCiv {
     private Game game;
 
-    private Position redArcherPosition = new Position(2, 0);
-    private Position redCityPosition = new Position(1, 1);
-    private Position blueCityPosition = new Position(4, 1);
-    private Position blueLegionPosition = new Position(3, 2);
-    private Position redSettlerPosition = new Position(4, 3);
+    private static Position redArcherPosition = new Position(2, 0);
+    private static Position redCityPosition = new Position(1, 1);
+    private static Position blueCityPosition = new Position(4, 1);
+    private static Position blueLegionPosition = new Position(3, 2);
+    private static Position redSettlerPosition = new Position(4, 3);
 
     @Before
     public void setUp() {
-        game = new ZetaCiv().getGame();
+        game = new ZetaCiv().newGame();
     }
 
     private void goToNextRound() {

@@ -14,18 +14,18 @@ import static org.junit.Assert.*;
 public class TestAlphaCiv {
     private Game game;
 
-    private Position redArcherPosition = new Position(2, 0);
-    private Position redCityPosition = new Position(1, 1);
-    private Position blueCityPosition = new Position(4, 1);
-    private Position blueLegionPosition = new Position(3, 2);
-    private Position redSettlerPosition = new Position(4, 3);
+    private static Position redArcherPosition = new Position(2, 0);
+    private static Position redCityPosition = new Position(1, 1);
+    private static Position blueCityPosition = new Position(4, 1);
+    private static Position blueLegionPosition = new Position(3, 2);
+    private static Position redSettlerPosition = new Position(4, 3);
 
     /**
      * Fixture for alphaciv testing.
      */
     @Before
     public void setUp() {
-        game = new AlphaCiv().getGame();
+        game = new AlphaCiv().newGame();
     }
 
     private void goToNextRound() {

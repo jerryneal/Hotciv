@@ -26,12 +26,6 @@ public class TestEpsilonCiv {
     private Game game;
     private FixedDice fixedDice;
 
-    private Position redArcherPosition = new Position(2, 0);
-    private Position redCityPosition = new Position(1, 1);
-    private Position blueCityPosition = new Position(4, 1);
-    private Position blueLegionPosition = new Position(3, 2);
-    private Position redSettlerPosition = new Position(4, 3);
-
     @Before
     public void setUp() {
         // Setting up a version of EpsilonCiv where the dice is replaced with a dice that always returns a specified value.

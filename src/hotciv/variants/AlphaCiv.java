@@ -14,7 +14,7 @@ public class AlphaCiv implements GameFactory {
      *
      * @return The game.
      */
-    public Game getGame() {
+    public Game newGame() {
         return new GameBuilder().build();
     }
 

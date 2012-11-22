@@ -17,7 +17,7 @@ public class GammaCiv implements GameFactory {
      *
      * @return The game.
      */
-    public Game getGame() {
+    public Game newGame() {
         return new GameBuilder()
                 .setUnitFactoryStrategy(new GammaUnitFactory())
                 .build();

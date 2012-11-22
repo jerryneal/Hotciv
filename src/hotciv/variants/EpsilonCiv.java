@@ -15,7 +15,7 @@ import hotciv.variants.strategies.TripleWinnerWins;
  */
 public class EpsilonCiv implements GameFactory {
     @Override
-    public Game getGame() {
+    public Game newGame() {
         return new GameBuilder()
                 .setAttackResolverStrategy(new EpsilonCivAttackResolver(new RandomDice()))
                 .setWinnerStrategy(new TripleWinnerWins())

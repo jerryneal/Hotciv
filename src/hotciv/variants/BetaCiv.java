@@ -16,7 +16,7 @@ public class BetaCiv implements GameFactory {
      *
      * @return The game.
      */
-    public Game getGame() {
+    public Game newGame() {
         return new GameBuilder()
                 .setWinnerStrategy(new ConquerWinnerStrategy())
                 .setAgingStrategy(new PeriodicAgingStrategy())
