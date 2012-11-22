@@ -88,36 +88,57 @@ public class Position {
     public Position getNorth() {
         return new Position(this.r - 1, this.c);
     }
+
     public Position getNorthEast() {
         return new Position(this.r - 1, this.c + 1);
     }
+
     public Position getEast() {
         return new Position(this.r, this.c + 1);
     }
+
     public Position getSouthEast() {
         return new Position(this.r + 1, this.c + 1);
     }
+
     public Position getSouth() {
         return new Position(this.r + 1, this.c);
     }
+
     public Position getSouthWest() {
         return new Position(this.r + 1, this.c - 1);
     }
+
     public Position getWest() {
         return new Position(this.r, this.c - 1);
     }
+
     public Position getNorthWest() {
         return new Position(this.r - 1, this.c - 1);
     }
 
     /**
-     * This method returns an iterable that iterates around the position, going clockwise in increasing distances.
-     * Not that it does not return the current position (this), the first position the iterator returns is the position just north of "this".
-     * This iterable doesn't care if the positions are out of bounds, it just returns the positions going clockwise.
-     * The hasNext method of the iterator always return true, so there is an unlimited number of Positions in the iterator.
+     * This method returns an iterable like the one returned by getPositionsWithinDistance().
+     * This one just never stops, it returns an infinite number of positions.
+     *
      * @return the iterable.
      */
     public Iterable<Position> getAroundIterable() {
+        return getPositionsWithinDistance(0);
+    }
+
+    /**
+     * This method returns an iterable that iterates around the position, going clockwise in increasing distances,
+     * until the distance is greater than the parameter maxDistance.
+     * Note that it does not return the current position (this), the first position the iterator returns is the position just north of "this".
+     * This iterable doesn't care if the positions are out of bounds, it just returns the positions going clockwise.
+     * The hasNext method of the iterator always return true if the next position isn't further away than the maxdistance,
+     * or true if maxDistance = 0, so in the last case there is an unlimited number of Positions in the iterator.
+     *
+     * @param maxDistance The maximum distance to return position from. Or 0 if no limit.
+     * @return the iterable.
+     */
+    public Iterable<Position> getPositionsWithinDistance(final int maxDistance) {
         final Position center = this;
         return new Iterable<Position>() {
             @Override
@@ -130,7 +151,10 @@ public class Position {
 
                     @Override
                     public boolean hasNext() {
-                        return true;
+                        if (maxDistance == 0) {
+                            return true;
+                        }
+                        return currentDistance <= maxDistance;
                     }
 
                     @Override
@@ -154,10 +178,14 @@ public class Position {
 
                     private Position getNextInDirection(Direction direction, Position position) {
                         switch (direction) {
-                            case UP: return position.getNorth();
-                            case RIGHT: return position.getEast();
-                            case DOWN: return position.getSouth();
-                            case LEFT: return position.getWest();
+                            case UP:
+                                return position.getNorth();
+                            case RIGHT:
+                                return position.getEast();
+                            case DOWN:
+                                return position.getSouth();
+                            case LEFT:
+                                return position.getWest();
                             default:
                                 throw new RuntimeException("Unrecognized direction: " + direction);
                         }
@@ -165,10 +193,14 @@ public class Position {
 
                     private Direction getNextClockwiseDirection(Direction direction) {
                         switch (direction) {
-                            case UP: return Direction.RIGHT;
-                            case RIGHT: return Direction.DOWN;
-                            case DOWN: return Direction.LEFT;
-                            case LEFT: return Direction.UP;
+                            case UP:
+                                return Direction.RIGHT;
+                            case RIGHT:
+                                return Direction.DOWN;
+                            case DOWN:
+                                return Direction.LEFT;
+                            case LEFT:
+                                return Direction.UP;
                             default:
                                 throw new RuntimeException("Unrecognized direction: " + direction);
                         }
@@ -183,6 +215,7 @@ public class Position {
             }
         };
     }
+
     private enum Direction {
         UP,
         RIGHT,

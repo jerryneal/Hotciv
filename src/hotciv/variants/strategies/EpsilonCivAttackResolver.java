@@ -29,7 +29,7 @@ public class EpsilonCivAttackResolver implements AttackResolver {
         return attackStrength * dice.getNext() > defendingStrength * dice.getNext();
     }
 
-    private int getCombinedBattleStrength(BaseGame game, Unit unit) {
+    public static int getCombinedBattleStrength(BaseGame game, Unit unit) {
         int attackStrength = unit.getAttackingStrength();
 
         GameWorld gameWorld = game.getGameWorld();
@@ -37,31 +37,35 @@ public class EpsilonCivAttackResolver implements AttackResolver {
         if (unitPosition == null) {
             throw new RuntimeException("The unit couldn't be found on the map!: " + unit);
         }
-        int counter = 0;
-        for (Position position : unitPosition.getAroundIterable()) {
-            counter++;
-            if (counter == 9)
-                break;
-            Unit supportingUnit = game.getUnitAt(position);
-            if (supportingUnit != null && supportingUnit.getOwner() == unit.getOwner()) {
-                attackStrength++;
-            }
-        }
+
+        int unitSupport = getFriendlySupport(game, unit, unitPosition);
+
+        attackStrength += unitSupport;
 
         return attackStrength * getTerrainFactor(game, unitPosition);
     }
 
-    private int getTerrainFactor(BaseGame game, Position position) {
-        int factor = 1;
+    public static int getFriendlySupport(BaseGame game, Unit unit, Position unitPosition) {
+        int unitSupport = 0;
+        for (Position position : unitPosition.getPositionsWithinDistance(1)) {
+            Unit supportingUnit = game.getUnitAt(position);
+            if (supportingUnit != null && supportingUnit.getOwner() == unit.getOwner()) {
+                unitSupport++;
+            }
+        }
+        return unitSupport;
+    }
+
+    public static int getTerrainFactor(BaseGame game, Position position) {
         Tile tile = game.getTileAt(position);
         String tileType = tile.getTypeString();
 
-        if (GameConstants.FOREST.equals(tileType) || GameConstants.HILLS.equals(tileType)) {
-            factor = 2;
-        }
         if (game.getCityAt(position) != null) {
-            factor = 3;
+            return 3;
         }
-        return factor;
+        if (GameConstants.FOREST.equals(tileType) || GameConstants.HILLS.equals(tileType)) {
+            return 2;
+        }
+        return 1;
     }
 }

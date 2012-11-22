@@ -11,7 +11,7 @@ import hotciv.framework.Position;
 import hotciv.framework.Unit;
 
 /**
- * //TODO: Doc
+ * // TODO: Doc
  * <p/>
  * // TODO: Change docs in methods and export the anonymous classes.
  *
