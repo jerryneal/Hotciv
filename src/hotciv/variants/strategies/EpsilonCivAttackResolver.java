@@ -3,10 +3,7 @@ package hotciv.variants.strategies;
 import hotciv.common.BaseGame;
 import hotciv.common.GameWorld;
 import hotciv.common.strategy.AttackResolver;
-import hotciv.framework.GameConstants;
-import hotciv.framework.Position;
-import hotciv.framework.Tile;
-import hotciv.framework.Unit;
+import hotciv.framework.*;
 
 /**
  * This strategy implements the EpsilonCiv battle-outcome calculation algorithm, using SecureRandom to simulate die rolls.
@@ -38,18 +35,18 @@ public class EpsilonCivAttackResolver implements AttackResolver {
             throw new RuntimeException("The unit couldn't be found on the map!: " + unit);
         }
 
-        int unitSupport = getFriendlySupport(game, unit, unitPosition);
+        int unitSupport = getFriendlySupport(game, unit.getOwner(), unitPosition);
 
         attackStrength += unitSupport;
 
         return attackStrength * getTerrainFactor(game, unitPosition);
     }
 
-    public static int getFriendlySupport(BaseGame game, Unit unit, Position unitPosition) {
+    public static int getFriendlySupport(BaseGame game, Player player, Position unitPosition) {
         int unitSupport = 0;
         for (Position position : unitPosition.getPositionsWithinDistance(1)) {
             Unit supportingUnit = game.getUnitAt(position);
-            if (supportingUnit != null && supportingUnit.getOwner() == unit.getOwner()) {
+            if (supportingUnit != null && supportingUnit.getOwner() == player) {
                 unitSupport++;
             }
         }

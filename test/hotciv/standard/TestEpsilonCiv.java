@@ -1,18 +1,20 @@
 package hotciv.standard;
 
 import hotciv.common.BaseGame;
+import hotciv.common.CityImpl;
 import hotciv.common.GameWorld;
-import hotciv.framework.Game;
+import hotciv.common.StandardTile;
 import hotciv.framework.GameConstants;
 import hotciv.framework.Player;
 import hotciv.framework.Position;
+import hotciv.framework.Unit;
 import hotciv.standard.strategies.FixedDice;
 import hotciv.variants.EpsilonCiv;
+import hotciv.variants.strategies.EpsilonCivAttackResolver;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 /**
  * JUnit test class for the EpsilonCiv specification.
@@ -21,14 +23,16 @@ import static org.junit.Assert.assertNull;
  *         Created: 16-11-12, 15:50
  */
 public class TestEpsilonCiv {
-    private Game game;
+    private BaseGame game;
+    private GameWorld gameWorld;
     private FixedDice fixedDice;
 
     @Before
     public void setUp() {
         // Setting up a version of EpsilonCiv where the dice is replaced with a dice that always returns a specified value.
         fixedDice = new FixedDice(1);
-        game = new EpsilonCiv(fixedDice).newGame();
+        game = (BaseGame) new EpsilonCiv(fixedDice).newGame();
+        gameWorld = game.getGameWorld();
     }
 
     private void goToNextRound() {
@@ -136,7 +140,56 @@ public class TestEpsilonCiv {
     }
 
     @Test
-    public void attackerAlwaysWinWithEnoughSupport() {
-        // TODO:
+    public void testFriendlyUnitSupport() {
+        Position redArcherPosition = new Position(10, 10);
+        assertEquals(0, EpsilonCivAttackResolver.getFriendlySupport(game, Player.RED, redArcherPosition));
+        // Inserting support
+        gameWorld.placeNewUnit(redArcherPosition.getNorth(), GameConstants.ARCHER, Player.RED);
+        assertEquals(1, EpsilonCivAttackResolver.getFriendlySupport(game, Player.RED, redArcherPosition));
+        // More support
+        gameWorld.placeNewUnit(redArcherPosition.getSouthEast(), GameConstants.ARCHER, Player.RED);
+        gameWorld.placeNewUnit(redArcherPosition.getWest(), GameConstants.ARCHER, Player.RED);
+        gameWorld.placeNewUnit(redArcherPosition.getSouth(), GameConstants.ARCHER, Player.RED);
+        assertEquals(4, EpsilonCivAttackResolver.getFriendlySupport(game, Player.RED, redArcherPosition));
+    }
+
+    @Test
+    public void testTerrainFactor() {
+        Position terrainTestPosition = new Position(10, 10);
+        // Plains have multiplier 1.
+        assertEquals(1, EpsilonCivAttackResolver.getTerrainFactor(game, terrainTestPosition));
+        // hills have multiplier 2
+        gameWorld.placeTile(terrainTestPosition, new StandardTile(terrainTestPosition, GameConstants.HILLS));
+        assertEquals(2, EpsilonCivAttackResolver.getTerrainFactor(game, terrainTestPosition));
+        // forest have multiplier 2
+        gameWorld.placeTile(terrainTestPosition, new StandardTile(terrainTestPosition, GameConstants.FOREST));
+        assertEquals(2, EpsilonCivAttackResolver.getTerrainFactor(game, terrainTestPosition));
+        // cities have multiplier 3
+        gameWorld.placeCity(terrainTestPosition, new CityImpl(Player.RED));
+        assertEquals(3, EpsilonCivAttackResolver.getTerrainFactor(game, terrainTestPosition));
+    }
+
+    @Test
+    public void testCombinedBattleStrength() {
+        Position redArcherPosition = new Position(10, 10);
+        gameWorld.placeNewUnit(redArcherPosition, GameConstants.ARCHER, Player.RED);
+        Unit redArcher = game.getUnitAt(redArcherPosition);
+        assertNotNull(redArcher);
+        int baseAttackStrength = redArcher.getAttackingStrength();
+
+        // Without anything we just have the baseAttackStrength
+        assertEquals(1 * baseAttackStrength, EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher));
+        // Inserting support
+        gameWorld.placeNewUnit(redArcherPosition.getNorth(), GameConstants.ARCHER, Player.RED);
+        assertEquals(1 * (baseAttackStrength + 1), EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher));
+        // Placing terrain
+        gameWorld.placeTile(redArcherPosition, new StandardTile(redArcherPosition, GameConstants.HILLS));
+        assertEquals(2 * (baseAttackStrength + 1), EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher));
+        // More support
+        gameWorld.placeNewUnit(redArcherPosition.getSouth(), GameConstants.ARCHER, Player.RED);
+        assertEquals(2 * (baseAttackStrength + 2), EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher));
+        // Lastly a city.
+        gameWorld.placeCity(redArcherPosition, new CityImpl(Player.RED));
+        assertEquals(3 * (baseAttackStrength + 2), EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher));
     }
 }
