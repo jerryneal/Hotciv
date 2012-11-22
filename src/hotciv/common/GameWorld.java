@@ -1,10 +1,7 @@
 package hotciv.common;
 
 import hotciv.common.strategy.UnitFactory;
-import hotciv.framework.GameConstants;
-import hotciv.framework.Player;
-import hotciv.framework.Position;
-import hotciv.framework.Tile;
+import hotciv.framework.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +15,7 @@ import java.util.Set;
  *         Date: 04-11-12, 13:51
  */
 public class GameWorld {
-    private Map<Position, AbstractUnit> unitMap = new HashMap<Position, AbstractUnit>();
+    private Map<Position, Unit> unitMap = new HashMap<Position, Unit>();
     private Map<Position, Tile> tileMap = new HashMap<Position, Tile>();
     private Map<Position, CityImpl> cityMap = new HashMap<Position, CityImpl>();
     private UnitFactory unitFactory;
@@ -35,7 +32,7 @@ public class GameWorld {
      * @param position The position
      * @param unit     The unit to place.
      */
-    protected void placeUnit(Position position, AbstractUnit unit) {
+    protected void placeUnit(Position position, Unit unit) {
         unitMap.put(position, unit);
     }
 
@@ -57,7 +54,7 @@ public class GameWorld {
      * @param position The position to insert the unit near.
      * @param unit     The unit.
      */
-    public void placeUnitNear(Position position, AbstractUnit unit) {
+    public void placeUnitNear(Position position, Unit unit) {
         if (canPlaceUnitAt(position)) {
             unitMap.put(position, unit);
             return;
@@ -108,7 +105,7 @@ public class GameWorld {
      * @param p The position.
      * @return The unit on the position.
      */
-    public AbstractUnit getUnit(Position p) {
+    public Unit getUnit(Position p) {
         return this.unitMap.get(p);
     }
 
@@ -118,7 +115,7 @@ public class GameWorld {
      * @param position The position.
      * @return The unit that was removed, or null if there wasn't a unit.
      */
-    public AbstractUnit removeUnit(Position position) {
+    public Unit removeUnit(Position position) {
         return this.unitMap.remove(position);
     }
 
@@ -127,7 +124,7 @@ public class GameWorld {
      *
      * @return An entrySet of units.
      */
-    public Set<Map.Entry<Position, AbstractUnit>> getUnitsEntrySet() {
+    public Set<Map.Entry<Position, Unit>> getUnitsEntrySet() {
         return unitMap.entrySet();
     }
 
@@ -225,8 +222,8 @@ public class GameWorld {
      * @param unit The unit to find.
      * @return the position of the unit.
      */
-    public Position getUnitPosition(AbstractUnit unit) {
-        for (Map.Entry<Position, AbstractUnit> unitEntry : getUnitsEntrySet()) {
+    public Position getUnitPosition(Unit unit) {
+        for (Map.Entry<Position, Unit> unitEntry : getUnitsEntrySet()) {
             if (unit == unitEntry.getValue()) {
                 return unitEntry.getKey();
             }

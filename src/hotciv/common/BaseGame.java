@@ -69,7 +69,7 @@ public class BaseGame implements Game {
         return gameWorld.getTile(position);
     }
 
-    public AbstractUnit getUnitAt(Position position) {
+    public Unit getUnitAt(Position position) {
         return gameWorld.getUnit(position);
     }
 
@@ -99,7 +99,7 @@ public class BaseGame implements Game {
     }
 
     public boolean moveUnit(Position from, Position to) {
-        AbstractUnit unit = getUnitAt(from);
+        Unit unit = getUnitAt(from);
         if (unit == null) {
             throw new IllegalArgumentException("There has to be a unit at the specified from position: " + from);
         }
@@ -109,7 +109,7 @@ public class BaseGame implements Game {
             return false;
         }
 
-        AbstractUnit unitAtTarget = getUnitAt(to);
+        Unit unitAtTarget = getUnitAt(to);
         Tile targetTile = getTileAt(to);
 
         // Tests if we try to move to far.
@@ -214,7 +214,7 @@ public class BaseGame implements Game {
             int productionAmount = city.getProductionAmount();
             String produces = city.getProduction();
 
-            AbstractUnit unit = null;
+            Unit unit = null;
 
             if (produces.equals(GameConstants.SETTLER)) {
                 if (productionAmount >= GameConstants.SETTLER_PRICE) {
@@ -252,7 +252,7 @@ public class BaseGame implements Game {
 
     public void performUnitActionAt(Position p) {
         // First see if its the right players turn.
-        AbstractUnit unit = getUnitAt(p);
+        Unit unit = getUnitAt(p);
         if (unit != null && unit.getOwner() != getPlayerInTurn()) {
             return;
         }
@@ -376,7 +376,7 @@ public class BaseGame implements Game {
         public static AttackResolver getAttackResolver() {
             return new AttackResolver() {
                 @Override
-                public boolean doesAttackerWin(BaseGame game, AbstractUnit attacker, AbstractUnit defender) {
+                public boolean doesAttackerWin(BaseGame game, Unit attacker, Unit defender) {
                     return true;
                 }
             };

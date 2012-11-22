@@ -1,8 +1,8 @@
 package hotciv.common.strategy;
 
-import hotciv.common.AbstractUnit;
 import hotciv.common.BaseGame;
 import hotciv.framework.Player;
+import hotciv.framework.Unit;
 
 /**
  * This strategy specifies how to make a unit using the factory method pattern.
@@ -18,5 +18,5 @@ public interface UnitFactory {
      * @param owner      The owner of the unit.
      * @return The created unit.
      */
-    public AbstractUnit makeUnit(BaseGame game, String typeString, Player owner);
+    public Unit makeUnit(BaseGame game, String typeString, Player owner);
 }

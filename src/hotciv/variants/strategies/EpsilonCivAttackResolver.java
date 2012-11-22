@@ -1,12 +1,12 @@
 package hotciv.variants.strategies;
 
-import hotciv.common.AbstractUnit;
 import hotciv.common.BaseGame;
 import hotciv.common.GameWorld;
 import hotciv.common.strategy.AttackResolver;
 import hotciv.framework.GameConstants;
 import hotciv.framework.Position;
 import hotciv.framework.Tile;
+import hotciv.framework.Unit;
 
 /**
  * This strategy implements the EpsilonCiv battle-outcome calculation algorithm, using SecureRandom to simulate die rolls.
@@ -22,14 +22,14 @@ public class EpsilonCivAttackResolver implements AttackResolver {
     }
 
     @Override
-    public boolean doesAttackerWin(BaseGame game, AbstractUnit attacker, AbstractUnit defender) {
+    public boolean doesAttackerWin(BaseGame game, Unit attacker, Unit defender) {
         int attackStrength = getCombinedBattleStrength(game, attacker);
         int defendingStrength = getCombinedBattleStrength(game, defender);
 
         return attackStrength * dice.getNext() > defendingStrength * dice.getNext();
     }
 
-    private int getCombinedBattleStrength(BaseGame game, AbstractUnit unit) {
+    private int getCombinedBattleStrength(BaseGame game, Unit unit) {
         int attackStrength = unit.getAttackingStrength();
 
         GameWorld gameWorld = game.getGameWorld();
@@ -42,7 +42,7 @@ public class EpsilonCivAttackResolver implements AttackResolver {
             counter++;
             if (counter == 9)
                 break;
-            AbstractUnit supportingUnit = game.getUnitAt(position);
+            Unit supportingUnit = game.getUnitAt(position);
             if (supportingUnit != null && supportingUnit.getOwner() == unit.getOwner()) {
                 attackStrength++;
             }
