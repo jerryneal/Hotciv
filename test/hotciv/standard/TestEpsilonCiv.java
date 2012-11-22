@@ -1,15 +1,13 @@
 package hotciv.standard;
 
 import hotciv.common.BaseGame;
-import hotciv.common.GameBuilder;
 import hotciv.common.GameWorld;
 import hotciv.framework.Game;
 import hotciv.framework.GameConstants;
 import hotciv.framework.Player;
 import hotciv.framework.Position;
 import hotciv.standard.strategies.FixedDice;
-import hotciv.variants.strategies.EpsilonCivAttackResolver;
-import hotciv.variants.strategies.TripleWinnerWins;
+import hotciv.variants.EpsilonCiv;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -30,10 +28,7 @@ public class TestEpsilonCiv {
     public void setUp() {
         // Setting up a version of EpsilonCiv where the dice is replaced with a dice that always returns a specified value.
         fixedDice = new FixedDice(1);
-        game = new GameBuilder()
-                .setAttackResolverStrategy(new EpsilonCivAttackResolver(fixedDice))
-                .setWinnerStrategy(new TripleWinnerWins())
-                .build();
+        game = new EpsilonCiv(fixedDice).newGame();
     }
 
     private void goToNextRound() {

@@ -1,6 +1,4 @@
-package hotciv.variants;
-
-import hotciv.variants.strategies.Dice;
+package hotciv.variants.strategies;
 
 import java.security.SecureRandom;
 import java.util.Random;

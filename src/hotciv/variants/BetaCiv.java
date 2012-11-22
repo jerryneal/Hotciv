@@ -1,10 +1,8 @@
 package hotciv.variants;
 
-import hotciv.common.GameBuilder;
+import hotciv.common.BaseGame;
 import hotciv.framework.Game;
 import hotciv.framework.GameFactory;
-import hotciv.variants.strategies.ConquerWinnerStrategy;
-import hotciv.variants.strategies.PeriodicAgingStrategy;
 
 /**
  * @author Erik
@@ -17,9 +15,6 @@ public class BetaCiv implements GameFactory {
      * @return The game.
      */
     public Game newGame() {
-        return new GameBuilder()
-                .setWinnerStrategy(new ConquerWinnerStrategy())
-                .setAgingStrategy(new PeriodicAgingStrategy())
-                .build();
+        return new BaseGame(new BetaCivFactory());
     }
 }

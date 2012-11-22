@@ -1,9 +1,8 @@
 package hotciv.variants;
 
-import hotciv.common.GameBuilder;
+import hotciv.common.BaseGame;
 import hotciv.framework.Game;
 import hotciv.framework.GameFactory;
-import hotciv.variants.strategies.DeltaWorldLayout;
 
 /**
  * @author Erik
@@ -16,8 +15,6 @@ public class DeltaCiv implements GameFactory {
      * @return The game.
      */
     public Game newGame() {
-        return new GameBuilder()
-                .setWorldLayoutStrategy(new DeltaWorldLayout())
-                .build();
+        return new BaseGame(new DeltaCivFactory());
     }
 }

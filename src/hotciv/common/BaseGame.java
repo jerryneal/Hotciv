@@ -1,9 +1,6 @@
 package hotciv.common;
 
 import hotciv.common.strategy.*;
-import hotciv.common.units.Archer;
-import hotciv.common.units.Legion;
-import hotciv.common.units.Settler;
 import hotciv.framework.*;
 
 import java.util.HashMap;
@@ -37,18 +34,13 @@ public class BaseGame implements Game {
 
     private int roundCount = 1;
 
-    /**
-     * The default and only constructor for BaseGame.
-     * The constructor is protected since only the GameBuilder is supposed to call it.
-     * All the parameters are the different strategies used by this BaseGame.
-     */
-    protected BaseGame(GetWinner getWinner, NewAgeCalculator newAgeCalculator, UnitFactory unitFactory, WorldLayoutStrategy worldLayoutStrategy, AttackResolver attackResolver) {
+    public BaseGame(GameStrategyFactory factory) {
         // First strategies
-        this.getWinner = getWinner;
-        this.newAgeCalculator = newAgeCalculator;
-        this.unitFactory = unitFactory;
-        this.worldLayoutStrategy = worldLayoutStrategy;
-        this.attackResolver = attackResolver;
+        this.getWinner = factory.createWinnerStrategy();
+        this.newAgeCalculator = factory.createNewAgeCalculatorStrategy();
+        this.unitFactory = factory.createUnitFactoryStrategy();
+        this.worldLayoutStrategy = factory.createWorldLayoutStrategy();
+        this.attackResolver = factory.createAttackResolverStrategy();
 
         // Player starts
         playerTurn = Player.RED;
@@ -266,120 +258,5 @@ public class BaseGame implements Game {
      */
     public int getCurrentRoundCount() {
         return roundCount;
-    }
-
-    /**
-     * This class holds all the default strategies for the game.
-     * When using the GameBuilder to make a game, these are inserted as defaults when no other strategy is specified.
-     */
-    public static class DefaultStrategies {
-        /**
-         * Gets an instance of the default strategy to calculate the new age of the game after each round.
-         *
-         * @return the default NewAgeCalculator
-         */
-        public static NewAgeCalculator getNewAgeCalculator() {
-            return new NewAgeCalculator() {
-                public int getNewAge(BaseGame game) {
-                    return game.getAge() + 100;
-                }
-            };
-        }
-
-        /**
-         * Gets an instance of the default strategy to calculate the winner of the game.
-         *
-         * @return The default GetWinner
-         */
-        public static GetWinner getWinner() {
-            return new GetWinner() {
-                public Player getWinner(BaseGame game) {
-                    if (game.getAge() >= -3000) {
-                        return Player.RED;
-                    } else {
-                        return null;
-                    }
-                }
-            };
-        }
-
-        /**
-         * Gets an instance of the default strategy for making units.
-         *
-         * @return the default UnitFactory.
-         */
-        public static UnitFactory getUnitFactory() {
-            return new UnitFactory() {
-                public AbstractUnit makeUnit(BaseGame game, String typeString, Player owner) {
-                    if (GameConstants.ARCHER.equals(typeString)) {
-                        return new Archer(owner);
-                    } else if (GameConstants.SETTLER.equals(typeString)) {
-                        return new Settler(owner);
-                    } else if (GameConstants.LEGION.equals(typeString)) {
-                        return new Legion(owner);
-                    } else {
-                        throw new RuntimeException("Unrecognized unit type: " + typeString);
-                    }
-                }
-            };
-        }
-
-        /**
-         * Gets an instance of the default strategy for creating the world.
-         *
-         * @return the default WorldLayoutStrategy.
-         */
-        public static WorldLayoutStrategy getWorldLayoutStrategy() {
-            return new WorldLayoutStrategy() {
-                public void createWorldLayout(BaseGame game) {
-                    GameWorld gameWorld = game.getGameWorld();
-                    String[] worldLayout = new String[]{
-                            "PHPPPPPPPPPPPPPP",
-                            "OPPPPPPPPPPPPPPP",
-                            "PPMPPPPPPPPPPPPP",
-                            "PPPPPPPPPPPPPPPP",
-                            "PPPPPPPPPPPPPPPP",
-                            "PPPPPPPPPPPPPPPP",
-                            "PPPPPPPPPPPPPPPP",
-                            "PPPPPPPPPPPPPPPP",
-                            "PPPPPPPPPPPPPPPP",
-                            "PPPPPPPPPPPPPPPP",
-                            "PPPPPPPPPPPPPPPP",
-                            "PPPPPPPPPPPPPPPP",
-                            "PPPPPPPPPPPPPPPP",
-                            "PPPPPPPPPPPPPPPP",
-                            "PPPPPPPPPPPPPPPP",
-                            "PPPPPPPPPPPPPPPP",
-                    };
-                    gameWorld.populateWorld(worldLayout);
-
-                    // Red has a city at (1,1)
-                    gameWorld.placeCity(new Position(1, 1), new CityImpl(Player.RED));
-                    // Blue has a city at (4,1)
-                    gameWorld.placeCity(new Position(4, 1), new CityImpl(Player.BLUE));
-
-                    // Red has a archer at (2,0)
-                    gameWorld.placeNewUnit(new Position(2, 0), GameConstants.ARCHER, Player.RED);
-                    // Red has a settler at (4,3)
-                    gameWorld.placeNewUnit(new Position(4, 3), GameConstants.SETTLER, Player.RED);
-                    // Blue has a legion at (3,2)
-                    gameWorld.placeNewUnit(new Position(3, 2), GameConstants.LEGION, Player.BLUE);
-                }
-            };
-        }
-
-        /**
-         * Gets the default attackResolver where the attacker always wins.
-         *
-         * @return The attackResolver
-         */
-        public static AttackResolver getAttackResolver() {
-            return new AttackResolver() {
-                @Override
-                public boolean doesAttackerWin(BaseGame game, Unit attacker, Unit defender) {
-                    return true;
-                }
-            };
-        }
     }
 }

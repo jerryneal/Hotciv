@@ -1,9 +1,8 @@
 package hotciv.variants;
 
-import hotciv.common.GameBuilder;
+import hotciv.common.BaseGame;
 import hotciv.framework.Game;
 import hotciv.framework.GameFactory;
-import hotciv.variants.strategies.GammaUnitFactory;
 
 /**
  * This variant handles unit actions, that the settler can fortify and the archer can
@@ -18,8 +17,6 @@ public class GammaCiv implements GameFactory {
      * @return The game.
      */
     public Game newGame() {
-        return new GameBuilder()
-                .setUnitFactoryStrategy(new GammaUnitFactory())
-                .build();
+        return new BaseGame(new GammaCivFactory());
     }
 }

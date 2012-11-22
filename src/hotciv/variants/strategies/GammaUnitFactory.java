@@ -5,6 +5,7 @@ import hotciv.common.strategy.UnitFactory;
 import hotciv.framework.GameConstants;
 import hotciv.framework.Player;
 import hotciv.framework.Unit;
+import hotciv.variants.AlphaCivFactory;
 import hotciv.variants.units.CityCreatingSettler;
 import hotciv.variants.units.FortifyingArcher;
 
@@ -16,7 +17,8 @@ import hotciv.variants.units.FortifyingArcher;
  *         Date: 16-11-12, 10:22
  */
 public class GammaUnitFactory implements UnitFactory {
-    UnitFactory defaultFactory = BaseGame.DefaultStrategies.getUnitFactory();
+    // TODO: Ugly.
+    UnitFactory defaultFactory = new AlphaCivFactory().createUnitFactoryStrategy();
 
     public Unit makeUnit(BaseGame game, String typeString, Player owner) {
         if (GameConstants.ARCHER.equals(typeString)) {
