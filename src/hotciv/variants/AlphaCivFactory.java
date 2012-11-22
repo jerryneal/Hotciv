@@ -6,8 +6,6 @@ import hotciv.variants.strategies.*;
 
 /**
  * // TODO: Doc
- * <p/>
- * // TODO: Change docs in methods and export the anonymous classes.
  *
  * @author Erik
  *         Created: 22-11-12, 13:09

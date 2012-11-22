@@ -15,8 +15,5 @@ public class ZetaCiv implements GameFactory {
     @Override
     public Game newGame() {
         return new BaseGame(new ZetaCivFactory());
-        /*return new GameBuilder()
-                .setWinnerStrategy(new ZetaCivWinnerStrategy())
-                .build();*/
     }
 }
