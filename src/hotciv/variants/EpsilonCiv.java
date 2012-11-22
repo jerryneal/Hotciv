@@ -20,7 +20,7 @@ public class EpsilonCiv implements GameFactory {
      * TODO: Doc.
      */
     public EpsilonCiv() {
-        this.dice = new RandomDice();
+        this(new RandomDice());
     }
 
     /**
