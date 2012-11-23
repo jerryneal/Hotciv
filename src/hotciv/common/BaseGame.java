@@ -36,6 +36,7 @@ public class BaseGame implements Game {
 
     public BaseGame(GameStrategyFactory factory) {
         // First strategies
+        // TODO: Remove BaseGame argument from strategies.
         this.getWinner = factory.createWinnerStrategy();
         this.newAgeCalculator = factory.createNewAgeCalculatorStrategy();
         this.unitFactory = factory.createUnitFactoryStrategy();
@@ -165,6 +166,7 @@ public class BaseGame implements Game {
      * Resets the counter that counts how many times each of the players has won.
      * Note that this resets it for all players.
      */
+    @Deprecated
     public void resetAttacksWon() {
         this.attackWonCounter.clear();
     }

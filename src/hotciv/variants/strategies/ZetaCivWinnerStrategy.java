@@ -10,9 +10,10 @@ import hotciv.framework.Player;
  * counting from the twentyfirst round onwards.
  *
  * @author Erik
- *         Created: 16-11-12, 17:14
+ * Created: 16-11-12, 17:14
  */
 public class ZetaCivWinnerStrategy implements GetWinner {
+    // TODO: Observer pattern.
     ConquerWinnerStrategy conquerWinnerStrategy = new ConquerWinnerStrategy();
     TripleWinnerWins tripleWinnerWinsStrategy = new TripleWinnerWins();
     boolean moveCountHasBeenReset = false;
