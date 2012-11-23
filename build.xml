@@ -18,124 +18,126 @@
 -->
 <project name="HotCiv" default="help" basedir=".">
 
-  <property name="source-directory" value="src"/>
-  <property name="test-source-directory" value="test"/>
+    <property name="source-directory" value="src"/>
+    <property name="test-source-directory" value="test"/>
 
-  <property name="build-directory" value="build"/>
-  <property name="resourceDirectory" value="resource"/>
-  <property name="docDirectory" value="doc"></property>
-  
-  <property name="junitJar" value="lib/junit-4.4.jar"/>
+    <property name="build-directory" value="build"/>
+    <property name="resourceDirectory" value="resource"/>
+    <property name="docDirectory" value="doc"></property>
 
-  <!-- define the class path for JUnit testing -->
-  <path id="class-path">
-    <pathelement location="${build-directory}"/>
-    <pathelement location="${junitJar}"/>
-  </path>
+    <property name="junitJar" value="lib/junit-4.4.jar"/>
 
-  <!-- define classpath for Emma -->
-  <property name="emma.dir" value="lib" />
+    <!-- define the class path for JUnit testing -->
+    <path id="class-path">
+        <pathelement location="${build-directory}"/>
+        <pathelement location="${junitJar}"/>
+    </path>
 
-  <path id="emma.lib" >
-    <pathelement location="${emma.dir}/emma.jar" />
-    <pathelement location="${emma.dir}/emma_ant.jar" />
-  </path>
+    <!-- define classpath for Emma -->
+    <property name="emma.dir" value="lib"/>
 
-  <taskdef resource="emma_ant.properties" classpathref="emma.lib" />
-  
-  <target name="help">
-    <echo>
-HotCiv build management.
-  Targets:
-    build-src: Builds production code.
-    clean:     Removes all bytecode.
-    javadoc:   Generate JavaDoc (output in doc/index.html)
+    <path id="emma.lib">
+        <pathelement location="${emma.dir}/emma.jar"/>
+        <pathelement location="${emma.dir}/emma_ant.jar"/>
+    </path>
 
-    test:      Run JUnit test cases.
+    <taskdef resource="emma_ant.properties" classpathref="emma.lib"/>
 
-    emmatest:  Run same JUnit tests as above and in addition
-               generate Emma code coverage report in
-               coverage/index.html.
-    </echo>
-  </target>
-  
-  <target name="clean">
-    <delete dir="${build-directory}"/>
-    <delete dir="${docDirectory}"/>
-    <delete dir="coverage"/>
-  </target>
-  
-  <target name="prepare">
-    <mkdir dir="${build-directory}"/>
-    <mkdir dir="${docDirectory}"/>
-  </target>
-  
-  <target name="build-src" depends="prepare">
-    <javac srcdir="${source-directory}"
-	   destdir="${build-directory}"
-	   debug="on" 
-	   includeantruntime="no" 
-	   >
-      <classpath refid="class-path"/>
-    </javac>
-  </target>
-  
-  <target name="build-test" depends="build-src">
-    <javac srcdir="${test-source-directory}"
-	   destdir="${build-directory}"
-	   debug = "on"
-	   includeantruntime="no" 
-	   >
-      <classpath refid="class-path"/>
-    </javac>
-  </target>
-  
-  <target name="build-all" depends="build-src,build-test"/>
+    <target name="help">
+        <echo>
+            HotCiv build management.
+            Targets:
+            build-src: Builds production code.
+            clean: Removes all bytecode.
+            javadoc: Generate JavaDoc (output in doc/index.html)
 
-  <target name="mkdirdoc">
-    <mkdir dir="${docDirectory}"></mkdir>
-  </target>
+            test: Run JUnit test cases.
 
-  <target name="javadoc" depends="clean,build-src,mkdirdoc">
-    <javadoc
-      source = "1.5"
-      packagenames="hotciv.*"
-      sourcepath="${source-directory}"
-      destdir="${docDirectory}"
-      package="true"
-      doctitle="&lt;b&gt;HotCiv&lt;/b&gt;"
-      bottom="&lt;b&gt;Skeleton code authored by Henrik B. Christensen &lt;/b&gt;"
-      windowtitle="HotCiv" >
-      <sourcepath> 
-	<pathelement path="${source-directory}"/> 
-      </sourcepath>
-      <classpath> 
-	<path refid="class-path"/> 
-      </classpath>
-    </javadoc>
-  </target>
+            emmatest: Run same JUnit tests as above and in addition
+            generate Emma code coverage report in
+            coverage/index.html.
+        </echo>
+    </target>
 
-  <!-- JUnit testing -->
-  <target name="test"  depends="build-all">
-    <java classname="org.junit.runner.JUnitCore">
-      <arg value="hotciv.standard.TestAlphaCiv"/>
-	  <arg value="hotciv.standard.TestBetaCiv"/>
-	  <arg value="hotciv.standard.TestDeltaCiv"/>
-	  <arg value="hotciv.standard.TestGammaCiv"/>
-      <classpath refid="class-path"/>
-    </java>
-  </target>
+    <target name="clean">
+        <delete dir="${build-directory}"/>
+        <delete dir="${docDirectory}"/>
+        <delete dir="coverage"/>
+    </target>
 
-  <!-- Run the test cases and let Emma make coverage report -->
-  <target name="emmatest" depends="build-all">
-    <emmajava enabled="true" libclasspathref="emma.lib" 
-	      sourcepath="${source-directory},${test-source-directory}"
-	      filter="hotciv.*"
-	      columns="name,class,method,block"
-              classname="org.junit.runner.JUnitCore">
-      <html/>
-      <arg value="hotciv.standard.TestAlphaCiv"/>
-      <classpath refid="class-path"/>
-    </emmajava>
-  </target>
+    <target name="prepare">
+        <mkdir dir="${build-directory}"/>
+        <mkdir dir="${docDirectory}"/>
+    </target>
+
+    <target name="build-src" depends="prepare">
+        <javac srcdir="${source-directory}"
+               destdir="${build-directory}"
+               debug="on"
+               includeantruntime="no"
+                >
+            <classpath refid="class-path"/>
+        </javac>
+    </target>
+
+    <target name="build-test" depends="build-src">
+        <javac srcdir="${test-source-directory}"
+               destdir="${build-directory}"
+               debug="on"
+               includeantruntime="no"
+                >
+            <classpath refid="class-path"/>
+        </javac>
+    </target>
+
+    <target name="build-all" depends="build-src,build-test"/>
+
+    <target name="mkdirdoc">
+        <mkdir dir="${docDirectory}"></mkdir>
+    </target>
+
+    <target name="javadoc" depends="clean,build-src,mkdirdoc">
+        <javadoc
+                source="1.5"
+                packagenames="hotciv.*"
+                sourcepath="${source-directory}"
+                destdir="${docDirectory}"
+                package="true"
+                doctitle="&lt;b&gt;HotCiv&lt;/b&gt;"
+                bottom="&lt;b&gt;Skeleton code authored by Henrik B. Christensen &lt;/b&gt;"
+                windowtitle="HotCiv">
+            <sourcepath>
+                <pathelement path="${source-directory}"/>
+            </sourcepath>
+            <classpath>
+                <path refid="class-path"/>
+            </classpath>
+        </javadoc>
+    </target>
+
+    <!-- JUnit testing -->
+    <target name="test" depends="build-all">
+        <java classname="org.junit.runner.JUnitCore">
+            <arg value="hotciv.standard.TestAlphaCiv"/>
+            <arg value="hotciv.standard.TestBetaCiv"/>
+            <arg value="hotciv.standard.TestDeltaCiv"/>
+            <arg value="hotciv.standard.TestGammaCiv"/>
+            <arg value="hotciv.standard.TestEpsilonCiv"/>
+            <arg value="hotciv.standard.TestZetaCiv"/>
+            <classpath refid="class-path"/>
+        </java>
+    </target>
+
+    <!-- Run the test cases and let Emma make coverage report -->
+    <target name="emmatest" depends="build-all">
+        <emmajava enabled="true" libclasspathref="emma.lib"
+                  sourcepath="${source-directory},${test-source-directory}"
+                  filter="hotciv.*"
+                  columns="name,class,method,block"
+                  classname="org.junit.runner.JUnitCore">
+            <html/>
+            <arg value="hotciv.standard.TestAlphaCiv"/>
+            <classpath refid="class-path"/>
+        </emmajava>
+    </target>
 </project>
