@@ -24,7 +24,7 @@ public class EpsilonCiv implements GameFactory {
     }
 
     /**
-     * TODO: Doc.
+     * Constructor required for use of any specified type of dice.
      *
      * @param dice
      */
