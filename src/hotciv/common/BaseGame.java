@@ -29,10 +29,6 @@ public class BaseGame implements Game {
     private WorldLayoutStrategy worldLayoutStrategy;
     private AttackResolver attackResolver;
 
-    @Deprecated
-    private Map<Player, Integer> attackWonCounter = new HashMap<Player, Integer>();
-
-    private int roundCount = 1;
     private List<WinnerObserver> winnerObservers;
     private List<EndOfRoundObserver> endOfRoundObservers;
 
@@ -131,13 +127,6 @@ public class BaseGame implements Game {
                     for (WinnerObserver winnerObserver : winnerObservers) {
                         winnerObserver.playerWonBattle(winner);
                     }
-
-                    Integer attacksWon = attackWonCounter.get(unit.getOwner());
-                    if (attacksWon == null) {
-                        attackWonCounter.put(unit.getOwner(), 1);
-                    } else {
-                        attackWonCounter.put(unit.getOwner(), attacksWon + 1);
-                    }
                 } else {
                     gameWorld.removeUnit(from);
                     return true; // move was valid.
@@ -157,30 +146,6 @@ public class BaseGame implements Game {
         gameWorld.placeUnit(to, unit);
         return true;
 
-    }
-
-    /**
-     * Gets how many time the specified player has won an attack.
-     *
-     * @param player The player
-     * @return How many times the player has won an attack.
-     */
-    @Deprecated
-    public int getAttacksWon(Player player) {
-        Integer attacksWon = attackWonCounter.get(player);
-        if (attacksWon == null) {
-            return 0;
-        }
-        return attacksWon;
-    }
-
-    /**
-     * Resets the counter that counts how many times each of the players has won.
-     * Note that this resets it for all players.
-     */
-    @Deprecated
-    public void resetAttacksWon() {
-        this.attackWonCounter.clear();
     }
 
     public void endOfTurn() {
@@ -208,8 +173,6 @@ public class BaseGame implements Game {
     private void endOfRound() {
         // Aging the world.
         this.age = newAgeCalculator.getNewAge();
-
-        roundCount++;
 
         // Making the Cities produce something and make the units they can.
         for (Map.Entry<Position, CityImpl> cityEntry : gameWorld.getCityEntrySet()) {
@@ -268,16 +231,6 @@ public class BaseGame implements Game {
             return;
         }
         unit.performAction();
-    }
-
-    /**
-     * Gets what number round the current round is, starting from round 1.
-     *
-     * @return The number of the current round.
-     */
-    @Deprecated
-    public int getCurrentRoundCount() {
-        return roundCount;
     }
 
     public void addWinnerObserver(WinnerObserver winnerObserver) {
