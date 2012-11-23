@@ -5,7 +5,7 @@ import hotciv.common.strategy.GetWinner;
 import hotciv.variants.strategies.ZetaCivWinnerStrategy;
 
 /**
- * //TODO: Doc
+ * A factory that creates the strategies needed by the game to make it act like Zeta.
  *
  * @author Erik
  *         Created: 22-11-12, 13:32

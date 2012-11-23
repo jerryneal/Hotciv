@@ -3,7 +3,7 @@ package hotciv.common;
 import hotciv.common.strategy.*;
 
 /**
- * //TODO: Doc
+ * The interface describes a factory that creates game strategies.
  *
  * @author Erik
  *         Created: 22-11-12, 13:06

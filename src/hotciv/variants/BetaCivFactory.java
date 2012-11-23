@@ -7,7 +7,7 @@ import hotciv.variants.strategies.ConquerWinnerStrategy;
 import hotciv.variants.strategies.PeriodicAgingStrategy;
 
 /**
- * //TODO: Doc
+ * * A factory that creates the strategies needed by the game to make it act like BetaCiv.
  *
  * @author Erik
  *         Created: 22-11-12, 13:15

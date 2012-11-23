@@ -9,7 +9,8 @@ import hotciv.framework.GameConstants;
 import hotciv.framework.Player;
 
 /**
- * //TODO: Doc
+ * This UnitFactory creates the default units for use in the game.
+ * These units does not support any "actions".
  *
  * @author Erik
  *         Created: 22-11-12, 15:42

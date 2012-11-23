@@ -6,7 +6,7 @@ import hotciv.common.strategy.*;
 import hotciv.variants.strategies.*;
 
 /**
- * //TODO: Doc
+ * * A factory that creates the strategies needed by the game to make it act like SemiCiv.
  *
  * @author Erik
  *         Created: 23-11-12, 13:05

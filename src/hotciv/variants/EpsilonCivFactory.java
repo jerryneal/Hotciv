@@ -8,7 +8,7 @@ import hotciv.variants.strategies.EpsilonCivAttackResolver;
 import hotciv.variants.strategies.TripleWinnerWins;
 
 /**
- * //TODO: Doc
+ * * A factory that creates the strategies needed by the game to make it act like EpsilonCiv.
  *
  * @author Erik
  *         Created: 22-11-12, 13:23

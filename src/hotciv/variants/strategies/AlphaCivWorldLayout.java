@@ -9,7 +9,7 @@ import hotciv.framework.Player;
 import hotciv.framework.Position;
 
 /**
- * //TODO: Doc
+ * This strategy defines the world layout for AlphaCiv.
  *
  * @author Erik
  *         Created: 22-11-12, 15:40

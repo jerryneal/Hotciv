@@ -5,7 +5,7 @@ import hotciv.common.strategy.UnitFactory;
 import hotciv.variants.strategies.GammaUnitFactory;
 
 /**
- * //TODO: Doc
+ * * A factory that creates the strategies needed by the game to make it act like GammaCiv.
  *
  * @author Erik
  *         Created: 22-11-12, 13:30

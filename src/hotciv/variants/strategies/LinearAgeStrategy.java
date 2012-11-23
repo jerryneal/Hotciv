@@ -4,7 +4,7 @@ import hotciv.common.BaseGame;
 import hotciv.common.strategy.NewAgeCalculator;
 
 /**
- * //TODO: Doc
+ * This NewAgeCalculator calculates an age that is 100 years newer than the previous.
  *
  * @author Erik
  *         Created: 22-11-12, 15:42

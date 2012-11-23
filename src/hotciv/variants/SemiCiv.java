@@ -7,7 +7,7 @@ import hotciv.variants.strategies.Dice;
 import hotciv.variants.strategies.RandomDice;
 
 /**
- * //TODO: Doc
+ * The SemiCiv variant combines 5 of the strategies from different variants, and combines them into one.
  *
  * @author Erik
  *         Created: 23-11-12, 13:04

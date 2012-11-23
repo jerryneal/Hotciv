@@ -4,7 +4,7 @@ import hotciv.common.strategy.AttackResolver;
 import hotciv.framework.Unit;
 
 /**
- * //TODO: Doc
+ * This attack resolver always returns that the attacker does win.
  *
  * @author Erik
  *         Created: 22-11-12, 15:41

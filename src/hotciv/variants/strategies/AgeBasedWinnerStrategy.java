@@ -5,7 +5,8 @@ import hotciv.common.strategy.GetWinner;
 import hotciv.framework.Player;
 
 /**
- * //TODO: Doc
+ * This GetWinner strategy calculates who the winner is based on the age of the game.
+ * If the age is 3000BC or more, the winner is RED.
  *
  * @author Erik
  *         Created: 22-11-12, 15:43

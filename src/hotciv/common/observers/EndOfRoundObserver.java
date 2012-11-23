@@ -1,7 +1,7 @@
 package hotciv.common.observers;
 
 /**
- * //TODO: Doc
+ * This observer is called after every end of round, if attached to a BaseGame.
  *
  * @author Erik
  *         Created: 23-11-12, 11:30

@@ -17,7 +17,7 @@ public class EpsilonCiv implements GameFactory {
     private Dice dice;
 
     /**
-     * TODO: Doc.
+     * The default constructor for EpsilonCiv. This constructs an instance of EpsilonCiv for use in production.
      */
     public EpsilonCiv() {
         this(new RandomDice());
