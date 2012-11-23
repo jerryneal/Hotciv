@@ -7,6 +7,7 @@ import hotciv.framework.City;
 import hotciv.framework.Player;
 import hotciv.framework.Position;
 
+import java.util.*;
 import java.util.Map;
 
 /**
@@ -22,8 +23,15 @@ public class ConquerWinnerStrategy implements GetWinner {
     @Override
     public Player getWinner(BaseGame game) {
         // The winner is the player that first conquers all cities in the world.
+    	Set<Player> playerHasCity = new HashSet<Player>();
         if (winner == null) {
-            Player potentialWinner = null;
+        	for (City c : game.getCities()) {
+        		playerHasCity.add(c.getOwner());
+        	}
+        	if ( playerHasCity.size() == 1 ) winner =
+        		
+        		
+            /*Player potentialWinner = null;
             for (Map.Entry<Position, CityImpl> cityEntry : game.getGameWorld().getCityEntrySet()) {
                 City city = cityEntry.getValue();
                 if (potentialWinner == null) {
@@ -35,7 +43,7 @@ public class ConquerWinnerStrategy implements GetWinner {
                     winner = null;
                     break;
                 }
-            }
+            } */
         }
 
         return winner;

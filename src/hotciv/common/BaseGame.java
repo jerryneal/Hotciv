@@ -170,7 +170,7 @@ public class BaseGame implements Game {
     }
 
     public void endOfTurn() {
-        // Restore unit moved.
+        // Restore the move count of moved units.
         movedUnits.clear();
 
         // Change player in turn.
