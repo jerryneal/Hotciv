@@ -1,6 +1,9 @@
 package hotciv.standard;
 
+import hotciv.common.BaseGame;
+import hotciv.common.GameWorld;
 import hotciv.framework.Game;
+import hotciv.framework.GameConstants;
 import hotciv.framework.Player;
 import hotciv.framework.Position;
 import hotciv.variants.ZetaCiv;
@@ -93,5 +96,66 @@ public class TestZetaCiv {
         goToNextRound();
         game.moveUnit(redArcherPosition.getSouthEast(), redArcherPosition.getSouthEast().getSouth());
         assertNull(game.getWinner());
+    }
+
+    @Test
+    public void cityConquerDoesWinAfter19Rounds() {
+        // Starting at round 1.
+        goToNextRound(18);
+        // Now at round 19. If he conquers a city
+        assertNull(game.getWinner());
+
+        // Moving red archer to conquer blue city.
+        game.moveUnit(redArcherPosition, redArcherPosition.getSouthEast());
+        assertNull(game.getWinner());
+        goToNextRound();
+        game.moveUnit(redArcherPosition.getSouthEast(), redArcherPosition.getSouthEast().getSouth());
+        assertEquals(Player.RED, game.getWinner());
+    }
+
+    @Test
+    public void tripleWinnerWinsAfter20RoundsBlueWins() {
+        goToNextRound(20);
+        game.endOfTurn();
+        // Now at 21, the triple winner strategy is now in effect.
+
+        Position redArcherPosition = new Position(10, 10);
+        Position blueLegionPosition = new Position(10, 11);
+        BaseGame game = (BaseGame) this.game;
+        GameWorld gameWorld = game.getGameWorld();
+
+        for (int i = 0; i < 3; i++) {
+            assertNull(game.getWinner());
+            gameWorld.removeUnit(redArcherPosition);
+            gameWorld.placeNewUnit(redArcherPosition, GameConstants.ARCHER, Player.RED);
+            gameWorld.removeUnit(blueLegionPosition);
+            gameWorld.placeNewUnit(blueLegionPosition, GameConstants.LEGION, Player.BLUE);
+            game.moveUnit(blueLegionPosition, redArcherPosition);
+            goToNextRound();
+            game.endOfTurn();
+        }
+        assertEquals(Player.BLUE, game.getWinner());
+    }
+
+    @Test
+    public void tripleWinnerWinsAfter20RoundsRedWins() {
+        goToNextRound(20);
+        // Now at 21, the triple winner strategy is now in effect.
+
+        Position redArcherPosition = new Position(10, 10);
+        Position blueLegionPosition = new Position(10, 11);
+        BaseGame game = (BaseGame) this.game;
+        GameWorld gameWorld = game.getGameWorld();
+
+        for (int i = 0; i < 3; i++) {
+            assertNull(game.getWinner());
+            gameWorld.removeUnit(redArcherPosition);
+            gameWorld.placeNewUnit(redArcherPosition, GameConstants.ARCHER, Player.RED);
+            gameWorld.removeUnit(blueLegionPosition);
+            gameWorld.placeNewUnit(blueLegionPosition, GameConstants.LEGION, Player.BLUE);
+            game.moveUnit(redArcherPosition, blueLegionPosition);
+            goToNextRound();
+        }
+        assertEquals(Player.RED, game.getWinner());
     }
 }

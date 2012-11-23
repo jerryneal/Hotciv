@@ -84,9 +84,6 @@ public class TestEpsilonCiv {
         BaseGame game = (BaseGame) this.game;
         GameWorld gameWorld = game.getGameWorld();
 
-        // Setting up support for blue, so he always wins.
-        gameWorld.placeNewUnit(blueLegionPosition.getNorth(), GameConstants.ARCHER, Player.BLUE);
-
         for (int i = 0; i < 3; i++) {
             assertNull(game.getWinner());
             gameWorld.removeUnit(redArcherPosition);
@@ -94,6 +91,8 @@ public class TestEpsilonCiv {
             gameWorld.removeUnit(blueLegionPosition);
             gameWorld.placeNewUnit(blueLegionPosition, GameConstants.LEGION, Player.BLUE);
             game.moveUnit(blueLegionPosition, redArcherPosition);
+            goToNextRound();
+            game.endOfTurn();
         }
         assertEquals(Player.BLUE, game.getWinner());
     }
