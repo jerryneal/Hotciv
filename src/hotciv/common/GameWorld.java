@@ -3,6 +3,7 @@ package hotciv.common;
 import hotciv.common.strategy.UnitFactory;
 import hotciv.framework.*;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -229,6 +230,15 @@ public class GameWorld {
             }
         }
         return null;
+    }
+
+    /**
+     * Returns an collection of all cities in the map.
+     *
+     * @return All cities.
+     */
+    public Collection<CityImpl> getCities() {
+        return cityMap.values();
     }
 
     private static enum ShortLayoutType {
