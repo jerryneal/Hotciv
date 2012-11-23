@@ -58,8 +58,15 @@ public class Position {
         return c;
     }
 
+    /**
+     * Calculates the distance between the 2 points on the board.
+     * So the distance between (0,0) and (2,2) is 2.
+     *
+     * @param p1 The position to calculates distance from.
+     * @param p2 The position to calculates distance to.
+     * @return The distance between the 2 points.
+     */
     public static int getDistance(Position p1, Position p2) {
-        // Since we can move in diagonals, its equals just moving
         int verticalDistance = Math.abs(p1.getRow() - p2.getRow());
         int horizontalDistance = Math.abs(p1.getColumn() - p2.getColumn());
         return Math.max(verticalDistance, horizontalDistance);

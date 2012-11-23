@@ -13,7 +13,7 @@ import hotciv.variants.units.FortifyingArcher;
  * If asked to create something that is not an archer or a settler, it will call the default factory.
  *
  * @author Erik
- *         Date: 16-11-12, 10:22
+ *         Created : 16-11-12, 10:22
  */
 public class GammaUnitFactory implements UnitFactory {
     private BaseGame game;

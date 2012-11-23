@@ -4,11 +4,22 @@ import hotciv.framework.City;
 import hotciv.framework.GameConstants;
 import hotciv.framework.Player;
 
+/**
+ * The default implementation of a city.
+ * <p/>
+ * It can everything specified in the City interface, except getWorkforceFocus().
+ * It also provides methods to increase and decrease productionAmount.
+ */
 public class CityImpl implements City {
     private Player owner;
     private String produces;
     private int productionAmount;
 
+    /**
+     * The default and only constructor for CityImpl.
+     *
+     * @param owner The owner of the city.
+     */
     public CityImpl(Player owner) {
         this.owner = owner;
         // We set a city to pr. default produce settlers.

@@ -7,7 +7,7 @@ import hotciv.framework.Unit;
  * This strategy specifies how to make a unit using the factory method pattern.
  *
  * @author Erik
- *         Date: 10-11-12, 10:36
+ *         Created: 10-11-12, 10:36
  */
 public interface UnitFactory {
     /**

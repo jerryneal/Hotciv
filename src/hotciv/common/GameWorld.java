@@ -13,7 +13,7 @@ import java.util.Set;
  * and is responsible for placing a unit when a city has produced one.
  *
  * @author : Erik
- *         Date: 04-11-12, 13:51
+ *         Created : 04-11-12, 13:51
  */
 public class GameWorld {
     private Map<Position, Unit> unitMap = new HashMap<Position, Unit>();

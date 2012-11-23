@@ -4,7 +4,7 @@ package hotciv.common.strategy;
  * This strategy calculates the new age of the game after each round.
  *
  * @author : Erik
- *         Date: 09-11-12, 11:46
+ *         Created: 09-11-12, 11:46
  */
 public interface NewAgeCalculator {
     /**

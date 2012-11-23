@@ -6,7 +6,7 @@ import hotciv.framework.GameFactory;
 
 /**
  * @author Erik
- *         Date: 09-11-12, Time: 11:38
+ *         Created: 09-11-12, 11:38
  */
 public class BetaCiv implements GameFactory {
     /**

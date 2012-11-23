@@ -6,7 +6,7 @@ import hotciv.framework.Player;
  * This interface describes a strategy that calculates who the winner is.
  *
  * @author : Erik
- *         Date: 09-11-12, Time: 11:26
+ *         Created: 09-11-12, 11:26
  */
 public interface GetWinner {
     /**

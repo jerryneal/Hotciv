@@ -11,7 +11,7 @@ import java.util.*;
  * This is a game instance, that does the most basic behaviour, and has a big constructor that specifies all the strategies this game uses.
  *
  * @author : Erik
- *         Date: 09-11-12, 11:22
+ *         Created: 09-11-12, 11:22
  */
 public class BaseGame implements Game {
     private GameWorld gameWorld;
@@ -236,10 +236,20 @@ public class BaseGame implements Game {
         unit.performAction();
     }
 
+    /**
+     * Adds the specified WinnerObserver to this BaseGame.
+     *
+     * @param winnerObserver The WinnerObserver.
+     */
     public void addWinnerObserver(WinnerObserver winnerObserver) {
         this.winnerObservers.add(winnerObserver);
     }
 
+    /**
+     * Adds the specified EndOfRoundObserver to this BaseGame.
+     *
+     * @param endOfRoundObserver The EndOfRoundObserver.
+     */
     public void addEndOfRoundObserver(EndOfRoundObserver endOfRoundObserver) {
         this.endOfRoundObservers.add(endOfRoundObserver);
     }
