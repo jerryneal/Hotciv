@@ -6,16 +6,16 @@ import hotciv.common.strategy.*;
  * //TODO: Doc
  *
  * @author Erik
- * Created: 22-11-12, 13:06
+ *         Created: 22-11-12, 13:06
  */
 public interface GameStrategyFactory {
-    GetWinner createWinnerStrategy();
+    GetWinner createWinnerStrategy(BaseGame game);
 
-    NewAgeCalculator createNewAgeCalculatorStrategy();
+    NewAgeCalculator createNewAgeCalculatorStrategy(BaseGame game);
 
-    UnitFactory createUnitFactoryStrategy();
+    UnitFactory createUnitFactoryStrategy(BaseGame game);
 
-    WorldLayoutStrategy createWorldLayoutStrategy();
+    WorldLayoutStrategy createWorldLayoutStrategy(BaseGame game);
 
-    AttackResolver createAttackResolverStrategy();
+    AttackResolver createAttackResolverStrategy(BaseGame game);
 }

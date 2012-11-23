@@ -1,5 +1,6 @@
 package hotciv.variants;
 
+import hotciv.common.BaseGame;
 import hotciv.common.strategy.GetWinner;
 import hotciv.variants.strategies.ZetaCivWinnerStrategy;
 
@@ -11,7 +12,7 @@ import hotciv.variants.strategies.ZetaCivWinnerStrategy;
  */
 public class ZetaCivFactory extends AlphaCivFactory {
     @Override
-    public GetWinner createWinnerStrategy() {
-        return new ZetaCivWinnerStrategy();
+    public GetWinner createWinnerStrategy(BaseGame game) {
+        return new ZetaCivWinnerStrategy(game);
     }
 }

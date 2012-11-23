@@ -45,7 +45,7 @@ public class GameWorld {
      * @param owner      The owner of the new unit.
      */
     public void placeNewUnit(Position position, String typeString, Player owner) {
-        placeUnit(position, unitFactory.makeUnit(game, typeString, owner));
+        placeUnit(position, unitFactory.makeUnit(typeString, owner));
     }
 
     /**

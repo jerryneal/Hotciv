@@ -15,7 +15,13 @@ import hotciv.framework.Position;
  *         Created: 22-11-12, 15:40
  */
 public class AlphaCivWorldLayout implements WorldLayoutStrategy {
-    public void createWorldLayout(BaseGame game) {
+    private BaseGame game;
+
+    public AlphaCivWorldLayout(BaseGame game) {
+        this.game = game;
+    }
+
+    public void createWorldLayout() {
         GameWorld gameWorld = game.getGameWorld();
         String[] worldLayout = new String[]{
                 "PHPPPPPPPPPPPPPP",

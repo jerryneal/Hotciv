@@ -1,5 +1,6 @@
 package hotciv.variants;
 
+import hotciv.common.BaseGame;
 import hotciv.common.strategy.UnitFactory;
 import hotciv.variants.strategies.GammaUnitFactory;
 
@@ -11,7 +12,7 @@ import hotciv.variants.strategies.GammaUnitFactory;
  */
 public class GammaCivFactory extends AlphaCivFactory {
     @Override
-    public UnitFactory createUnitFactoryStrategy() {
-        return new GammaUnitFactory();
+    public UnitFactory createUnitFactoryStrategy(BaseGame game) {
+        return new GammaUnitFactory(game);
     }
 }

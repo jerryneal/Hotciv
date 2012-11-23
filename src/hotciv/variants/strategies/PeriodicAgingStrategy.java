@@ -10,8 +10,14 @@ import hotciv.common.strategy.NewAgeCalculator;
  *         Created: 16-11-12, 10:28
  */
 public class PeriodicAgingStrategy implements NewAgeCalculator {
+    private BaseGame game;
+
+    public PeriodicAgingStrategy(BaseGame game) {
+        this.game = game;
+    }
+
     @Override
-    public int getNewAge(BaseGame game) {
+    public int getNewAge() {
         int age = game.getAge();
         if (-4000 <= age && age < -100) {
             return age + 100;

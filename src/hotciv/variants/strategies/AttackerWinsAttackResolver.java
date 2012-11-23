@@ -1,6 +1,5 @@
 package hotciv.variants.strategies;
 
-import hotciv.common.BaseGame;
 import hotciv.common.strategy.AttackResolver;
 import hotciv.framework.Unit;
 
@@ -11,7 +10,7 @@ import hotciv.framework.Unit;
  *         Created: 22-11-12, 15:41
  */
 public class AttackerWinsAttackResolver implements AttackResolver {
-    public boolean doesAttackerWin(BaseGame game, Unit attacker, Unit defender) {
+    public boolean doesAttackerWin(Unit attacker, Unit defender) {
         return true;
     }
 }

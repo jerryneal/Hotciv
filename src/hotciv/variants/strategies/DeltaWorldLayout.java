@@ -15,8 +15,14 @@ import hotciv.framework.Position;
  *         Created: 16-11-12, 10:25
  */
 public class DeltaWorldLayout implements WorldLayoutStrategy {
+    private BaseGame game;
+
+    public DeltaWorldLayout(BaseGame game) {
+        this.game = game;
+    }
+
     @Override
-    public void createWorldLayout(BaseGame game) {
+    public void createWorldLayout() {
         GameWorld gameWorld = game.getGameWorld();
 
         // first and foremost red city at (8, 12), blue city at (4, 5)

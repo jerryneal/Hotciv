@@ -1,7 +1,6 @@
 package hotciv.variants.strategies;
 
 import hotciv.common.AbstractUnit;
-import hotciv.common.BaseGame;
 import hotciv.common.strategy.UnitFactory;
 import hotciv.common.units.Archer;
 import hotciv.common.units.Legion;
@@ -16,7 +15,7 @@ import hotciv.framework.Player;
  *         Created: 22-11-12, 15:42
  */
 public class DefaultUnitFactory implements UnitFactory {
-    public AbstractUnit makeUnit(BaseGame game, String typeString, Player owner) {
+    public AbstractUnit makeUnit(String typeString, Player owner) {
         if (GameConstants.ARCHER.equals(typeString)) {
             return new Archer(owner);
         } else if (GameConstants.SETTLER.equals(typeString)) {

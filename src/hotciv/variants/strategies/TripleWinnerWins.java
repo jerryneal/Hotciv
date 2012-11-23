@@ -11,10 +11,16 @@ import hotciv.framework.Player;
  *         Created: 16-11-12, 16:42
  */
 public class TripleWinnerWins implements GetWinner {
+    private BaseGame game;
+
+    public TripleWinnerWins(BaseGame game) {
+        this.game = game;
+    }
+
     Player winner;
 
     @Override
-    public Player getWinner(BaseGame game) {
+    public Player getWinner() {
         if (winner == null) {
             for (Player player : Player.values()) {
                 if (game.getAttacksWon(player) >= 3) {

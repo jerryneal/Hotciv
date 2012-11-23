@@ -11,7 +11,13 @@ import hotciv.framework.Player;
  *         Created: 22-11-12, 15:43
  */
 public class AgeBasedWinnerStrategy implements GetWinner {
-    public Player getWinner(BaseGame game) {
+    private BaseGame game;
+
+    public AgeBasedWinnerStrategy(BaseGame game) {
+        this.game = game;
+    }
+
+    public Player getWinner() {
         if (game.getAge() >= -3000) {
             return Player.RED;
         } else {

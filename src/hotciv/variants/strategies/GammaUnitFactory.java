@@ -16,16 +16,22 @@ import hotciv.variants.units.FortifyingArcher;
  *         Date: 16-11-12, 10:22
  */
 public class GammaUnitFactory implements UnitFactory {
+    private BaseGame game;
+
+    public GammaUnitFactory(BaseGame game) {
+        this.game = game;
+    }
+
     UnitFactory defaultFactory = new DefaultUnitFactory();
 
-    public Unit makeUnit(BaseGame game, String typeString, Player owner) {
+    public Unit makeUnit(String typeString, Player owner) {
         if (GameConstants.ARCHER.equals(typeString)) {
             return new FortifyingArcher(owner);
         } else if (GameConstants.SETTLER.equals(typeString)) {
             return new CityCreatingSettler(game, owner);
         } else {
             // Return default implementation.
-            return defaultFactory.makeUnit(game, typeString, owner);
+            return defaultFactory.makeUnit(typeString, owner);
         }
     }
 }

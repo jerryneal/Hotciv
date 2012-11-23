@@ -30,18 +30,18 @@ public class BaseGame implements Game {
     private WorldLayoutStrategy worldLayoutStrategy;
     private AttackResolver attackResolver;
 
+    @Deprecated
     private Map<Player, Integer> attackWonCounter = new HashMap<Player, Integer>();
 
     private int roundCount = 1;
 
     public BaseGame(GameStrategyFactory factory) {
         // First strategies
-        // TODO: Remove BaseGame argument from strategies.
-        this.getWinner = factory.createWinnerStrategy();
-        this.newAgeCalculator = factory.createNewAgeCalculatorStrategy();
-        this.unitFactory = factory.createUnitFactoryStrategy();
-        this.worldLayoutStrategy = factory.createWorldLayoutStrategy();
-        this.attackResolver = factory.createAttackResolverStrategy();
+        this.getWinner = factory.createWinnerStrategy(this);
+        this.newAgeCalculator = factory.createNewAgeCalculatorStrategy(this);
+        this.unitFactory = factory.createUnitFactoryStrategy(this);
+        this.worldLayoutStrategy = factory.createWorldLayoutStrategy(this);
+        this.attackResolver = factory.createAttackResolverStrategy(this);
 
         // Player starts
         playerTurn = Player.RED;
@@ -55,7 +55,7 @@ public class BaseGame implements Game {
      * Creates the world, based on the worldLayoutStrategy.
      */
     private void createWorld() {
-        worldLayoutStrategy.createWorldLayout(this);
+        worldLayoutStrategy.createWorldLayout();
     }
 
     public Tile getTileAt(Position position) {
@@ -84,7 +84,7 @@ public class BaseGame implements Game {
     }
 
     public Player getWinner() {
-        return this.getWinner.getWinner(this);
+        return this.getWinner.getWinner();
     }
 
     public int getAge() {
@@ -119,7 +119,7 @@ public class BaseGame implements Game {
         //If there is a unit at the target, if it is an enemy, attack it, if it is the players unit, reject move.
         if (unitAtTarget != null) {
             if (unitAtTarget.getOwner() != unit.getOwner()) {
-                if (attackResolver.doesAttackerWin(this, unit, unitAtTarget)) {
+                if (attackResolver.doesAttackerWin(unit, unitAtTarget)) {
                     gameWorld.removeUnit(to);
                     Integer attacksWon = attackWonCounter.get(unit.getOwner());
                     if (attacksWon == null) {
@@ -154,6 +154,7 @@ public class BaseGame implements Game {
      * @param player The player
      * @return How many times the player has won an attack.
      */
+    @Deprecated
     public int getAttacksWon(Player player) {
         Integer attacksWon = attackWonCounter.get(player);
         if (attacksWon == null) {
@@ -195,7 +196,7 @@ public class BaseGame implements Game {
      */
     private void endOfRound() {
         // Aging the world.
-        this.age = newAgeCalculator.getNewAge(this);
+        this.age = newAgeCalculator.getNewAge();
 
         roundCount++;
 
@@ -213,17 +214,17 @@ public class BaseGame implements Game {
             if (produces.equals(GameConstants.SETTLER)) {
                 if (productionAmount >= GameConstants.SETTLER_PRICE) {
                     city.decreaseProductionAmount(GameConstants.SETTLER_PRICE);
-                    unit = unitFactory.makeUnit(this, GameConstants.SETTLER, city.getOwner());
+                    unit = unitFactory.makeUnit(GameConstants.SETTLER, city.getOwner());
                 }
             } else if (produces.equals(GameConstants.ARCHER)) {
                 if (productionAmount >= GameConstants.ARCHER_PRICE) {
                     city.decreaseProductionAmount(GameConstants.ARCHER_PRICE);
-                    unit = unitFactory.makeUnit(this, GameConstants.ARCHER, city.getOwner());
+                    unit = unitFactory.makeUnit(GameConstants.ARCHER, city.getOwner());
                 }
             } else if (produces.equals(GameConstants.LEGION)) {
                 if (productionAmount >= GameConstants.LEGION_PRICE) {
                     city.decreaseProductionAmount(GameConstants.LEGION_PRICE);
-                    unit = unitFactory.makeUnit(this, GameConstants.LEGION, city.getOwner());
+                    unit = unitFactory.makeUnit(GameConstants.LEGION, city.getOwner());
                 }
             }
             if (unit != null) {

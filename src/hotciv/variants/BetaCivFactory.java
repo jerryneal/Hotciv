@@ -1,5 +1,6 @@
 package hotciv.variants;
 
+import hotciv.common.BaseGame;
 import hotciv.common.strategy.GetWinner;
 import hotciv.common.strategy.NewAgeCalculator;
 import hotciv.variants.strategies.ConquerWinnerStrategy;
@@ -13,12 +14,12 @@ import hotciv.variants.strategies.PeriodicAgingStrategy;
  */
 public class BetaCivFactory extends AlphaCivFactory {
     @Override
-    public GetWinner createWinnerStrategy() {
-        return new ConquerWinnerStrategy();
+    public GetWinner createWinnerStrategy(BaseGame game) {
+        return new ConquerWinnerStrategy(game);
     }
 
     @Override
-    public NewAgeCalculator createNewAgeCalculatorStrategy() {
-        return new PeriodicAgingStrategy();
+    public NewAgeCalculator createNewAgeCalculatorStrategy(BaseGame game) {
+        return new PeriodicAgingStrategy(game);
     }
 }

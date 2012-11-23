@@ -1,6 +1,5 @@
 package hotciv.common.strategy;
 
-import hotciv.common.BaseGame;
 import hotciv.framework.Unit;
 
 /**
@@ -10,11 +9,13 @@ import hotciv.framework.Unit;
  *         Created: 16-11-12, 15:40
  */
 public interface AttackResolver {
+
     /**
      * Calculates which unit wins a battle.
      *
-     * @param game The game, attacker The attacking unit, defender The defending unit.
+     * @param attacker The attacking unit
+     * @param defender The defending unit.
      * @return True if attacker wins, false if defender wins.
      */
-    public boolean doesAttackerWin(BaseGame game, Unit attacker, Unit defender);
+    public boolean doesAttackerWin(Unit attacker, Unit defender);
 }

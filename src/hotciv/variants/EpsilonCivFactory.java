@@ -1,5 +1,6 @@
 package hotciv.variants;
 
+import hotciv.common.BaseGame;
 import hotciv.common.strategy.AttackResolver;
 import hotciv.common.strategy.GetWinner;
 import hotciv.variants.strategies.Dice;
@@ -20,12 +21,12 @@ public class EpsilonCivFactory extends AlphaCivFactory {
     }
 
     @Override
-    public AttackResolver createAttackResolverStrategy() {
-        return new EpsilonCivAttackResolver(dice);
+    public AttackResolver createAttackResolverStrategy(BaseGame game) {
+        return new EpsilonCivAttackResolver(game, dice);
     }
 
     @Override
-    public GetWinner createWinnerStrategy() {
-        return new TripleWinnerWins();
+    public GetWinner createWinnerStrategy(BaseGame game) {
+        return new TripleWinnerWins(game);
     }
 }

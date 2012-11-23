@@ -10,7 +10,13 @@ import hotciv.common.strategy.NewAgeCalculator;
  *         Created: 22-11-12, 15:42
  */
 public class LinearAgeStrategy implements NewAgeCalculator {
-    public int getNewAge(BaseGame game) {
+    private BaseGame game;
+
+    public LinearAgeStrategy(BaseGame game) {
+        this.game = game;
+    }
+
+    public int getNewAge() {
         return game.getAge() + 100;
     }
 }

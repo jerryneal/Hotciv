@@ -16,10 +16,16 @@ import java.util.Set;
  *         Created: 16-11-12, 10:26
  */
 public class ConquerWinnerStrategy implements GetWinner {
+    private BaseGame game;
+
+    public ConquerWinnerStrategy(BaseGame game) {
+        this.game = game;
+    }
+
     Player winner = null;
 
     @Override
-    public Player getWinner(BaseGame game) {
+    public Player getWinner() {
         // The winner is the player that first conquers all cities in the world.
         Set<Player> playerHasCity = new HashSet<Player>();
         if (winner == null) {

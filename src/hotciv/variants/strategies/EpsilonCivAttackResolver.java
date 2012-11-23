@@ -13,13 +13,15 @@ import hotciv.framework.*;
  */
 public class EpsilonCivAttackResolver implements AttackResolver {
     private Dice dice;
+    private BaseGame game;
 
-    public EpsilonCivAttackResolver(Dice dice) {
+    public EpsilonCivAttackResolver(BaseGame game, Dice dice) {
+        this.game = game;
         this.dice = dice;
     }
 
     @Override
-    public boolean doesAttackerWin(BaseGame game, Unit attacker, Unit defender) {
+    public boolean doesAttackerWin(Unit attacker, Unit defender) {
         int attackStrength = getCombinedBattleStrength(game, attacker, true);
         int defendingStrength = getCombinedBattleStrength(game, defender, false);
 
