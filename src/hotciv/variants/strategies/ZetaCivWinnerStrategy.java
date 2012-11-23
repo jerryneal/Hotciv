@@ -16,17 +16,21 @@ public class ZetaCivWinnerStrategy implements GetWinner {
     ConquerWinnerStrategy conquerWinnerStrategy = new ConquerWinnerStrategy();
     TripleWinnerWins tripleWinnerWinsStrategy = new TripleWinnerWins();
     boolean moveCountHasBeenReset = false;
+    private Player winner;
 
     @Override
     public Player getWinner(BaseGame game) {
-        if (game.getCurrentRoundCount() <= 20) {
-            return conquerWinnerStrategy.getWinner(game);
-        } else {
-            if (!moveCountHasBeenReset) {
-                moveCountHasBeenReset = true;
-                game.resetAttacksWon();
+        if (winner == null) {
+            if (game.getCurrentRoundCount() <= 20) {
+                winner = conquerWinnerStrategy.getWinner(game);
+            } else {
+                if (!moveCountHasBeenReset) {
+                    moveCountHasBeenReset = true;
+                    game.resetAttacksWon();
+                }
+                winner = tripleWinnerWinsStrategy.getWinner(game);
             }
-            return tripleWinnerWinsStrategy.getWinner(game);
         }
+        return winner;
     }
 }

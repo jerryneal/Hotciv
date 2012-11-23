@@ -7,6 +7,9 @@ import hotciv.variants.ZetaCiv;
 import org.junit.Before;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+
 /**
  * JUnit test class for the ZetaCiv specification.
  *
@@ -46,7 +49,49 @@ public class TestZetaCiv {
     }
 
     @Test
-    public void testWinnerStuff() {
-        // TODO:
+    public void fastCityConquerWinsRed() {
+        assertNull(game.getWinner());
+
+        // Moving red archer to conquer blue city.
+        game.moveUnit(redArcherPosition, redArcherPosition.getSouthEast());
+        assertNull(game.getWinner());
+        goToNextRound();
+        game.moveUnit(redArcherPosition.getSouthEast(), redArcherPosition.getSouthEast().getSouth());
+        assertEquals(Player.RED, game.getWinner());
+    }
+
+    @Test
+    public void fastCityConquerWinsBlue() {
+        game.endOfTurn();
+        assertNull(game.getWinner());
+
+        // Moving red archer to conquer blue city.
+        game.moveUnit(blueLegionPosition, blueLegionPosition.getNorthWest());
+        assertNull(game.getWinner());
+        goToNextRound();
+        game.endOfTurn();
+        game.moveUnit(blueLegionPosition.getNorthWest(), blueLegionPosition.getNorthWest().getNorth());
+        assertEquals(Player.BLUE, game.getWinner());
+    }
+
+    @Test
+    public void noWinnerAfterManyRounds() {
+        goToNextRound(100);
+        assertNull(game.getWinner());
+    }
+
+    @Test
+    public void cityConquerDoesntWinAfter20Rounds() {
+        // Starting at round 1.
+        goToNextRound(19);
+        // Now at round 20. If he conquers a city
+        assertNull(game.getWinner());
+
+        // Moving red archer to conquer blue city.
+        game.moveUnit(redArcherPosition, redArcherPosition.getSouthEast());
+        assertNull(game.getWinner());
+        goToNextRound();
+        game.moveUnit(redArcherPosition.getSouthEast(), redArcherPosition.getSouthEast().getSouth());
+        assertNull(game.getWinner());
     }
 }

@@ -236,21 +236,21 @@ public class TestEpsilonCiv {
         gameWorld.placeNewUnit(redArcherPosition, GameConstants.ARCHER, Player.RED);
         Unit redArcher = game.getUnitAt(redArcherPosition);
         assertNotNull(redArcher);
-        int baseAttackStrength = redArcher.getAttackingStrength();
+        int baseDefensiveStrength = redArcher.getDefensiveStrength();
 
         // Without anything we just have the baseAttackStrength
-        assertEquals(1 * baseAttackStrength, EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher, true));
+        assertEquals(1 * baseDefensiveStrength, EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher, false));
         // Inserting support
         gameWorld.placeNewUnit(redArcherPosition.getNorth(), GameConstants.ARCHER, Player.RED);
-        assertEquals(1 * (baseAttackStrength + 1), EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher, true));
+        assertEquals(1 * (baseDefensiveStrength + 1), EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher, false));
         // Placing terrain
         gameWorld.placeTile(redArcherPosition, new StandardTile(redArcherPosition, GameConstants.HILLS));
-        assertEquals(2 * (baseAttackStrength + 1), EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher, true));
+        assertEquals(2 * (baseDefensiveStrength + 1), EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher, false));
         // More support
         gameWorld.placeNewUnit(redArcherPosition.getSouth(), GameConstants.ARCHER, Player.RED);
-        assertEquals(2 * (baseAttackStrength + 2), EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher, true));
+        assertEquals(2 * (baseDefensiveStrength + 2), EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher, false));
         // Lastly a city.
         gameWorld.placeCity(redArcherPosition, new CityImpl(Player.RED));
-        assertEquals(3 * (baseAttackStrength + 2), EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher, true));
+        assertEquals(3 * (baseDefensiveStrength + 2), EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher, false));
     }
 }
