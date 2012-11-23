@@ -1,12 +1,11 @@
 package hotciv.common;
 
+import hotciv.common.observers.EndOfRoundObserver;
+import hotciv.common.observers.WinnerObserver;
 import hotciv.common.strategy.*;
 import hotciv.framework.*;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This is a game instance, that does the most basic behaviour, and has a big constructor that specifies all the strategies this game uses.
@@ -34,8 +33,15 @@ public class BaseGame implements Game {
     private Map<Player, Integer> attackWonCounter = new HashMap<Player, Integer>();
 
     private int roundCount = 1;
+    private List<WinnerObserver> winnerObservers;
+    private List<EndOfRoundObserver> endOfRoundObservers;
 
     public BaseGame(GameStrategyFactory factory) {
+        // Making the observer lists.
+        this.winnerObservers = new ArrayList<WinnerObserver>();
+        this.endOfRoundObservers = new ArrayList<EndOfRoundObserver>();
+
+
         // First strategies
         this.getWinner = factory.createWinnerStrategy(this);
         this.newAgeCalculator = factory.createNewAgeCalculatorStrategy(this);
@@ -121,6 +127,11 @@ public class BaseGame implements Game {
             if (unitAtTarget.getOwner() != unit.getOwner()) {
                 if (attackResolver.doesAttackerWin(unit, unitAtTarget)) {
                     gameWorld.removeUnit(to);
+                    Player winner = unit.getOwner();
+                    for (WinnerObserver winnerObserver : winnerObservers) {
+                        winnerObserver.playerWonBattle(winner);
+                    }
+
                     Integer attacksWon = attackWonCounter.get(unit.getOwner());
                     if (attacksWon == null) {
                         attackWonCounter.put(unit.getOwner(), 1);
@@ -231,6 +242,11 @@ public class BaseGame implements Game {
                 gameWorld.placeUnitNear(cityPosition, unit);
             }
         }
+
+        for (EndOfRoundObserver endOfRoundObserver : endOfRoundObservers) {
+            endOfRoundObserver.endOfRound();
+        }
+
     }
 
     public void changeWorkForceFocusInCityAt(Position p, String balance) {
@@ -259,7 +275,16 @@ public class BaseGame implements Game {
      *
      * @return The number of the current round.
      */
+    @Deprecated
     public int getCurrentRoundCount() {
         return roundCount;
+    }
+
+    public void addWinnerObserver(WinnerObserver winnerObserver) {
+        this.winnerObservers.add(winnerObserver);
+    }
+
+    public void addEndOfRoundObserver(EndOfRoundObserver endOfRoundObserver) {
+        this.endOfRoundObservers.add(endOfRoundObserver);
     }
 }

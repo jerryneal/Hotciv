@@ -1,8 +1,11 @@
 package hotciv.variants.strategies;
 
 import hotciv.common.BaseGame;
+import hotciv.common.observers.WinnerObserver;
 import hotciv.common.strategy.GetWinner;
 import hotciv.framework.Player;
+
+import java.util.HashMap;
 
 /**
  * This strategy is an implementation of the EpsilonCiv and ZetaCiv winner strategies. It returns the player who first gets 3 battle wins.
@@ -11,10 +14,27 @@ import hotciv.framework.Player;
  *         Created: 16-11-12, 16:42
  */
 public class TripleWinnerWins implements GetWinner {
-    private BaseGame game;
+    private HashMap<Player, Integer> playerWonCounter;
 
-    public TripleWinnerWins(BaseGame game) {
-        this.game = game;
+    public TripleWinnerWins(final BaseGame game) {
+        this.playerWonCounter = new HashMap<Player, Integer>();
+
+        // Observers
+        game.addWinnerObserver(new WinnerObserver() {
+            @Override
+            public void playerWonBattle(Player winner) {
+                incrementWonCounter(winner);
+            }
+        });
+    }
+
+    private void incrementWonCounter(Player winner) {
+        if (playerWonCounter.get(winner) == null) {
+            playerWonCounter.put(winner, 1);
+        } else {
+            int playerWon = playerWonCounter.get(winner) + 1;
+            playerWonCounter.put(winner, playerWon);
+        }
     }
 
     Player winner;
@@ -22,8 +42,8 @@ public class TripleWinnerWins implements GetWinner {
     @Override
     public Player getWinner() {
         if (winner == null) {
-            for (Player player : Player.values()) {
-                if (game.getAttacksWon(player) >= 3) {
+            for (Player player : playerWonCounter.keySet()) {
+                if (playerWonCounter.get(player) >= 3) {
                     winner = player;
                     break;
                 }

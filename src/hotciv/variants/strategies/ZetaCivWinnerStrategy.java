@@ -1,6 +1,7 @@
 package hotciv.variants.strategies;
 
 import hotciv.common.BaseGame;
+import hotciv.common.observers.EndOfRoundObserver;
 import hotciv.common.strategy.GetWinner;
 import hotciv.framework.Player;
 
@@ -17,25 +18,36 @@ public class ZetaCivWinnerStrategy implements GetWinner {
     private ConquerWinnerStrategy conquerWinnerStrategy;
     private TripleWinnerWins tripleWinnerWinsStrategy;
 
-    public ZetaCivWinnerStrategy(BaseGame game) {
+    boolean moveCountHasBeenReset = false;
+    private Player winner = null;
+    private int roundCount = 1;
+
+    public ZetaCivWinnerStrategy(final BaseGame game) {
         this.game = game;
         conquerWinnerStrategy = new ConquerWinnerStrategy(game);
-        tripleWinnerWinsStrategy = new TripleWinnerWins(game);
+        // TrippleWinnerWins is constructed when the roundCount is bigger than 20.
+
+        game.addEndOfRoundObserver(new EndOfRoundObserver() {
+            @Override
+            public void endOfRound() {
+                incrementRoundCounter();
+            }
+        });
     }
 
-    // TODO: Observer pattern.
-    boolean moveCountHasBeenReset = false;
-    private Player winner;
+    private void incrementRoundCounter() {
+        roundCount++;
+    }
 
     @Override
     public Player getWinner() {
         if (winner == null) {
-            if (game.getCurrentRoundCount() <= 20) {
+            if (roundCount <= 20) {
                 winner = conquerWinnerStrategy.getWinner();
             } else {
                 if (!moveCountHasBeenReset) {
                     moveCountHasBeenReset = true;
-                    game.resetAttacksWon();
+                    tripleWinnerWinsStrategy = new TripleWinnerWins(game);
                 }
                 winner = tripleWinnerWinsStrategy.getWinner();
             }
