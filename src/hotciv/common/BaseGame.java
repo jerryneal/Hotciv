@@ -224,10 +224,13 @@ public class BaseGame implements Game {
         city.setProduction(unitType);
     }
 
-    public void performUnitActionAt(Position p) {
+    public void performUnitActionAt(Position position) {
         // First see if its the right players turn.
-        Unit unit = getUnitAt(p);
-        if (unit != null && unit.getOwner() != getPlayerInTurn()) {
+        Unit unit = getUnitAt(position);
+        if (unit == null) {
+            throw new IllegalArgumentException("There has to be a unit at the specified from position: " + position);
+        }
+        if (unit.getOwner() != getPlayerInTurn()) {
             return;
         }
         unit.performAction();
