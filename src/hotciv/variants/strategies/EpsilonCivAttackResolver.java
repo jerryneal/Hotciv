@@ -20,14 +20,19 @@ public class EpsilonCivAttackResolver implements AttackResolver {
 
     @Override
     public boolean doesAttackerWin(BaseGame game, Unit attacker, Unit defender) {
-        int attackStrength = getCombinedBattleStrength(game, attacker);
-        int defendingStrength = getCombinedBattleStrength(game, defender);
+        int attackStrength = getCombinedBattleStrength(game, attacker, true);
+        int defendingStrength = getCombinedBattleStrength(game, defender, false);
 
         return attackStrength * dice.getNext() > defendingStrength * dice.getNext();
     }
 
-    public static int getCombinedBattleStrength(BaseGame game, Unit unit) {
-        int attackStrength = unit.getAttackingStrength();
+    public static int getCombinedBattleStrength(BaseGame game, Unit unit, boolean attacking) {
+        int strength;
+        if (attacking) {
+            strength = unit.getAttackingStrength();
+        } else {
+            strength = unit.getDefensiveStrength();
+        }
 
         GameWorld gameWorld = game.getGameWorld();
         Position unitPosition = gameWorld.getUnitPosition(unit);
@@ -37,9 +42,9 @@ public class EpsilonCivAttackResolver implements AttackResolver {
 
         int unitSupport = getFriendlySupport(game, unit.getOwner(), unitPosition);
 
-        attackStrength += unitSupport;
+        strength += unitSupport;
 
-        return attackStrength * getTerrainFactor(game, unitPosition);
+        return strength * getTerrainFactor(game, unitPosition);
     }
 
     public static int getFriendlySupport(BaseGame game, Player player, Position unitPosition) {

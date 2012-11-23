@@ -56,22 +56,20 @@ public class TestEpsilonCiv {
 
     @Test
     public void tripleWinnerWinsRedWins() {
-        Position redArcherPosition = new Position(10, 10);
+        Position redLegionPosition = new Position(10, 10);
         Position blueArcherPosition = new Position(10, 11);
 
         BaseGame game = (BaseGame) this.game;
         GameWorld gameWorld = game.getGameWorld();
 
-        // Setting up support for red, so he always wins.
-        gameWorld.placeNewUnit(redArcherPosition.getNorth(), GameConstants.ARCHER, Player.RED);
 
         for (int i = 0; i < 3; i++) {
             assertNull(game.getWinner());
-            gameWorld.removeUnit(redArcherPosition);
-            gameWorld.placeNewUnit(redArcherPosition, GameConstants.ARCHER, Player.RED);
+            gameWorld.removeUnit(redLegionPosition);
+            gameWorld.placeNewUnit(redLegionPosition, GameConstants.LEGION, Player.RED);
             gameWorld.removeUnit(blueArcherPosition);
             gameWorld.placeNewUnit(blueArcherPosition, GameConstants.ARCHER, Player.BLUE);
-            game.moveUnit(redArcherPosition, blueArcherPosition);
+            game.moveUnit(redLegionPosition, blueArcherPosition);
         }
         assertEquals(Player.RED, game.getWinner());
     }
@@ -81,40 +79,40 @@ public class TestEpsilonCiv {
         game.endOfTurn();
 
         Position redArcherPosition = new Position(10, 10);
-        Position blueArcherPosition = new Position(10, 11);
+        Position blueLegionPosition = new Position(10, 11);
 
         BaseGame game = (BaseGame) this.game;
         GameWorld gameWorld = game.getGameWorld();
 
         // Setting up support for blue, so he always wins.
-        gameWorld.placeNewUnit(blueArcherPosition.getNorth(), GameConstants.ARCHER, Player.BLUE);
+        gameWorld.placeNewUnit(blueLegionPosition.getNorth(), GameConstants.ARCHER, Player.BLUE);
 
         for (int i = 0; i < 3; i++) {
             assertNull(game.getWinner());
             gameWorld.removeUnit(redArcherPosition);
             gameWorld.placeNewUnit(redArcherPosition, GameConstants.ARCHER, Player.RED);
-            gameWorld.removeUnit(blueArcherPosition);
-            gameWorld.placeNewUnit(blueArcherPosition, GameConstants.ARCHER, Player.BLUE);
-            game.moveUnit(blueArcherPosition, redArcherPosition);
+            gameWorld.removeUnit(blueLegionPosition);
+            gameWorld.placeNewUnit(blueLegionPosition, GameConstants.LEGION, Player.BLUE);
+            game.moveUnit(blueLegionPosition, redArcherPosition);
         }
         assertEquals(Player.BLUE, game.getWinner());
     }
 
     @Test
     public void attackerCanLooseBlueLoose() {
-        Position redArcherPosition = new Position(10, 10);
+        Position redLegionPosition = new Position(10, 10);
         Position blueArcherPosition = new Position(10, 11);
 
         BaseGame game = (BaseGame) this.game;
         GameWorld gameWorld = game.getGameWorld();
 
         // Support
-        gameWorld.placeNewUnit(redArcherPosition.getNorth(), GameConstants.ARCHER, Player.RED);
+        gameWorld.placeNewUnit(redLegionPosition.getNorth(), GameConstants.ARCHER, Player.RED);
 
-        gameWorld.placeNewUnit(redArcherPosition, GameConstants.ARCHER, Player.RED);
+        gameWorld.placeNewUnit(redLegionPosition, GameConstants.LEGION, Player.RED);
         gameWorld.placeNewUnit(blueArcherPosition, GameConstants.ARCHER, Player.BLUE);
 
-        game.moveUnit(redArcherPosition, blueArcherPosition);
+        game.moveUnit(redLegionPosition, blueArcherPosition);
 
         assertEquals(Player.RED, gameWorld.getUnit(blueArcherPosition).getOwner());
     }
@@ -130,6 +128,7 @@ public class TestEpsilonCiv {
 
         // Support
         gameWorld.placeNewUnit(blueArcherPosition.getNorth(), GameConstants.ARCHER, Player.BLUE);
+        gameWorld.placeNewUnit(blueArcherPosition.getEast(), GameConstants.ARCHER, Player.BLUE);
 
         gameWorld.placeNewUnit(redArcherPosition, GameConstants.ARCHER, Player.RED);
         gameWorld.placeNewUnit(blueArcherPosition, GameConstants.ARCHER, Player.BLUE);
@@ -137,6 +136,44 @@ public class TestEpsilonCiv {
         game.moveUnit(blueArcherPosition, redArcherPosition);
 
         assertEquals(Player.BLUE, gameWorld.getUnit(redArcherPosition).getOwner());
+    }
+
+    @Test
+    public void settlerCannotWin() {
+        Position redSettlerPosition = new Position(10, 10);
+        Position blueLegionPosition = new Position(10, 11);
+
+        gameWorld.placeNewUnit(redSettlerPosition, GameConstants.SETTLER, Player.RED);
+        gameWorld.placeNewUnit(blueLegionPosition, GameConstants.LEGION, Player.BLUE);
+
+        BaseGame game = (BaseGame) this.game;
+        GameWorld gameWorld = game.getGameWorld();
+
+        // Placing him on a city.
+        gameWorld.placeCity(redSettlerPosition, new CityImpl(Player.RED));
+
+        // But still he shouldn't win.
+        game.moveUnit(redSettlerPosition, blueLegionPosition);
+
+        assertEquals(Player.BLUE, game.getUnitAt(blueLegionPosition).getOwner());
+    }
+
+    @Test
+    public void legionBeatsSettler() {
+        game.endOfTurn();
+        Position redSettlerPosition = new Position(10, 10);
+        Position blueLegionPosition = new Position(10, 11);
+
+        gameWorld.placeNewUnit(redSettlerPosition, GameConstants.SETTLER, Player.RED);
+        gameWorld.placeNewUnit(blueLegionPosition, GameConstants.LEGION, Player.BLUE);
+
+        BaseGame game = (BaseGame) this.game;
+        GameWorld gameWorld = game.getGameWorld();
+
+        // But still he shouldn't win.
+        game.moveUnit(blueLegionPosition, redSettlerPosition);
+
+        assertEquals(Player.BLUE, game.getUnitAt(redSettlerPosition).getOwner());
     }
 
     @Test
@@ -170,7 +207,7 @@ public class TestEpsilonCiv {
     }
 
     @Test
-    public void testCombinedBattleStrength() {
+    public void testCombinedBattleStrengthAttack() {
         Position redArcherPosition = new Position(10, 10);
         gameWorld.placeNewUnit(redArcherPosition, GameConstants.ARCHER, Player.RED);
         Unit redArcher = game.getUnitAt(redArcherPosition);
@@ -178,18 +215,42 @@ public class TestEpsilonCiv {
         int baseAttackStrength = redArcher.getAttackingStrength();
 
         // Without anything we just have the baseAttackStrength
-        assertEquals(1 * baseAttackStrength, EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher));
+        assertEquals(1 * baseAttackStrength, EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher, true));
         // Inserting support
         gameWorld.placeNewUnit(redArcherPosition.getNorth(), GameConstants.ARCHER, Player.RED);
-        assertEquals(1 * (baseAttackStrength + 1), EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher));
+        assertEquals(1 * (baseAttackStrength + 1), EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher, true));
         // Placing terrain
         gameWorld.placeTile(redArcherPosition, new StandardTile(redArcherPosition, GameConstants.HILLS));
-        assertEquals(2 * (baseAttackStrength + 1), EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher));
+        assertEquals(2 * (baseAttackStrength + 1), EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher, true));
         // More support
         gameWorld.placeNewUnit(redArcherPosition.getSouth(), GameConstants.ARCHER, Player.RED);
-        assertEquals(2 * (baseAttackStrength + 2), EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher));
+        assertEquals(2 * (baseAttackStrength + 2), EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher, true));
         // Lastly a city.
         gameWorld.placeCity(redArcherPosition, new CityImpl(Player.RED));
-        assertEquals(3 * (baseAttackStrength + 2), EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher));
+        assertEquals(3 * (baseAttackStrength + 2), EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher, true));
+    }
+
+    @Test
+    public void testCombinedBattleStrengthDefensive() {
+        Position redArcherPosition = new Position(10, 10);
+        gameWorld.placeNewUnit(redArcherPosition, GameConstants.ARCHER, Player.RED);
+        Unit redArcher = game.getUnitAt(redArcherPosition);
+        assertNotNull(redArcher);
+        int baseAttackStrength = redArcher.getAttackingStrength();
+
+        // Without anything we just have the baseAttackStrength
+        assertEquals(1 * baseAttackStrength, EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher, true));
+        // Inserting support
+        gameWorld.placeNewUnit(redArcherPosition.getNorth(), GameConstants.ARCHER, Player.RED);
+        assertEquals(1 * (baseAttackStrength + 1), EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher, true));
+        // Placing terrain
+        gameWorld.placeTile(redArcherPosition, new StandardTile(redArcherPosition, GameConstants.HILLS));
+        assertEquals(2 * (baseAttackStrength + 1), EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher, true));
+        // More support
+        gameWorld.placeNewUnit(redArcherPosition.getSouth(), GameConstants.ARCHER, Player.RED);
+        assertEquals(2 * (baseAttackStrength + 2), EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher, true));
+        // Lastly a city.
+        gameWorld.placeCity(redArcherPosition, new CityImpl(Player.RED));
+        assertEquals(3 * (baseAttackStrength + 2), EpsilonCivAttackResolver.getCombinedBattleStrength(game, redArcher, true));
     }
 }
