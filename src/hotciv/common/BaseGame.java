@@ -28,6 +28,7 @@ public class BaseGame implements Game {
     private UnitFactory unitFactory;
     private WorldLayoutStrategy worldLayoutStrategy;
     private AttackResolver attackResolver;
+    private CityProductionStrategy cityProductionStrategy;
 
     private List<WinnerObserver> winnerObservers;
     private List<EndOfRoundObserver> endOfRoundObservers;
@@ -44,6 +45,7 @@ public class BaseGame implements Game {
         this.unitFactory = factory.createUnitFactoryStrategy(this);
         this.worldLayoutStrategy = factory.createWorldLayoutStrategy(this);
         this.attackResolver = factory.createAttackResolverStrategy(this);
+        this.cityProductionStrategy = factory.createCityProductionStrategy(this);
 
         // Player starts
         playerTurn = Player.RED;
@@ -179,7 +181,7 @@ public class BaseGame implements Game {
             CityImpl city = cityEntry.getValue();
             Position cityPosition = cityEntry.getKey();
 
-            city.increaseProductionAmount(6);
+            this.cityProductionStrategy.produceOnCity(city);
             int productionAmount = city.getProductionAmount();
             String produces = city.getProduction();
 
@@ -212,8 +214,12 @@ public class BaseGame implements Game {
 
     }
 
-    public void changeWorkForceFocusInCityAt(Position p, String balance) {
-        throw new UnsupportedOperationException();
+    public void changeWorkForceFocusInCityAt(Position position, String balance) {
+        CityImpl city = getCityAt(position);
+        if (city == null) {
+            throw new IllegalArgumentException("No city at: " + position);
+        }
+        city.setWorkForceFocus(balance);
     }
 
     public void changeProductionInCityAt(Position p, String unitType) {

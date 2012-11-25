@@ -18,7 +18,6 @@ public class SemiCivFactory implements GameStrategyFactory {
         this.dice = dice;
     }
 
-    // TODO: City Workforce and population: EtaCiv.
     @Override
     public GetWinner createWinnerStrategy(BaseGame game) {
         return new TripleWinnerWins(game);
@@ -43,5 +42,11 @@ public class SemiCivFactory implements GameStrategyFactory {
     @Override
     public AttackResolver createAttackResolverStrategy(BaseGame game) {
         return new EpsilonCivAttackResolver(game, dice);
+    }
+
+    @Override
+    public CityProductionStrategy createCityProductionStrategy(BaseGame game) {
+        // TODO: EtaCiv stuff.
+        return new BasicCityProduction();
     }
 }

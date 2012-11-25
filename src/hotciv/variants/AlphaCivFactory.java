@@ -36,4 +36,9 @@ public class AlphaCivFactory implements GameStrategyFactory {
     public AttackResolver createAttackResolverStrategy(BaseGame game) {
         return new AttackerWinsAttackResolver();
     }
+
+    @Override
+    public CityProductionStrategy createCityProductionStrategy(BaseGame game) {
+        return new BasicCityProduction();
+    }
 }

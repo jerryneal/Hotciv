@@ -48,4 +48,12 @@ public interface GameStrategyFactory {
      * @return A AttackResolver instance.
      */
     public AttackResolver createAttackResolverStrategy(BaseGame game);
+
+    /**
+     * Creates the CityProductionStrategy, that produces stuff in the end of each round for a city.
+     *
+     * @param game The game.
+     * @return A CityProductionStrategy instance.
+     */
+    public CityProductionStrategy createCityProductionStrategy(BaseGame game);
 }
