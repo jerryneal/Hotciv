@@ -30,6 +30,9 @@ public class CityImpl implements City {
 
         // workForceFocus is on production pr. default.
         this.workForceFocus = GameConstants.productionFocus;
+
+        // Size defaults to 1.
+        this.size = 1;
     }
 
     @Override

@@ -38,8 +38,7 @@ public class BaseGame implements Game {
         this.winnerObservers = new ArrayList<WinnerObserver>();
         this.endOfRoundObservers = new ArrayList<EndOfRoundObserver>();
 
-
-        // First strategies
+        // Strategies
         this.getWinner = factory.createWinnerStrategy(this);
         this.newAgeCalculator = factory.createNewAgeCalculatorStrategy(this);
         this.unitFactory = factory.createUnitFactoryStrategy(this);
@@ -47,12 +46,12 @@ public class BaseGame implements Game {
         this.attackResolver = factory.createAttackResolverStrategy(this);
         this.cityProductionStrategy = factory.createCityProductionStrategy(this);
 
-        // Player starts
-        playerTurn = Player.RED;
-
         // Gameworld
         this.gameWorld = new GameWorld(this, unitFactory);
         createWorld();
+
+        // Player starts
+        playerTurn = Player.RED;
     }
 
     /**

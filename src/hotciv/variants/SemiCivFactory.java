@@ -46,7 +46,6 @@ public class SemiCivFactory implements GameStrategyFactory {
 
     @Override
     public CityProductionStrategy createCityProductionStrategy(BaseGame game) {
-        // TODO: EtaCiv stuff.
-        return new BasicCityProduction();
+        return new EtaCivCityProductionStrategy(game);
     }
 }

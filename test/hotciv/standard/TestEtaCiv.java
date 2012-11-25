@@ -11,7 +11,7 @@ import hotciv.variants.EtaCiv;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 /**
  * //TODO: Document!
@@ -73,6 +73,39 @@ public class TestEtaCiv {
         gameWorld.placeTile(redCityPosition.getEast(), new StandardTile(redCityPosition.getEast(), GameConstants.MOUNTAINS));
         gameWorld.placeTile(redCityPosition.getSouthEast(), new StandardTile(redCityPosition.getSouthEast(), GameConstants.HILLS));
 
+        goToNextRound(8);
+        assertNull(game.getUnitAt(redCityPosition));
+
+        // With all production considered, and considering that the city size increases. Next round there should be an archer on the city.
         goToNextRound();
+        assertNotNull(game.getTileAt(redCityPosition));
+    }
+
+    @Test
+    public void testFood() {
+        Position redCityPosition = new Position(10, 10);
+
+        gameWorld.placeCity(redCityPosition, new CityImpl(Player.RED));
+
+        assertEquals(1, game.getCityAt(redCityPosition).getSize());
+        goToNextRound(2);
+        assertEquals(1, game.getCityAt(redCityPosition).getSize());
+        goToNextRound();
+        assertEquals(2, game.getCityAt(redCityPosition).getSize());
+    }
+
+    @Test
+    public void testFoodOnMountain() {
+        Position redCityPosition = new Position(10, 10);
+
+        gameWorld.placeCity(redCityPosition, new CityImpl(Player.RED));
+
+        gameWorld.placeTile(redCityPosition, new StandardTile(redCityPosition, GameConstants.MOUNTAINS));
+
+        assertEquals(1, game.getCityAt(redCityPosition).getSize());
+        goToNextRound(8);
+        assertEquals(1, game.getCityAt(redCityPosition).getSize());
+        goToNextRound();
+        assertEquals(2, game.getCityAt(redCityPosition).getSize());
     }
 }
