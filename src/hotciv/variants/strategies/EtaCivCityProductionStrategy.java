@@ -14,7 +14,7 @@ import java.util.*;
  * //TODO: Document!
  *
  * @author : Erik
- *         Date: 25-11-12, 19:52
+ * Date: 25-11-12, 19:52
  */
 public class EtaCivCityProductionStrategy implements CityProductionStrategy {
     private BaseGame game;
