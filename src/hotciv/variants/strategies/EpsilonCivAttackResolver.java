@@ -6,7 +6,7 @@ import hotciv.common.strategy.AttackResolver;
 import hotciv.framework.*;
 
 /**
- * This strategy implements the EpsilonCiv battle-outcome calculation algorithm, using SecureRandom to simulate die rolls.
+ * This strategy implements the EpsilonCiv battle-outcome calculation algorithm, using a random dice to simulate dice rolls.
  *
  * @author Erik
  *         Created: 16-11-12, 15:43

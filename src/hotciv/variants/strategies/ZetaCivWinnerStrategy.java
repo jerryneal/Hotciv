@@ -13,30 +13,20 @@ import hotciv.framework.Player;
  * @author Erik
  *         Created: 16-11-12, 17:14
  */
-public class ZetaCivWinnerStrategy implements GetWinner {
+public class ZetaCivWinnerStrategy implements GetWinner, EndOfRoundObserver {
     private BaseGame game;
     private ConquerWinnerStrategy conquerWinnerStrategy;
     private TripleWinnerWins tripleWinnerWinsStrategy;
 
-    boolean moveCountHasBeenReset = false;
     private Player winner = null;
     private int roundCount = 1;
 
     public ZetaCivWinnerStrategy(final BaseGame game) {
         this.game = game;
         conquerWinnerStrategy = new ConquerWinnerStrategy(game);
-        // TrippleWinnerWins is constructed when the roundCount is bigger than 20.
+        this.tripleWinnerWinsStrategy = null;
 
-        game.addEndOfRoundObserver(new EndOfRoundObserver() {
-            @Override
-            public void endOfRound() {
-                incrementRoundCounter();
-            }
-        });
-    }
-
-    private void incrementRoundCounter() {
-        roundCount++;
+        game.addEndOfRoundObserver(this);
     }
 
     @Override
@@ -45,13 +35,17 @@ public class ZetaCivWinnerStrategy implements GetWinner {
             if (roundCount <= 20) {
                 winner = conquerWinnerStrategy.getWinner();
             } else {
-                if (!moveCountHasBeenReset) {
-                    moveCountHasBeenReset = true;
+                if (tripleWinnerWinsStrategy == null) {
                     tripleWinnerWinsStrategy = new TripleWinnerWins(game);
                 }
                 winner = tripleWinnerWinsStrategy.getWinner();
             }
         }
         return winner;
+    }
+
+    @Override
+    public void endOfRound() {
+        roundCount++;
     }
 }

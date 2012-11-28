@@ -1,6 +1,5 @@
 package hotciv.variants.strategies;
 
-import java.security.SecureRandom;
 import java.util.Random;
 
 /**
@@ -10,7 +9,7 @@ import java.util.Random;
  *         Created: 19-11-12, 14:45
  */
 public class RandomDice implements Dice {
-    private Random dice = new SecureRandom();
+    private Random dice = new Random();
 
     @Override
     public int getNext() {
