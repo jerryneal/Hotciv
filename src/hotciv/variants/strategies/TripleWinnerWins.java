@@ -13,28 +13,14 @@ import java.util.HashMap;
  * @author Erik
  *         Created: 16-11-12, 16:42
  */
-public class TripleWinnerWins implements GetWinner {
+public class TripleWinnerWins implements GetWinner, WinnerObserver {
     private HashMap<Player, Integer> playerWonCounter;
 
     public TripleWinnerWins(final BaseGame game) {
         this.playerWonCounter = new HashMap<Player, Integer>();
 
         // Observers
-        game.addWinnerObserver(new WinnerObserver() {
-            @Override
-            public void playerWonBattle(Player winner) {
-                incrementWonCounter(winner);
-            }
-        });
-    }
-
-    private void incrementWonCounter(Player winner) {
-        if (playerWonCounter.get(winner) == null) {
-            playerWonCounter.put(winner, 1);
-        } else {
-            int playerWon = playerWonCounter.get(winner) + 1;
-            playerWonCounter.put(winner, playerWon);
-        }
+        game.addWinnerObserver(this);
     }
 
     Player winner;
@@ -50,5 +36,15 @@ public class TripleWinnerWins implements GetWinner {
             }
         }
         return winner;
+    }
+
+    @Override
+    public void playerWonBattle(Player winner) {
+        if (playerWonCounter.get(winner) == null) {
+            playerWonCounter.put(winner, 1);
+        } else {
+            int playerWon = playerWonCounter.get(winner) + 1;
+            playerWonCounter.put(winner, playerWon);
+        }
     }
 }

@@ -5,7 +5,9 @@ import hotciv.common.observers.WinnerObserver;
 import hotciv.common.strategy.*;
 import hotciv.framework.*;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * This is a game instance, that does the most basic behaviour, and has a big constructor that specifies all the strategies this game uses.
@@ -30,13 +32,13 @@ public class BaseGame implements Game {
     private AttackResolver attackResolver;
     private CityProductionStrategy cityProductionStrategy;
 
-    private List<WinnerObserver> winnerObservers;
-    private List<EndOfRoundObserver> endOfRoundObservers;
+    private Set<WinnerObserver> winnerObservers;
+    private Set<EndOfRoundObserver> endOfRoundObservers;
 
     public BaseGame(GameStrategyFactory factory) {
         // Making the observer lists.
-        this.winnerObservers = new ArrayList<WinnerObserver>();
-        this.endOfRoundObservers = new ArrayList<EndOfRoundObserver>();
+        this.winnerObservers = new HashSet<WinnerObserver>();
+        this.endOfRoundObservers = new HashSet<EndOfRoundObserver>();
 
         // Strategies
         this.getWinner = factory.createWinnerStrategy(this);
