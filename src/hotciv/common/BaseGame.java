@@ -49,7 +49,7 @@ public class BaseGame implements Game {
         this.cityProductionStrategy = factory.createCityProductionStrategy(this);
 
         // Gameworld
-        this.gameWorld = new GameWorld(this, unitFactory);
+        this.gameWorld = new GameWorld(unitFactory);
         createWorld();
 
         // Player starts

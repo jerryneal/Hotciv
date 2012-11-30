@@ -20,10 +20,8 @@ public class GameWorld {
     private Map<Position, Tile> tileMap = new HashMap<Position, Tile>();
     private Map<Position, CityImpl> cityMap = new HashMap<Position, CityImpl>();
     private UnitFactory unitFactory;
-    private BaseGame game;
 
-    public GameWorld(BaseGame game, UnitFactory unitFactory) {
-        this.game = game;
+    public GameWorld(UnitFactory unitFactory) {
         this.unitFactory = unitFactory;
     }
 
