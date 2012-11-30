@@ -51,7 +51,7 @@ public class BaseGame implements Game {
         playerTurn = Player.RED;
 
         // Gameworld
-        this.gameWorld = new GameWorld(this, unitFactory);
+        this.gameWorld = new GameWorld(unitFactory);
         createWorld();
     }
 
