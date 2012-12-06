@@ -3,7 +3,6 @@ package hotciv.variants.strategies;
 import hotciv.common.BaseGame;
 import hotciv.common.GameWorld;
 import hotciv.common.strategy.WorldLayoutStrategy;
-import hotciv.variants.AlphaCiv;
 import thirdparty.ThirdPartyFractalGenerator;
 
 /**
@@ -33,15 +32,11 @@ public class FractalWorldLayout implements WorldLayoutStrategy {
             for (int c = 0; c < 16; c++) {
                 line = line + generator.getLandscapeAt(r, c);
             }
-            // Making it fit out definition of the world.
+            // Making it fit our definition of the world.
             line = line.replaceAll("o", "P").replaceAll("\\.", "O").toUpperCase();
             worldLayout[r] = line;
         }
 
         gameWorld.populateWorld(worldLayout);
-    }
-
-    public static void main(String[] args) {
-        new FractalWorldLayout((BaseGame) new AlphaCiv().newGame()).createWorldLayout();
     }
 }
