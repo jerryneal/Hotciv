@@ -4,6 +4,7 @@ import hotciv.common.BaseGame;
 import hotciv.common.CityImpl;
 import hotciv.framework.*;
 import hotciv.view.Figures.CityFigure;
+import hotciv.view.Figures.TextFigure;
 import hotciv.view.Figures.UnitFigure;
 import hotciv.view.FrameWork.GfxConstants;
 import minidraw.framework.Figure;
@@ -20,6 +21,7 @@ import java.util.Map;
  */
 public class HotCivDrawing extends StandardDrawing implements GameObserver {
     private BaseGame game;
+    private TextFigure ageTextField;
 
     public HotCivDrawing(BaseGame game) {
         this.game = game;
@@ -46,6 +48,11 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
                     new Point(GfxConstants.getXFromColumn(column),
                             GfxConstants.getYFromRow(row))));
         }
+
+        ageTextField = new TextFigure("4000 BC",
+                new Point(GfxConstants.AGE_TEXT_X,
+                        GfxConstants.AGE_TEXT_Y));
+        add(ageTextField);
     }
 
     @Override
@@ -79,12 +86,13 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
             this.add(new UnitFigure(unit, new Point(column, row)));
         }
 
-        this.requestUpdate();
+        requestUpdate();
     }
 
     @Override
     public void turnEnds(Player nextPlayer, int age) {
-        // TODO
+        ageTextField.setText(Integer.toString(Math.abs(age)) + ((age > 0) ? " AC" : " BC"));
+        requestUpdate();
     }
 
     @Override

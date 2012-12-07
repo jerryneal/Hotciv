@@ -38,6 +38,10 @@ public class HotCivTool implements Tool {
             case 0:
                 System.out.println("Moving a unit");
                 game.moveUnit(new Position(3, 8), new Position(2, 8));
+                break;
+            default:
+                System.out.println("End turn");
+                game.endOfTurn();
         }
         count++;
     }
