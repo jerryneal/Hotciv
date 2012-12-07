@@ -246,6 +246,7 @@ public class GameWorld {
     }
 
     /**
+<<<<<<< HEAD
      * Returns the position where the specified city is located, or null if the city was not found.
      *
      * @param city The city to find.
