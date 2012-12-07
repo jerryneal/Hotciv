@@ -121,5 +121,13 @@ public interface Game {
    * @param p the position of a unit that must perform its action.
    * Nothing happens in case the unit has no associated action.
    */
-  public void performUnitActionAt( Position p );  
+  public void performUnitActionAt( Position p );
+
+  /**
+   * add an observer on this game instance. The game
+   * instance atcs as 'subject' in the pattern.
+   * @param observer the observer to notify in case of
+   * state changes
+   */
+  public void addObserver(GameObserver observer);
 }

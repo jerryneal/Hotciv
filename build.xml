@@ -31,6 +31,9 @@
     <path id="class-path">
         <pathelement location="${build-directory}"/>
         <pathelement location="${junitJar}"/>
+		<fileset dir="lib">
+			<include name="**/*.jar" />
+		</fileset>
     </path>
 
     <!-- define classpath for Emma -->
@@ -75,7 +78,6 @@
                destdir="${build-directory}"
                debug="on"
                includeantruntime="no"
-			   classpath="lib/fractal.jar"
                 >
             <classpath refid="class-path"/>
         </javac>
@@ -103,7 +105,6 @@
                 packagenames="hotciv.*"
                 sourcepath="${source-directory}"
                 destdir="${docDirectory}"
-				classpath="lib/fractal.jar"
                 package="true"
                 doctitle="&lt;b&gt;HotCiv&lt;/b&gt;"
                 bottom="&lt;b&gt;Skeleton code authored by Henrik B. Christensen &lt;/b&gt;"

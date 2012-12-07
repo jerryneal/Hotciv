@@ -79,4 +79,9 @@ public class GameLogger implements Game {
         System.out.println(getPlayerInTurn() + " performed unit action un unit at " + p);
         game.performUnitActionAt(p);
     }
+
+    @Override
+    public void addObserver(GameObserver observer) {
+        game.addObserver(observer);
+    }
 }
