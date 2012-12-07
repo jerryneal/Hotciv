@@ -1,7 +1,7 @@
-package hotciv.view.Figures;
+package hotciv.view.fiigures;
 
 import hotciv.framework.City;
-import hotciv.view.FrameWork.GfxConstants;
+import hotciv.view.framework.GfxConstants;
 import minidraw.standard.ImageFigure;
 
 import java.awt.*;

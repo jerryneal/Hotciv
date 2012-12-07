@@ -1,4 +1,4 @@
-package hotciv.view.Figures;
+package hotciv.view.fiigures;
 
 import hotciv.framework.Unit;
 import minidraw.standard.ImageFigure;

@@ -1,9 +1,9 @@
-package hotciv.view;
+package hotciv.view.tools;
 
 import hotciv.framework.Game;
 import hotciv.framework.Position;
-import hotciv.view.Figures.UnitFigure;
-import hotciv.view.FrameWork.GfxConstants;
+import hotciv.view.fiigures.UnitFigure;
+import hotciv.view.framework.GfxConstants;
 import minidraw.framework.Drawing;
 import minidraw.framework.Figure;
 import minidraw.framework.Tool;
@@ -17,9 +17,10 @@ import java.awt.event.MouseEvent;
  * @author Erik
  *         Created: 07-12-12, 10:23
  */
-public class HotCivController implements Tool {
+public class UnitMovingTool implements Tool {
     private Game game;
     private Drawing model;
+
     private Figure draggingFigure = null;
     private int initialDraggingX = 0;
     private int initialDraggingY = 0;
@@ -27,7 +28,7 @@ public class HotCivController implements Tool {
     private int draggingX = 0;
     private Position moveFrom;
 
-    public HotCivController(Game game, Drawing model) {
+    public UnitMovingTool(Game game, Drawing model) {
         this.game = game;
         this.model = model;
     }

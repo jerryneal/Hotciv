@@ -1,4 +1,4 @@
-package hotciv.view.FrameWork;
+package hotciv.view.framework;
 
 import hotciv.framework.Player;
 import hotciv.framework.Position;
