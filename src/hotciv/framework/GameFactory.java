@@ -1,5 +1,7 @@
 package hotciv.framework;
 
+import hotciv.common.BaseGame;
+
 /**
  * This is a Game factory, that produces an instance of Game
  *
@@ -7,5 +9,5 @@ package hotciv.framework;
  *         Created: 16-11-12, Time: 09:49
  */
 public interface GameFactory {
-    public Game newGame();
+    public BaseGame newGame();
 }

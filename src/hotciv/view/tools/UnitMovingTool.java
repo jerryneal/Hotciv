@@ -35,7 +35,6 @@ public class UnitMovingTool implements Tool {
 
     @Override
     public void mouseDown(MouseEvent mouseEvent, int x, int y) {
-        System.out.println("X: " + x + " Y: " + y);
         Figure figure = model.findFigure(x, y);
         if (figure instanceof UnitFigure) {
             this.draggingFigure = figure;
