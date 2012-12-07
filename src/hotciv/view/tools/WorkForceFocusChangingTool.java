@@ -11,11 +11,11 @@ import java.awt.event.MouseEvent;
  * @author: Erik
  * Date: 08-12-12, 00:17
  */
-public class WorkForceFocusChanginTool extends ClickingTool {
+public class WorkForceFocusChangingTool extends ClickingTool {
     private final BaseGame game;
     private final Drawing drawing;
 
-    public WorkForceFocusChanginTool(BaseGame game, Drawing drawing) {
+    public WorkForceFocusChangingTool(BaseGame game, Drawing drawing) {
         this.game = game;
         this.drawing = drawing;
     }
