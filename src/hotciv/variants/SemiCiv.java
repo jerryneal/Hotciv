@@ -24,7 +24,7 @@ public class SemiCiv implements GameFactory {
     }
 
     @Override
-    public Game newGame() {
+    public BaseGame newGame() {
         return new BaseGame(new SemiCivFactory(dice));
     }
 }

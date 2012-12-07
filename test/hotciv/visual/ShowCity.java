@@ -36,8 +36,7 @@ public class ShowCity {
     Game game = new AlphaCiv().newGame();
 
     DrawingEditor editor = 
-      new MiniDrawApplication( "Click to see city graphics update...",  
-                               new HotCivFactory3(game) );
+      new MiniDrawApplication( "Click to see city graphics update...",  new HotCivFactory3(game) );
     editor.open();
     CityStub city = new CityStub();
 

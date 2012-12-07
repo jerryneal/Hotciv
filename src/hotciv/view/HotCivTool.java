@@ -27,9 +27,14 @@ public class HotCivTool implements Tool {
         //To change body of implemented methods use File | Settings | File Templates.
     }
 
+    int count = 0;
     @Override
     public void mouseUp(MouseEvent mouseEvent, int i, int i1) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        switch (count) {
+            case 0:
+                System.out.println("Moving a unit");
+        }
+        count++;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package hotciv.view;
 
+import hotciv.common.BaseGame;
 import hotciv.variants.SemiCiv;
 import minidraw.standard.*;
 import minidraw.framework.*;
@@ -7,6 +8,9 @@ import minidraw.framework.*;
 import javax.swing.*;
 
 import hotciv.framework.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /** Show a basic world.
  *
@@ -29,10 +33,12 @@ public class HotCiv {
         new HotCiv();
     }
 
-    public HotCiv() {
-        Game game = new SemiCiv().newGame();
+    Map<Position, Figure> cityFigureMap = new HashMap<Position, Figure>();
 
-        DrawingEditor editor = new MiniDrawApplication( "Paint the HotCiv world map...", new HotCivViewFactory(game) );
+    public HotCiv() {
+        BaseGame game = new SemiCiv().newGame();
+
+        DrawingEditor editor = new MiniDrawApplication( "HotCiv", new HotCivViewFactory(game) );
         editor.open();
 
         editor.setTool(new HotCivTool(game));
