@@ -2,7 +2,7 @@ package hotciv.view.tools;
 
 import hotciv.framework.Game;
 import hotciv.framework.Position;
-import hotciv.view.fiigures.UnitFigure;
+import hotciv.view.figures.UnitFigure;
 import hotciv.view.framework.GfxConstants;
 import minidraw.framework.Drawing;
 import minidraw.framework.Figure;

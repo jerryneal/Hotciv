@@ -5,7 +5,7 @@ import hotciv.framework.Game;
 import hotciv.framework.Player;
 import hotciv.variants.AlphaCiv;
 import hotciv.view.MapView;
-import hotciv.view.fiigures.CityFigure;
+import hotciv.view.figures.CityFigure;
 import hotciv.view.framework.GfxConstants;
 import minidraw.framework.Drawing;
 import minidraw.framework.DrawingEditor;

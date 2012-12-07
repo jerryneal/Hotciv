@@ -12,7 +12,7 @@ import javax.swing.*;
  * //TODO: Doc
  *
  * @author Erik
- *         Created: 07-12-12, 10:20
+ * Created: 07-12-12, 10:20
  */
 public class HotCivFactory implements Factory {
     private BaseGame game;

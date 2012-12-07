@@ -3,10 +3,10 @@ package hotciv.view;
 import hotciv.common.BaseGame;
 import hotciv.common.CityImpl;
 import hotciv.framework.*;
-import hotciv.view.fiigures.CityFigure;
-import hotciv.view.fiigures.ShieldFigure;
-import hotciv.view.fiigures.TextFigure;
-import hotciv.view.fiigures.UnitFigure;
+import hotciv.view.figures.CityFigure;
+import hotciv.view.figures.ShieldFigure;
+import hotciv.view.figures.TextFigure;
+import hotciv.view.figures.UnitFigure;
 import hotciv.view.framework.GfxConstants;
 import minidraw.framework.Figure;
 import minidraw.standard.StandardDrawing;
@@ -109,4 +109,6 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
     public void tileFocusChangedAt(Position position) {
         // TODO
     }
+
+
 }

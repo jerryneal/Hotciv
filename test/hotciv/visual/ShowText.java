@@ -2,7 +2,7 @@ package hotciv.visual;
 
 import hotciv.framework.Game;
 import hotciv.variants.AlphaCiv;
-import hotciv.view.fiigures.TextFigure;
+import hotciv.view.figures.TextFigure;
 import hotciv.view.framework.GfxConstants;
 import minidraw.framework.Drawing;
 import minidraw.framework.DrawingEditor;

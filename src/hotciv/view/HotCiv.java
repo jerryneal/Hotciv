@@ -3,6 +3,7 @@ package hotciv.view;
 import hotciv.common.BaseGame;
 import hotciv.variants.SemiCiv;
 import hotciv.view.tools.TurnPassingTool;
+import hotciv.view.tools.UnitActionTool;
 import minidraw.framework.DrawingEditor;
 import minidraw.standard.MiniDrawApplication;
 
@@ -24,7 +25,7 @@ public class HotCiv {
 
         editor.open();
 
-        editor.setTool(new TurnPassingTool(game, editor.drawing()));
+        editor.setTool(new UnitActionTool(game, editor.drawing()));
     }
 }
 

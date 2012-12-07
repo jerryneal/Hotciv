@@ -1,4 +1,4 @@
-package hotciv.view.fiigures;
+package hotciv.view.figures;
 
 import hotciv.framework.City;
 import hotciv.view.framework.GfxConstants;

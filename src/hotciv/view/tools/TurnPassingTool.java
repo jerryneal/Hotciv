@@ -1,7 +1,7 @@
 package hotciv.view.tools;
 
 import hotciv.common.BaseGame;
-import hotciv.view.fiigures.ShieldFigure;
+import hotciv.view.figures.ShieldFigure;
 import minidraw.framework.Drawing;
 import minidraw.framework.Figure;
 
