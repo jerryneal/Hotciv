@@ -84,4 +84,9 @@ public class GameLogger implements Game {
     public void addObserver(GameObserver observer) {
         game.addObserver(observer);
     }
+
+    @Override
+    public void setTileFocus(Position position) {
+        game.setTileFocus(position);
+    }
 }

@@ -252,6 +252,13 @@ public class BaseGame implements Game {
         this.gameObservers.add(observer);
     }
 
+    @Override
+    public void setTileFocus(Position position) {
+        for (GameObserver gameObserver : gameObservers) {
+            gameObserver.tileFocusChangedAt(position);
+        }
+    }
+
     private void callWorldChangedAddObserver(Position position) {
         for (GameObserver gameObserver : gameObservers) {
             gameObserver.worldChangedAt(position);
