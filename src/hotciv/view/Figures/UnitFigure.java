@@ -1,7 +1,6 @@
 package hotciv.view.Figures;
 
 import hotciv.framework.Unit;
-import hotciv.view.FrameWork.GfxConstants;
 import minidraw.standard.ImageFigure;
 
 import java.awt.*;
@@ -27,5 +26,9 @@ public class UnitFigure extends ImageFigure {
         super.draw(g);
 
         // TODO: Draw something more.
+    }
+
+    public Unit getUnit() {
+        return unit;
     }
 }

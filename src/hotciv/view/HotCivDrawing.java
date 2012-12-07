@@ -57,32 +57,36 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
 
     @Override
     public void worldChangedAt(Position position) {
-        // TODO: This is ugly.
-        // Updating the unit.
-        Unit unit = game.getUnitAt(position);
         int column = GfxConstants.getXFromColumn(position.getColumn());
         int row = GfxConstants.getYFromRow(position.getRow());
-        Figure unitFigure;
-        if ((unitFigure = this.findFigure(column, row)) != null) {
-            if (unitFigure instanceof UnitFigure) {
-                this.remove(unitFigure);
-            }
-        }
-        if (unit != null) {
-            this.add(new UnitFigure(unit, new Point(column, row)));
-        }
 
-        // Updating the unit.
+        // TODO: This is ugly.
+        // Updating the city.
         City city = game.getCityAt(position);
-        column = position.getColumn();
-        row = position.getRow();
-        Figure cityFigure;
-        if ((cityFigure = this.findFigure(column, row)) != null) {
-            if (cityFigure instanceof CityFigure) {
-                this.remove(cityFigure);
+        Figure figure;
+        if ((figure = this.findFigure(column, row)) != null) {
+            if (figure instanceof CityFigure) {
+                CityFigure cityFigure = (CityFigure) figure;
+                Position cityPosition = game.getGameWorld().getCityPosition(cityFigure.getCity());
+                // Cities can't move, and sometimes we hit the city when we didn't mean to.
+                if (position.equals(cityPosition)) {
+                    this.remove(figure);
+                }
             }
         }
         if (city != null) {
+            this.add(new CityFigure(city, new Point(column, row)));
+        }
+
+        // Updating the unit.
+        Unit unit = game.getUnitAt(position);
+        figure = null;
+        if ((figure = this.findFigure(column, row)) != null) {
+            if (figure instanceof UnitFigure) {
+                this.remove(figure);
+            }
+        }
+        if (unit != null) {
             this.add(new UnitFigure(unit, new Point(column, row)));
         }
 
