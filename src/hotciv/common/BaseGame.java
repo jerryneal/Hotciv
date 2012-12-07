@@ -5,9 +5,7 @@ import hotciv.common.observers.WinnerObserver;
 import hotciv.common.strategy.*;
 import hotciv.framework.*;
 
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This is a game instance, that does the most basic behaviour, and has a big constructor that specifies all the strategies this game uses.
@@ -33,11 +31,13 @@ public class BaseGame implements Game {
 
     private Set<WinnerObserver> winnerObservers;
     private Set<EndOfRoundObserver> endOfRoundObservers;
+    private Set<GameObserver> gameObservers;
 
     public BaseGame(GameStrategyFactory factory) {
         // Making the observer lists.
         this.winnerObservers = new HashSet<WinnerObserver>();
         this.endOfRoundObservers = new HashSet<EndOfRoundObserver>();
+        this.gameObservers = new HashSet<GameObserver>();
 
 
         // First strategies
@@ -51,7 +51,7 @@ public class BaseGame implements Game {
         playerTurn = Player.RED;
 
         // Gameworld
-        this.gameWorld = new GameWorld(unitFactory);
+        this.gameWorld = new GameWorld(unitFactory, gameObservers);
         createWorld();
     }
 
@@ -166,6 +166,9 @@ public class BaseGame implements Game {
             default:
                 throw new RuntimeException("Unrecognized player: " + playerTurn);
         }
+        for (GameObserver gameObserver : gameObservers) {
+            gameObserver.turnEnds(playerTurn, getAge());
+        }
     }
 
     /**
@@ -218,12 +221,15 @@ public class BaseGame implements Game {
         throw new UnsupportedOperationException();
     }
 
-    public void changeProductionInCityAt(Position p, String unitType) {
-        City city = gameWorld.getCity(p);
+    public void changeProductionInCityAt(Position position, String unitType) {
+        City city = gameWorld.getCity(position);
         if (city == null) {
-            throw new IllegalArgumentException("Called changeProduction on a position with no city: " + p);
+            throw new IllegalArgumentException("Called changeProduction on a position with no city: " + position);
         }
         city.setProduction(unitType);
+
+        // Calling the observers
+        callWorldChangedAddObserver(position);
     }
 
     public void performUnitActionAt(Position position) {
@@ -236,7 +242,22 @@ public class BaseGame implements Game {
             return;
         }
         unit.performAction();
+
+        // Calling the observers
+        callWorldChangedAddObserver(position);
     }
+
+    @Override
+    public void addObserver(GameObserver observer) {
+        this.gameObservers.add(observer);
+    }
+
+    private void callWorldChangedAddObserver(Position position) {
+        for (GameObserver gameObserver : gameObservers) {
+            gameObserver.worldChangedAt(position);
+        }
+    }
+
 
     /**
      * Adds the specified WinnerObserver to this BaseGame.

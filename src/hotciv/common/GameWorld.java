@@ -20,9 +20,17 @@ public class GameWorld {
     private Map<Position, Tile> tileMap = new HashMap<Position, Tile>();
     private Map<Position, CityImpl> cityMap = new HashMap<Position, CityImpl>();
     private UnitFactory unitFactory;
+    private Set<GameObserver> gameObservers;
 
-    public GameWorld(UnitFactory unitFactory) {
+    public GameWorld(UnitFactory unitFactory, Set<GameObserver> gameObservers) {
         this.unitFactory = unitFactory;
+        this.gameObservers = gameObservers;
+    }
+
+    private void callWorldChangedAddObserver(Position position) {
+        for (GameObserver gameObserver : gameObservers) {
+            gameObserver.worldChangedAt(position);
+        }
     }
 
     /**
@@ -33,6 +41,7 @@ public class GameWorld {
      */
     protected void placeUnit(Position position, Unit unit) {
         unitMap.put(position, unit);
+        callWorldChangedAddObserver(position);
     }
 
     /**
@@ -56,11 +65,13 @@ public class GameWorld {
     public void placeUnitNear(Position position, Unit unit) {
         if (canPlaceUnitAt(position)) {
             unitMap.put(position, unit);
+            callWorldChangedAddObserver(position);
             return;
         }
         for (Position aroundPosition : position.getAroundIterable()) {
             if (canPlaceUnitAt(aroundPosition)) {
                 unitMap.put(aroundPosition, unit);
+                callWorldChangedAddObserver(aroundPosition);
                 return;
             }
         }
@@ -115,7 +126,9 @@ public class GameWorld {
      * @return The unit that was removed, or null if there wasn't a unit.
      */
     public Unit removeUnit(Position position) {
-        return this.unitMap.remove(position);
+        Unit unit = this.unitMap.remove(position);
+        callWorldChangedAddObserver(position);
+        return unit;
     }
 
     /**
@@ -136,6 +149,7 @@ public class GameWorld {
      */
     public void placeCity(Position position, CityImpl city) {
         this.cityMap.put(position, city);
+        callWorldChangedAddObserver(position);
     }
 
     /**
@@ -146,6 +160,7 @@ public class GameWorld {
      */
     public void placeTile(Position position, Tile tile) {
         this.tileMap.put(position, tile);
+        callWorldChangedAddObserver(position);
     }
 
     /**
