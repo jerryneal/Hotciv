@@ -246,13 +246,12 @@ public class GameWorld {
     }
 
     /**
-<<<<<<< HEAD
      * Returns the position where the specified city is located, or null if the city was not found.
      *
      * @param city The city to find.
      * @return the position of the city.
      */
-    public Position getCityPosition(CityImpl city) {
+    public Position getCityPosition(City city) {
         for (Map.Entry<Position, CityImpl> cityEntry : cityMap.entrySet()) {
             if (city == cityEntry.getValue()) {
                 return cityEntry.getKey();
