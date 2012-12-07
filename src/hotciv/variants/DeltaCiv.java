@@ -14,7 +14,7 @@ public class DeltaCiv implements GameFactory {
      *
      * @return The game.
      */
-    public Game newGame() {
+    public BaseGame newGame() {
         return new BaseGame(new DeltaCivFactory());
     }
 }

@@ -2,26 +2,13 @@ package hotciv.view;
 
 import hotciv.common.BaseGame;
 import hotciv.variants.SemiCiv;
+import hotciv.view.tools.CompositeTool;import hotciv.view.tools.TurnPassingTool;
+import hotciv.view.tools.UnitActionTool;
+import hotciv.view.tools.UnitMovingTool;
+import minidraw.framework.Drawing;
 import minidraw.framework.DrawingEditor;
 import minidraw.standard.MiniDrawApplication;
 
-/**
- * Show a basic world.
- * <p/>
- * This source code is from the book
- * "Flexible, Reliable Software:
- * Using Patterns and Agile Development"
- * published 2010 by CRC Press.
- * Author:
- * Henrik B Christensen
- * Computer Science Department
- * Aarhus University
- * <p/>
- * This source code is provided WITHOUT ANY WARRANTY either
- * expressed or implied. You may study, use, modify, and
- * distribute it for non-commercial purposes. For any
- * commercial use, see http://www.baerbak.com/
- */
 public class HotCiv {
     private DrawingEditor editor;
 
@@ -32,12 +19,22 @@ public class HotCiv {
     public HotCiv() {
         BaseGame game = new SemiCiv().newGame();
 
+        // Uncomment to print working directory.
+        /*URL location = HotCiv.class.getProtectionDomain().getCodeSource().getLocation();
+        System.out.println(location.getFile());*/
+
         this.editor = new MiniDrawApplication("HotCiv", new HotCivFactory(game));
 
         editor.open();
 
+        CompositeTool compositeTool = new CompositeTool();
 
-        editor.setTool(new HotCivTool(game));
+        Drawing drawing = editor.drawing();
+        compositeTool.addTool(new TurnPassingTool(game, drawing));
+        compositeTool.addTool(new UnitActionTool(game, drawing));
+        compositeTool.addTool(new UnitMovingTool(game, drawing));
+
+        editor.setTool(compositeTool);
     }
 }
 

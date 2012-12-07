@@ -13,7 +13,7 @@ import hotciv.framework.GameFactory;
 public class ZetaCiv implements GameFactory {
 
     @Override
-    public Game newGame() {
+    public BaseGame newGame() {
         return new BaseGame(new ZetaCivFactory());
     }
 }

@@ -3,10 +3,11 @@ package hotciv.view;
 import hotciv.common.BaseGame;
 import hotciv.common.CityImpl;
 import hotciv.framework.*;
-import hotciv.view.Figures.CityFigure;
-import hotciv.view.Figures.TextFigure;
-import hotciv.view.Figures.UnitFigure;
-import hotciv.view.FrameWork.GfxConstants;
+import hotciv.view.figures.CityFigure;
+import hotciv.view.figures.ShieldFigure;
+import hotciv.view.figures.TextFigure;
+import hotciv.view.figures.UnitFigure;
+import hotciv.view.framework.GfxConstants;
 import minidraw.framework.Figure;
 import minidraw.standard.StandardDrawing;
 
@@ -22,6 +23,7 @@ import java.util.Map;
 public class HotCivDrawing extends StandardDrawing implements GameObserver {
     private BaseGame game;
     private TextFigure ageTextField;
+    private final ShieldFigure turnShield;
 
     public HotCivDrawing(BaseGame game) {
         this.game = game;
@@ -53,6 +55,9 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
                 new Point(GfxConstants.AGE_TEXT_X,
                         GfxConstants.AGE_TEXT_Y));
         add(ageTextField);
+
+        turnShield = new ShieldFigure();
+        add(turnShield);
     }
 
     @Override
@@ -96,6 +101,7 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
     @Override
     public void turnEnds(Player nextPlayer, int age) {
         ageTextField.setText(Integer.toString(Math.abs(age)) + ((age > 0) ? " AC" : " BC"));
+        turnShield.setPlayerInTurn(nextPlayer);
         requestUpdate();
     }
 
@@ -103,4 +109,6 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
     public void tileFocusChangedAt(Position position) {
         // TODO
     }
+
+
 }
