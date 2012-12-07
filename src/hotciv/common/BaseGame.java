@@ -224,6 +224,9 @@ public class BaseGame implements Game {
             throw new IllegalArgumentException("No city at: " + position);
         }
         city.setWorkForceFocus(balance);
+
+        // Calling the observers
+        callWorldChangedAddObserver(position);
     }
 
     public void changeProductionInCityAt(Position position, String unitType) {
