@@ -2,9 +2,7 @@ package hotciv.view;
 
 import hotciv.common.BaseGame;
 import hotciv.variants.SemiCiv;
-import hotciv.view.tools.CompositeTool;import hotciv.view.tools.TurnPassingTool;
-import hotciv.view.tools.UnitActionTool;
-import hotciv.view.tools.UnitMovingTool;
+import hotciv.view.tools.*;
 import minidraw.framework.Drawing;
 import minidraw.framework.DrawingEditor;
 import minidraw.standard.MiniDrawApplication;
@@ -33,6 +31,7 @@ public class HotCiv {
         compositeTool.addTool(new TurnPassingTool(game, drawing));
         compositeTool.addTool(new UnitActionTool(game, drawing));
         compositeTool.addTool(new UnitMovingTool(game, drawing));
+        compositeTool.addTool(new TileSelectionTool(game));
 
         editor.setTool(compositeTool);
     }
