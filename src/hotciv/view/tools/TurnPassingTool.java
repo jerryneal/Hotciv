@@ -2,6 +2,7 @@ package hotciv.view.tools;
 
 import hotciv.framework.Game;
 import hotciv.view.figures.ShieldFigure;
+import hotciv.view.figures.TurnShield;
 import minidraw.framework.Drawing;
 import minidraw.framework.Figure;
 
@@ -25,7 +26,7 @@ public class TurnPassingTool extends ClickingTool {
     @Override
     public void mouseClicked(MouseEvent mouseEvent, int x, int y) {
         Figure figure = model.findFigure(x, y);
-        if (figure instanceof ShieldFigure) {
+        if (figure instanceof TurnShield) {
             game.endOfTurn();
         }
     }

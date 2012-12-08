@@ -18,7 +18,10 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
     private Game game;
     private TextFigure ageTextField;
     private ShieldFigure turnShield;
-    private UnitShieldFigure unitShield;
+    private ShieldFigure unitShield;
+    private ShieldFigure cityShield;
+    private ProductionFigure productionFigure;
+    private TextFigure movesLeftText;
 
     public HotCivDrawing(Game game) {
         this.game = game;
@@ -49,12 +52,21 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
                         GfxConstants.AGE_TEXT_Y));
         add(ageTextField);
 
-        turnShield = new ShieldFigure();
+        turnShield = new TurnShield();
+        turnShield.setPlayer(Player.RED);
         add(turnShield);
 
-        unitShield = new UnitShieldFigure();
+        unitShield = new ShieldFigure(new Point(GfxConstants.UNIT_SHIELD_X, GfxConstants.UNIT_SHIELD_Y));
         add(unitShield);
 
+        cityShield = new ShieldFigure(new Point(GfxConstants.CITY_SHIELD_X, GfxConstants.CITY_SHIELD_Y));
+        add(cityShield);
+
+        productionFigure = new ProductionFigure();
+        add(productionFigure);
+
+        movesLeftText = new TextFigure("", new Point(GfxConstants.UNIT_COUNT_X, GfxConstants.UNIT_COUNT_Y));
+        add(movesLeftText);
     }
 
     @Override
@@ -97,13 +109,29 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
     @Override
     public void turnEnds(Player nextPlayer, int age) {
         ageTextField.setText(Integer.toString(Math.abs(age)) + ((age > 0) ? " AC" : " BC"));
-        turnShield.setPlayerInTurn(nextPlayer);
+        turnShield.setPlayer(nextPlayer);
         requestUpdate();
     }
 
     @Override
     public void tileFocusChangedAt(Position position) {
-        // TODO
+        Unit unit = game.getUnitAt(position);
+        if (unit != null) {
+            unitShield.setPlayer(unit.getOwner());
+            movesLeftText.setText(Integer.toString(unit.getMoveCount()));
+        } else {
+            unitShield.setBlank();
+            movesLeftText.setText("");
+        }
+
+        City city = game.getCityAt(position);
+        if (city != null) {
+            cityShield.setPlayer(city.getOwner());
+            productionFigure.setProduction(city.getProduction());
+        } else {
+            cityShield.setBlank();
+            productionFigure.setProduction(null);
+        }
     }
 
 
