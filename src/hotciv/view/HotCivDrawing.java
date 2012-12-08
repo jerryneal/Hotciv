@@ -22,6 +22,7 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
     private TextFigure ageTextField;
     private ShieldFigure turnShield;
     private WorkForceFocusFigure workForceFocusFigure;
+    private ProductionFigure productionFigure;
 
 
     public HotCivDrawing(BaseGame game) {
@@ -60,6 +61,9 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
 
         workForceFocusFigure = new WorkForceFocusFigure();
         add(workForceFocusFigure);
+
+        productionFigure = new ProductionFigure();
+        add(productionFigure);
     }
 
     @Override
@@ -115,8 +119,10 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
         CityImpl city = game.getCityAt(position);
         if (city != null) {
             workForceFocusFigure.setWorkForceFocus(city.getWorkforceFocus());
+            productionFigure.setProduction(city.getProduction());
         } else {
             workForceFocusFigure.setWorkForceFocus(null);
+            productionFigure.setProduction(null);
         }
 
     }

@@ -240,6 +240,9 @@ public class BaseGame implements Game {
         if (city == null) {
             throw new IllegalArgumentException("Called changeProduction on a position with no city: " + position);
         }
+        if (city.getOwner() != playerTurn) {
+            return;
+        }
         city.setProduction(unitType);
 
         // Calling the observers

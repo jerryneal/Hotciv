@@ -32,6 +32,7 @@ public class HotCiv {
         compositeTool.addTool(new UnitActionTool(game, drawing));
         compositeTool.addTool(new UnitMovingTool(game, drawing));
         compositeTool.addTool(new WorkForceFocusChangingTool(game, drawing));
+        compositeTool.addTool(new ProductionChangingTool(game, drawing));
         compositeTool.addTool(new TileSelectionTool(game));
 
         editor.setTool(compositeTool);

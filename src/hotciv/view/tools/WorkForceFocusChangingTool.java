@@ -29,13 +29,14 @@ public class WorkForceFocusChangingTool extends ClickingTool {
     public void mouseClicked(MouseEvent mouseEvent, int x, int y) {
         Figure figure = drawing.findFigure(x, y);
         if (figure instanceof WorkForceFocusFigure) {
-            WorkForceFocusFigure workForceFocusFigure = (WorkForceFocusFigure) figure;
             Position selected = game.getTileFocus();
             City city = game.getCityAt(selected);
             if (GameConstants.foodFocus.equals(city.getWorkforceFocus())) {
                 game.changeWorkForceFocusInCityAt(selected, GameConstants.productionFocus);
             } else if (GameConstants.productionFocus.equals(city.getWorkforceFocus())) {
                 game.changeWorkForceFocusInCityAt(selected, GameConstants.foodFocus);
+            } else {
+                throw new RuntimeException("Unrecognized workforceFocus in city at: " + selected);
             }
         }
     }
