@@ -13,29 +13,25 @@ import java.awt.*;
  * Date: 07-12-12, 23:03
  */
 public class ShieldFigure extends ImageFigure {
-    private final static String redShieldUrl = "redshield";
-    private final static String blueShieldUrl = "blueshield";
-    private final static String blankUrl = "blank";
-
     private Point shieldPoint;
 
     public ShieldFigure(Point shieldPoint) {
-        super(blankUrl, shieldPoint);
+        super(GfxConstants.NOTHING, shieldPoint);
         this.shieldPoint = shieldPoint;
     }
 
     public void setPlayer(Player player) {
         switch (player) {
             case RED:
-                set(redShieldUrl, shieldPoint);
+                set(GfxConstants.RED_SHIELD, shieldPoint);
                 break;
             case BLUE:
-                set(blueShieldUrl, shieldPoint);
+                set(GfxConstants.BLUE_SHIELD, shieldPoint);
                 break;
         }
     }
 
     public void setBlank() {
-        set(blankUrl, shieldPoint);
+        set(GfxConstants.NOTHING, shieldPoint);
     }
 }

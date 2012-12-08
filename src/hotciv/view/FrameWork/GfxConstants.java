@@ -58,7 +58,10 @@ public class GfxConstants {
     // === Names of GIF files loaded by image manager
     public static final String RED_SHIELD = "redshield";
     public static final String BLUE_SHIELD = "blueshield";
-    public static final String NOTHING = "black";
+    public static final String NOTHING = "blank";
+    public static final String ARCHER = "archer";
+    public static final String LEGION = "legion";
+    public static final String SETTLER = "settler";
 
     /**
      * return the x pixel position on the graphical display
