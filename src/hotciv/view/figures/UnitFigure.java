@@ -1,6 +1,7 @@
 package hotciv.view.figures;
 
 import hotciv.framework.Unit;
+import hotciv.view.framework.GfxConstants;
 import minidraw.standard.ImageFigure;
 
 import java.awt.*;
@@ -22,10 +23,11 @@ public class UnitFigure extends ImageFigure {
     }
 
     public void draw(Graphics g) {
-        // draw background color
         super.draw(g);
 
-        // TODO: Draw something more.
+        g.setColor(GfxConstants.getColorForPlayer(unit.getOwner()));
+        g.fillOval(position.x + GfxConstants.TILESIZE - 10, position.y,
+                10, 10);
     }
 
     public Unit getUnit() {

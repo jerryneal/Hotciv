@@ -14,13 +14,9 @@ import java.awt.*;
  */
 public class ProductionFigure extends ImageFigure {
     private final static Point iconPoint = new Point(GfxConstants.CITY_PRODUCTION_X, GfxConstants.CITY_PRODUCTION_Y);
-    private final static String archerUrl = "archer";
-    private final static String legionUrl = "legion";
-    private final static String settlerUrl = "settler";
-    private final static String blankUrl = "blank";
 
     public ProductionFigure() {
-        super(blankUrl, iconPoint);
+        super(GfxConstants.NOTHING, iconPoint);
     }
 
     /**
@@ -32,13 +28,13 @@ public class ProductionFigure extends ImageFigure {
      */
     public void setProduction(String production) {
         if (GameConstants.ARCHER.equals(production)) {
-            set(archerUrl, iconPoint);
+            set(GfxConstants.ARCHER, iconPoint);
         } else if (GameConstants.LEGION.equals(production)) {
-            set(legionUrl, iconPoint);
+            set(GfxConstants.LEGION, iconPoint);
         } else if (GameConstants.SETTLER.equals(production)) {
-            set(settlerUrl, iconPoint);
+            set(GfxConstants.SETTLER, iconPoint);
         } else {
-            set(blankUrl, iconPoint);
+            set(GfxConstants.NOTHING, iconPoint);
         }
     }
 }
