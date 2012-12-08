@@ -10,10 +10,26 @@ import hotciv.framework.*;
  */
 public class GameLogger implements Game {
     private Game game;
+    private Printer printer;
 
     public GameLogger(Game game) {
-        this.game = game;
+        this(game, new Printer() {
+            @Override
+            public void print(String str) {
+                System.out.println(str);
+            }
+        });
     }
+
+    public GameLogger(Game game, Printer printer) {
+        this.game = game;
+        this.printer = printer;
+    }
+
+    public interface Printer {
+        public void print(String str);
+    }
+
 
     @Override
     public Tile getTileAt(Position p) {
@@ -52,31 +68,31 @@ public class GameLogger implements Game {
         if ((unit = game.getUnitAt(from)) != null) {
             unitType = unit.getTypeString();
         }
-        System.out.println(getPlayerInTurn() + " moves " + unitType + " from " + from + " to " + to + ".");
+        printer.print(getPlayerInTurn() + " moves " + unitType + " from " + from + " to " + to + ".");
         return game.moveUnit(from, to);
     }
 
     @Override
     public void endOfTurn() {
-        System.out.println(getPlayerInTurn() + " ends turn.");
+        printer.print(getPlayerInTurn() + " ends turn.");
         game.endOfTurn();
     }
 
     @Override
     public void changeWorkForceFocusInCityAt(Position p, String balance) {
-        System.out.println(getPlayerInTurn() + " changes work force focus in city at " + p + " to " + balance);
+        printer.print(getPlayerInTurn() + " changes work force focus in city at " + p + " to " + balance);
         game.changeWorkForceFocusInCityAt(p, balance);
     }
 
     @Override
     public void changeProductionInCityAt(Position p, String unitType) {
-        System.out.println(getPlayerInTurn() + " changes production in city at " + p + " to " + unitType);
+        printer.print(getPlayerInTurn() + " changes production in city at " + p + " to " + unitType);
         game.changeProductionInCityAt(p, unitType);
     }
 
     @Override
     public void performUnitActionAt(Position p) {
-        System.out.println(getPlayerInTurn() + " performed unit action un unit at " + p);
+        printer.print(getPlayerInTurn() + " performed unit action un unit at " + p);
         game.performUnitActionAt(p);
     }
 
