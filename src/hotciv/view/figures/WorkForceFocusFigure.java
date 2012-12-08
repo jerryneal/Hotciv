@@ -14,12 +14,9 @@ import java.awt.*;
  */
 public class WorkForceFocusFigure extends ImageFigure {
     private final static Point iconPoint = new Point(GfxConstants.WORKFORCEFOCUS_X, GfxConstants.WORKFORCEFOCUS_Y);
-    private final static String appleUrl = "apple";
-    private final static String hammerUrl = "hammer";
-    private final static String blankUrl = "blank";
 
     public WorkForceFocusFigure() {
-        super(blankUrl, iconPoint);
+        super(GfxConstants.NOTHING, iconPoint);
     }
 
     /**
@@ -31,11 +28,11 @@ public class WorkForceFocusFigure extends ImageFigure {
      */
     public void setWorkForceFocus(String workForceFocus) {
         if (GameConstants.foodFocus.equals(workForceFocus)) {
-            set(appleUrl, iconPoint);
+            set(GfxConstants.FOCUS_FOOD, iconPoint);
         } else if (GameConstants.productionFocus.equals(workForceFocus)) {
-            set(hammerUrl, iconPoint);
+            set(GfxConstants.FOCUS_PRODUCTION, iconPoint);
         } else {
-            set(blankUrl, iconPoint);
+            set(GfxConstants.NOTHING, iconPoint);
         }
     }
 }

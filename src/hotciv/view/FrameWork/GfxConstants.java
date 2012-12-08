@@ -63,6 +63,9 @@ public class GfxConstants {
     public static final String LEGION = "legion";
     public static final String SETTLER = "settler";
 
+    public static final String FOCUS_PRODUCTION = "hammer";
+    public static final String FOCUS_FOOD = "apple";
+
     /**
      * return the x pixel position on the graphical display
      * for a tile's column position
