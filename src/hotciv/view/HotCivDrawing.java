@@ -3,10 +3,7 @@ package hotciv.view;
 import hotciv.common.BaseGame;
 import hotciv.common.CityImpl;
 import hotciv.framework.*;
-import hotciv.view.figures.CityFigure;
-import hotciv.view.figures.ShieldFigure;
-import hotciv.view.figures.TextFigure;
-import hotciv.view.figures.UnitFigure;
+import hotciv.view.figures.*;
 import hotciv.view.framework.GfxConstants;
 import minidraw.framework.Figure;
 import minidraw.standard.StandardDrawing;
@@ -23,7 +20,9 @@ import java.util.Map;
 public class HotCivDrawing extends StandardDrawing implements GameObserver {
     private BaseGame game;
     private TextFigure ageTextField;
-    private final ShieldFigure turnShield;
+    private ShieldFigure turnShield;
+    private WorkForceFocusFigure workForceFocusFigure;
+
 
     public HotCivDrawing(BaseGame game) {
         this.game = game;
@@ -58,6 +57,9 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
 
         turnShield = new ShieldFigure();
         add(turnShield);
+
+        workForceFocusFigure = new WorkForceFocusFigure();
+        add(workForceFocusFigure);
     }
 
     @Override
@@ -95,6 +97,9 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
             this.add(new UnitFigure(unit, new Point(column, row)));
         }
 
+        // Making sure the focus updates as well
+        tileFocusChangedAt(game.getTileFocus());
+
         requestUpdate();
     }
 
@@ -107,7 +112,13 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
 
     @Override
     public void tileFocusChangedAt(Position position) {
-        // TODO
+        CityImpl city = game.getCityAt(position);
+        if (city != null) {
+            workForceFocusFigure.setWorkForceFocus(city.getWorkforceFocus());
+        } else {
+            workForceFocusFigure.setWorkForceFocus(null);
+        }
+
     }
 
 

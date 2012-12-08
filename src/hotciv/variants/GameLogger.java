@@ -89,4 +89,9 @@ public class GameLogger implements Game {
     public void setTileFocus(Position position) {
         game.setTileFocus(position);
     }
+
+    @Override
+    public Position getTileFocus() {
+        return game.getTileFocus();
+    }
 }

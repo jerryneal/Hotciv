@@ -164,4 +164,11 @@ public interface Game {
      *                 has focus.
      */
     public void setTileFocus(Position position);
+
+    /**
+     * Gets the current tile focus.
+     *
+     * @return the position of the tile that has focus.
+     */
+    public Position getTileFocus();
 }

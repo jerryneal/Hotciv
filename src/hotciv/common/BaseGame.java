@@ -35,6 +35,7 @@ public class BaseGame implements Game {
     private Set<WinnerObserver> winnerObservers;
     private Set<EndOfRoundObserver> endOfRoundObservers;
     private Set<GameObserver> gameObservers;
+    private Position tileFocusPosition = new Position(0, 0);
 
     public BaseGame(GameStrategyFactory factory) {
         // Making the observer lists.
@@ -225,6 +226,9 @@ public class BaseGame implements Game {
         if (city == null) {
             throw new IllegalArgumentException("No city at: " + position);
         }
+        if (city.getOwner() != playerTurn) {
+            return;
+        }
         city.setWorkForceFocus(balance);
 
         // Calling the observers
@@ -264,9 +268,15 @@ public class BaseGame implements Game {
 
     @Override
     public void setTileFocus(Position position) {
+        tileFocusPosition = position;
         for (GameObserver gameObserver : gameObservers) {
             gameObserver.tileFocusChangedAt(position);
         }
+    }
+
+    @Override
+    public Position getTileFocus() {
+        return this.tileFocusPosition;
     }
 
     private void callWorldChangedAddObserver(Position position) {

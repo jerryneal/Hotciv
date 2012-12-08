@@ -1,7 +1,12 @@
 package hotciv.view.tools;
 
 import hotciv.common.BaseGame;
+import hotciv.framework.City;
+import hotciv.framework.GameConstants;
+import hotciv.framework.Position;
+import hotciv.view.figures.WorkForceFocusFigure;
 import minidraw.framework.Drawing;
+import minidraw.framework.Figure;
 
 import java.awt.event.MouseEvent;
 
@@ -22,6 +27,16 @@ public class WorkForceFocusChangingTool extends ClickingTool {
 
     @Override
     public void mouseClicked(MouseEvent mouseEvent, int x, int y) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        Figure figure = drawing.findFigure(x, y);
+        if (figure instanceof WorkForceFocusFigure) {
+            WorkForceFocusFigure workForceFocusFigure = (WorkForceFocusFigure) figure;
+            Position selected = game.getTileFocus();
+            City city = game.getCityAt(selected);
+            if (GameConstants.foodFocus.equals(city.getWorkforceFocus())) {
+                game.changeWorkForceFocusInCityAt(selected, GameConstants.productionFocus);
+            } else if (GameConstants.productionFocus.equals(city.getWorkforceFocus())) {
+                game.changeWorkForceFocusInCityAt(selected, GameConstants.foodFocus);
+            }
+        }
     }
 }

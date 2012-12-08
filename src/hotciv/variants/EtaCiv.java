@@ -1,7 +1,6 @@
 package hotciv.variants;
 
 import hotciv.common.BaseGame;
-import hotciv.framework.Game;
 import hotciv.framework.GameFactory;
 
 /**
@@ -12,7 +11,7 @@ import hotciv.framework.GameFactory;
  */
 public class EtaCiv implements GameFactory {
     @Override
-    public Game newGame() {
+    public BaseGame newGame() {
         return new BaseGame(new EtaCivFactory());
     }
 }
