@@ -26,8 +26,14 @@ public class UnitFigure extends ImageFigure {
         super.draw(g);
 
         g.setColor(GfxConstants.getColorForPlayer(unit.getOwner()));
-        g.fillOval(position.x + GfxConstants.TILESIZE - 10, position.y,
+        g.fillOval(position.x, position.y,
                 10, 10);
+    }
+
+    @Override
+    protected void basicMoveBy(int x, int y) {
+        super.basicMoveBy(x, y);
+        position = new Point(position.x + x, position.y + y);
     }
 
     public Unit getUnit() {

@@ -26,7 +26,7 @@ public class TestAlphaCiv {
      */
     @Before
     public void setUp() {
-        game = new GameLogger(new AlphaCiv().newGame());
+        game = new AlphaCiv().newGame();
     }
 
     private void goToNextRound() {
