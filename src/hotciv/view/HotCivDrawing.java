@@ -1,10 +1,7 @@
 package hotciv.view;
 
 import hotciv.framework.*;
-import hotciv.view.figures.CityFigure;
-import hotciv.view.figures.ShieldFigure;
-import hotciv.view.figures.TextFigure;
-import hotciv.view.figures.UnitFigure;
+import hotciv.view.figures.*;
 import hotciv.view.framework.GfxConstants;
 import minidraw.framework.Figure;
 import minidraw.standard.StandardDrawing;
@@ -21,6 +18,7 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
     private Game game;
     private TextFigure ageTextField;
     private ShieldFigure turnShield;
+    private UnitShieldFigure unitShield;
 
     public HotCivDrawing(Game game) {
         this.game = game;
@@ -53,6 +51,10 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
 
         turnShield = new ShieldFigure();
         add(turnShield);
+
+        unitShield = new UnitShieldFigure();
+        add(unitShield);
+
     }
 
     @Override
