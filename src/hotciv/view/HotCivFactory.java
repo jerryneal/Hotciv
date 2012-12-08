@@ -1,6 +1,6 @@
 package hotciv.view;
 
-import hotciv.common.BaseGame;
+import hotciv.framework.Game;
 import minidraw.framework.Drawing;
 import minidraw.framework.DrawingEditor;
 import minidraw.framework.DrawingView;
@@ -12,13 +12,13 @@ import javax.swing.*;
  * //TODO: Doc
  *
  * @author Erik
- * Created: 07-12-12, 10:20
+ *         Created: 07-12-12, 10:20
  */
 public class HotCivFactory implements Factory {
-    private BaseGame game;
+    private Game game;
 
-    public HotCivFactory(BaseGame g) {
-        game = g;
+    public HotCivFactory(Game game) {
+        this.game = game;
     }
 
     public DrawingView createDrawingView(DrawingEditor editor) {

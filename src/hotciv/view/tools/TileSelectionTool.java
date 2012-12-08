@@ -1,6 +1,6 @@
 package hotciv.view.tools;
 
-import hotciv.common.BaseGame;
+import hotciv.framework.Game;
 import hotciv.framework.GameConstants;
 import hotciv.framework.Position;
 import hotciv.view.framework.GfxConstants;
@@ -14,9 +14,9 @@ import java.awt.event.MouseEvent;
  * Date: 08-12-12, 00:23
  */
 public class TileSelectionTool extends ClickingTool {
-    private final BaseGame game;
+    private final Game game;
 
-    public TileSelectionTool(BaseGame game) {
+    public TileSelectionTool(Game game) {
         this.game = game;
     }
 
