@@ -16,7 +16,7 @@ import java.util.Set;
  *         Created : 04-11-12, 13:51
  */
 public class GameWorld {
-    private Map<Position, Unit> unitMap = new HashMap<Position, Unit>();
+    private Map<Position, AbstractUnit> unitMap = new HashMap<Position, AbstractUnit>();
     private Map<Position, Tile> tileMap = new HashMap<Position, Tile>();
     private Map<Position, CityImpl> cityMap = new HashMap<Position, CityImpl>();
     private UnitFactory unitFactory;
@@ -39,7 +39,7 @@ public class GameWorld {
      * @param position The position
      * @param unit     The unit to place.
      */
-    protected void placeUnit(Position position, Unit unit) {
+    protected void placeUnit(Position position, AbstractUnit unit) {
         unitMap.put(position, unit);
         callWorldChangedAddObserver(position);
     }
@@ -62,7 +62,7 @@ public class GameWorld {
      * @param position The position to insert the unit near.
      * @param unit     The unit.
      */
-    public void placeUnitNear(Position position, Unit unit) {
+    public void placeUnitNear(Position position, AbstractUnit unit) {
         if (canPlaceUnitAt(position)) {
             unitMap.put(position, unit);
             callWorldChangedAddObserver(position);
@@ -115,7 +115,7 @@ public class GameWorld {
      * @param p The position.
      * @return The unit on the position.
      */
-    public Unit getUnit(Position p) {
+    public AbstractUnit getUnit(Position p) {
         return this.unitMap.get(p);
     }
 
@@ -136,7 +136,7 @@ public class GameWorld {
      *
      * @return An entrySet of units.
      */
-    public Set<Map.Entry<Position, Unit>> getUnitsEntrySet() {
+    public Set<Map.Entry<Position, AbstractUnit>> getUnitsEntrySet() {
         return unitMap.entrySet();
     }
 
@@ -237,7 +237,7 @@ public class GameWorld {
      * @return the position of the unit.
      */
     public Position getUnitPosition(Unit unit) {
-        for (Map.Entry<Position, Unit> unitEntry : getUnitsEntrySet()) {
+        for (Map.Entry<Position, AbstractUnit> unitEntry : getUnitsEntrySet()) {
             if (unit == unitEntry.getValue()) {
                 return unitEntry.getKey();
             }

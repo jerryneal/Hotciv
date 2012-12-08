@@ -20,7 +20,7 @@ public class BaseGame implements Game {
 
     private Player playerTurn;
 
-    private Set<Unit> movedUnits = new HashSet<Unit>();
+    private Set<AbstractUnit> movedUnits = new HashSet<AbstractUnit>();
 
     private int age = -4000;
 
@@ -70,7 +70,7 @@ public class BaseGame implements Game {
         return gameWorld.getTile(position);
     }
 
-    public Unit getUnitAt(Position position) {
+    public AbstractUnit getUnitAt(Position position) {
         return gameWorld.getUnit(position);
     }
 
@@ -100,7 +100,7 @@ public class BaseGame implements Game {
     }
 
     public boolean moveUnit(Position from, Position to) {
-        Unit unit = getUnitAt(from);
+        AbstractUnit unit = getUnitAt(from);
         if (unit == null) {
             throw new IllegalArgumentException("There has to be a unit at the specified from position: " + from);
         }
@@ -115,7 +115,7 @@ public class BaseGame implements Game {
 
         // Tests if we try to move to far.
         int distance = Position.getDistance(from, to);
-        if (distance > unit.getMoveCount() || movedUnits.contains(unit)) {
+        if (distance > unit.getMoveCount()) {
             return false;
         }
 
@@ -147,6 +147,7 @@ public class BaseGame implements Game {
         }
 
         movedUnits.add(unit);
+        unit.decreaseMoveCount(distance);
 
         gameWorld.removeUnit(from);
         gameWorld.placeUnit(to, unit);
@@ -156,6 +157,10 @@ public class BaseGame implements Game {
 
     public void endOfTurn() {
         // Restore the move count of moved units.
+        for (AbstractUnit movedUnit : movedUnits) {
+            movedUnit.resetMoveCount();
+        }
+
         movedUnits.clear();
 
         // Change player in turn.
@@ -192,7 +197,7 @@ public class BaseGame implements Game {
             int productionAmount = city.getProductionAmount();
             String produces = city.getProduction();
 
-            Unit unit = null;
+            AbstractUnit unit = null;
 
             if (produces.equals(GameConstants.SETTLER)) {
                 if (productionAmount >= GameConstants.SETTLER_PRICE) {

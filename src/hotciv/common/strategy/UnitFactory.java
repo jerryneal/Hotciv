@@ -1,5 +1,6 @@
 package hotciv.common.strategy;
 
+import hotciv.common.AbstractUnit;
 import hotciv.framework.Player;
 import hotciv.framework.Unit;
 
@@ -17,5 +18,5 @@ public interface UnitFactory {
      * @param owner      The owner of the unit.
      * @return The created unit.
      */
-    public Unit makeUnit(String typeString, Player owner);
+    public AbstractUnit makeUnit(String typeString, Player owner);
 }
