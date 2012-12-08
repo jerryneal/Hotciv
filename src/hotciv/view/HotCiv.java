@@ -1,6 +1,6 @@
 package hotciv.view;
 
-import hotciv.common.BaseGame;
+import hotciv.framework.Game;
 import hotciv.variants.SemiCiv;
 import hotciv.view.tools.*;
 import minidraw.framework.Drawing;
@@ -15,7 +15,7 @@ public class HotCiv {
     }
 
     public HotCiv() {
-        BaseGame game = new SemiCiv().newGame();
+        Game game = new SemiCiv().newGame();
 
         // Uncomment to print working directory.
         /*URL location = HotCiv.class.getProtectionDomain().getCodeSource().getLocation();

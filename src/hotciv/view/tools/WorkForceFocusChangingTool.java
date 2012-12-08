@@ -1,7 +1,7 @@
 package hotciv.view.tools;
 
-import hotciv.common.BaseGame;
 import hotciv.framework.City;
+import hotciv.framework.Game;
 import hotciv.framework.GameConstants;
 import hotciv.framework.Position;
 import hotciv.view.figures.WorkForceFocusFigure;
@@ -17,10 +17,10 @@ import java.awt.event.MouseEvent;
  * Date: 08-12-12, 00:17
  */
 public class WorkForceFocusChangingTool extends ClickingTool {
-    private final BaseGame game;
+    private final Game game;
     private final Drawing drawing;
 
-    public WorkForceFocusChangingTool(BaseGame game, Drawing drawing) {
+    public WorkForceFocusChangingTool(Game game, Drawing drawing) {
         this.game = game;
         this.drawing = drawing;
     }

@@ -1,7 +1,7 @@
 package hotciv.view.tools;
 
-import hotciv.common.BaseGame;
 import hotciv.framework.City;
+import hotciv.framework.Game;
 import hotciv.framework.GameConstants;
 import hotciv.framework.Position;
 import hotciv.view.figures.ProductionFigure;
@@ -17,10 +17,10 @@ import java.awt.event.MouseEvent;
  * Date: 08-12-12, 01:05
  */
 public class ProductionChangingTool extends ClickingTool {
-    private final BaseGame game;
+    private final Game game;
     private final Drawing drawing;
 
-    public ProductionChangingTool(BaseGame game, Drawing drawing) {
+    public ProductionChangingTool(Game game, Drawing drawing) {
         this.game = game;
         this.drawing = drawing;
     }

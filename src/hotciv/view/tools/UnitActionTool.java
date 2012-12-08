@@ -1,15 +1,12 @@
 package hotciv.view.tools;
 
-import hotciv.common.BaseGame;
+import hotciv.framework.Game;
 import hotciv.framework.Position;
 import hotciv.view.figures.UnitFigure;
 import hotciv.view.framework.GfxConstants;
 import minidraw.framework.Drawing;
 import minidraw.framework.Figure;
-import minidraw.framework.Tool;
 
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 /**
@@ -19,10 +16,10 @@ import java.awt.event.MouseEvent;
  * Date: 07-12-12, 23:19
  */
 public class UnitActionTool extends ClickingTool {
-    private final BaseGame game;
+    private final Game game;
     private final Drawing model;
 
-    public UnitActionTool(BaseGame game, Drawing model) {
+    public UnitActionTool(Game game, Drawing model) {
         this.game = game;
         this.model = model;
     }

@@ -1,6 +1,6 @@
 package hotciv.view.tools;
 
-import hotciv.common.BaseGame;
+import hotciv.framework.Game;
 import hotciv.view.figures.ShieldFigure;
 import minidraw.framework.Drawing;
 import minidraw.framework.Figure;
@@ -14,10 +14,10 @@ import java.awt.event.MouseEvent;
  * Date: 07-12-12, 23:00
  */
 public class TurnPassingTool extends ClickingTool {
-    private final BaseGame game;
+    private final Game game;
     private final Drawing model;
 
-    public TurnPassingTool(BaseGame game, Drawing model) {
+    public TurnPassingTool(Game game, Drawing model) {
         this.game = game;
         this.model = model;
     }

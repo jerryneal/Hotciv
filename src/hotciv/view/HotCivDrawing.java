@@ -1,7 +1,5 @@
 package hotciv.view;
 
-import hotciv.common.BaseGame;
-import hotciv.common.CityImpl;
 import hotciv.framework.*;
 import hotciv.view.figures.*;
 import hotciv.view.framework.GfxConstants;
@@ -9,7 +7,6 @@ import minidraw.framework.Figure;
 import minidraw.standard.StandardDrawing;
 
 import java.awt.*;
-import java.util.Map;
 
 /**
  * //TODO: Doc
@@ -18,37 +15,34 @@ import java.util.Map;
  *         Created: 07-12-12, 11:49
  */
 public class HotCivDrawing extends StandardDrawing implements GameObserver {
-    private BaseGame game;
+    private Game game;
     private TextFigure ageTextField;
     private ShieldFigure turnShield;
     private WorkForceFocusFigure workForceFocusFigure;
     private ProductionFigure productionFigure;
 
-
-    public HotCivDrawing(BaseGame game) {
+    public HotCivDrawing(Game game) {
         this.game = game;
         game.addObserver(this);
 
-        // Placing all cities in the GameWorld.
-        for (Map.Entry<Position, CityImpl> entry : game.getGameWorld().getCityEntrySet()) {
-            City city = entry.getValue();
-            Position position = entry.getKey();
-            int column = position.getColumn();
-            int row = position.getRow();
-            this.add(new CityFigure(city,
-                    new Point(GfxConstants.getXFromColumn(column),
-                            GfxConstants.getYFromRow(row))));
-        }
+        // Placing all cities and units in the GameWorld.
+        for (int x = 0; x < GameConstants.WORLDSIZE; x++) {
+            for (int y = 0; y < GameConstants.WORLDSIZE; y++) {
+                Position position = new Position(y, x);
+                City city = game.getCityAt(position);
+                if (city != null) {
+                    this.add(new CityFigure(city,
+                            new Point(GfxConstants.getXFromColumn(x),
+                                    GfxConstants.getYFromRow(y))));
+                }
 
-        // Placing all units
-        for (Map.Entry<Position, Unit> entry : game.getGameWorld().getUnitsEntrySet()) {
-            Unit unit = entry.getValue();
-            Position position = entry.getKey();
-            int column = position.getColumn();
-            int row = position.getRow();
-            this.add(new UnitFigure(unit,
-                    new Point(GfxConstants.getXFromColumn(column),
-                            GfxConstants.getYFromRow(row))));
+                Unit unit = game.getUnitAt(position);
+                if (unit != null) {
+                    this.add(new UnitFigure(unit,
+                            new Point(GfxConstants.getXFromColumn(x),
+                                    GfxConstants.getYFromRow(y))));
+                }
+            }
         }
 
         ageTextField = new TextFigure("4000 BC",
@@ -78,9 +72,8 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
         if ((figure = this.findFigure(column, row)) != null) {
             if (figure instanceof CityFigure) {
                 CityFigure cityFigure = (CityFigure) figure;
-                Position cityPosition = game.getGameWorld().getCityPosition(cityFigure.getCity());
                 // Cities can't move, and sometimes we hit the city when we didn't mean to.
-                if (position.equals(cityPosition)) {
+                if (game.getCityAt(position) != null) {
                     this.remove(figure);
                 }
             }
@@ -116,7 +109,7 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
 
     @Override
     public void tileFocusChangedAt(Position position) {
-        CityImpl city = game.getCityAt(position);
+        City city = game.getCityAt(position);
         if (city != null) {
             workForceFocusFigure.setWorkForceFocus(city.getWorkforceFocus());
             productionFigure.setProduction(city.getProduction());
