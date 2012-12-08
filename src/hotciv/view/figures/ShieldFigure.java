@@ -13,15 +13,18 @@ import java.awt.*;
  * Date: 07-12-12, 23:03
  */
 public class ShieldFigure extends ImageFigure {
-    private final static Point shieldPoint = new Point(GfxConstants.TURN_SHIELD_X, GfxConstants.TURN_SHIELD_Y);
     private final static String redShieldUrl = "redshield";
     private final static String blueShieldUrl = "blueshield";
+    private final static String blankUrl = "blank";
 
-    public ShieldFigure() {
-        super(redShieldUrl, shieldPoint);
+    private Point shieldPoint;
+
+    public ShieldFigure(Point shieldPoint) {
+        super(blankUrl, shieldPoint);
+        this.shieldPoint = shieldPoint;
     }
 
-    public void setPlayerInTurn(Player player) {
+    public void setPlayer(Player player) {
         switch (player) {
             case RED:
                 set(redShieldUrl, shieldPoint);
@@ -30,5 +33,9 @@ public class ShieldFigure extends ImageFigure {
                 set(blueShieldUrl, shieldPoint);
                 break;
         }
+    }
+
+    public void setBlank() {
+        set(blankUrl, shieldPoint);
     }
 }
