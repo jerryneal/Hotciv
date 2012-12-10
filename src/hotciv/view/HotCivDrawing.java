@@ -111,9 +111,6 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
             tileFocusChangedAt(game.getTileFocus());
         }
 
-        // Making sure the focus updates as well
-        tileFocusChangedAt(game.getTileFocus());
-
         requestUpdate();
     }
 
