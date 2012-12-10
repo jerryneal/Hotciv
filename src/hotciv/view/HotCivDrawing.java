@@ -77,8 +77,8 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
         // TODO: This is ugly.
         // Updating the city.
         City city = game.getCityAt(position);
-        Figure figure;
-        if ((figure = this.findFigure(column, row)) != null) {
+        Figure figure = this.findFigure(column + GfxConstants.TILESIZE / 2, row + GfxConstants.TILESIZE / 2);
+        if (figure != null) {
             if (figure instanceof CityFigure) {
                 CityFigure cityFigure = (CityFigure) figure;
                 // Cities can't move, and sometimes we hit the city when we didn't mean to.
@@ -95,8 +95,7 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
 
         // Updating the unit.
         Unit unit = game.getUnitAt(position);
-        figure = null;
-        if ((figure = this.findFigure(column, row)) != null) {
+        if (figure != null) {
             if (figure instanceof UnitFigure) {
                 this.remove(figure);
             }
