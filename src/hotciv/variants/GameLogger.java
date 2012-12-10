@@ -92,7 +92,7 @@ public class GameLogger implements Game {
 
     @Override
     public void performUnitActionAt(Position p) {
-        printer.print(getPlayerInTurn() + " performed unit action un unit at " + p);
+        printer.print(getPlayerInTurn() + " performed unit action on unit at " + p);
         game.performUnitActionAt(p);
     }
 
