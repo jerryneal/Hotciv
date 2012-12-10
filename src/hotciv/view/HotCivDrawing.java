@@ -89,6 +89,8 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
         }
         if (city != null) {
             this.add(new CityFigure(city, new Point(column, row)));
+            // Potentially we need to redraw some stuff.
+            tileFocusChangedAt(game.getTileFocus());
         }
 
         // Updating the unit.
@@ -101,6 +103,8 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
         }
         if (unit != null) {
             this.add(new UnitFigure(unit, new Point(column, row)));
+            // Potentially we need to redraw some stuff.
+            tileFocusChangedAt(game.getTileFocus());
         }
 
         requestUpdate();

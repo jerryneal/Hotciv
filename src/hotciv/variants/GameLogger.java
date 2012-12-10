@@ -31,7 +31,6 @@ public class GameLogger implements Game {
     }
 
 
-
     @Override
     public Tile getTileAt(Position p) {
         return game.getTileAt(p);
@@ -93,7 +92,7 @@ public class GameLogger implements Game {
 
     @Override
     public void performUnitActionAt(Position p) {
-        printer.print(getPlayerInTurn() + " performed unit action un unit at " + p);
+        printer.print(getPlayerInTurn() + " performed unit action on unit at " + p);
         game.performUnitActionAt(p);
     }
 
@@ -105,5 +104,10 @@ public class GameLogger implements Game {
     @Override
     public void setTileFocus(Position position) {
         game.setTileFocus(position);
+    }
+
+    @Override
+    public Position getTileFocus() {
+        return game.getTileFocus();
     }
 }

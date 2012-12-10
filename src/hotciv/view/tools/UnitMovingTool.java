@@ -6,9 +6,8 @@ import hotciv.view.figures.UnitFigure;
 import hotciv.view.framework.GfxConstants;
 import minidraw.framework.Drawing;
 import minidraw.framework.Figure;
-import minidraw.framework.Tool;
+import minidraw.standard.NullTool;
 
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 
 /**
@@ -17,7 +16,7 @@ import java.awt.event.MouseEvent;
  * @author Erik
  *         Created: 07-12-12, 10:23
  */
-public class UnitMovingTool implements Tool {
+public class UnitMovingTool extends NullTool {
     private Game game;
     private Drawing model;
 
@@ -27,6 +26,7 @@ public class UnitMovingTool implements Tool {
     private int draggingY = 0;
     private int draggingX = 0;
     private Position moveFrom;
+    private boolean dragged = false;
 
     public UnitMovingTool(Game game, Drawing model) {
         this.game = game;
@@ -35,6 +35,7 @@ public class UnitMovingTool implements Tool {
 
     @Override
     public void mouseDown(MouseEvent mouseEvent, int x, int y) {
+        dragged = false;
         Figure figure = model.findFigure(x, y);
         if (figure instanceof UnitFigure) {
             this.draggingFigure = figure;
@@ -48,6 +49,7 @@ public class UnitMovingTool implements Tool {
 
     @Override
     public void mouseDrag(MouseEvent mouseEvent, int x, int y) {
+        dragged = true;
         if (this.draggingFigure != null) {
             int deltaX = x - draggingX;
             draggingX = x;
@@ -61,7 +63,7 @@ public class UnitMovingTool implements Tool {
 
     @Override
     public void mouseUp(MouseEvent mouseEvent, int x, int y) {
-        if (draggingFigure != null) {
+        if (draggingFigure != null && dragged) {
             draggingFigure.moveBy(initialDraggingX - x, initialDraggingY - y);
             draggingFigure = null;
             draggingX = 0;
@@ -70,15 +72,5 @@ public class UnitMovingTool implements Tool {
             Position moveTo = new Position(GfxConstants.getTileYFromPixel(y), GfxConstants.getTileXFromPixel(x));
             game.moveUnit(moveFrom, moveTo);
         }
-    }
-
-    @Override
-    public void mouseMove(MouseEvent mouseEvent, int i, int i1) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void keyDown(KeyEvent keyEvent, int i) {
-        //To change body of implemented methods use File | Settings | File Templates.
     }
 }

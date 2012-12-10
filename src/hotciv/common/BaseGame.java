@@ -5,7 +5,9 @@ import hotciv.common.observers.WinnerObserver;
 import hotciv.common.strategy.*;
 import hotciv.framework.*;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * This is a game instance, that does the most basic behaviour, and has a big constructor that specifies all the strategies this game uses.
@@ -32,6 +34,7 @@ public class BaseGame implements Game {
     private Set<WinnerObserver> winnerObservers;
     private Set<EndOfRoundObserver> endOfRoundObservers;
     private Set<GameObserver> gameObservers;
+    private Position tileFocus;
 
     public BaseGame(GameStrategyFactory factory) {
         // Making the observer lists.
@@ -259,9 +262,15 @@ public class BaseGame implements Game {
 
     @Override
     public void setTileFocus(Position position) {
+        this.tileFocus = position;
         for (GameObserver gameObserver : gameObservers) {
             gameObserver.tileFocusChangedAt(position);
         }
+    }
+
+    @Override
+    public Position getTileFocus() {
+        return this.tileFocus;
     }
 
     private void callWorldChangedAddObserver(Position position) {

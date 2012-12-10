@@ -37,6 +37,7 @@ public class HotCiv {
         compositeTool.addTool(new TurnPassingTool(game, drawing));
         compositeTool.addTool(new UnitActionTool(game, drawing));
         compositeTool.addTool(new UnitMovingTool(game, drawing));
+        compositeTool.addTool(new ProductionChangingTool(game, drawing));
 
         editor.setTool(compositeTool);
     }
