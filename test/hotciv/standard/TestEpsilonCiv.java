@@ -8,7 +8,7 @@ import hotciv.framework.GameConstants;
 import hotciv.framework.Player;
 import hotciv.framework.Position;
 import hotciv.framework.Unit;
-import hotciv.standard.strategies.FixedDice;
+import hotciv.standard.strategies.IWantToTestThereforeIUseADieThatWillReturnTheValueThatISayItShould;
 import hotciv.variants.EpsilonCiv;
 import hotciv.variants.strategies.EpsilonCivAttackResolver;
 import org.junit.Before;
@@ -25,12 +25,12 @@ import static org.junit.Assert.*;
 public class TestEpsilonCiv {
     private BaseGame game;
     private GameWorld gameWorld;
-    private FixedDice fixedDice;
+    private IWantToTestThereforeIUseADieThatWillReturnTheValueThatISayItShould fixedDice;
 
     @Before
     public void setUp() {
         // Setting up a version of EpsilonCiv where the dice is replaced with a dice that always returns a specified value.
-        fixedDice = new FixedDice(1);
+        fixedDice = new IWantToTestThereforeIUseADieThatWillReturnTheValueThatISayItShould(1);
         game = (BaseGame) new EpsilonCiv(fixedDice).newGame();
         gameWorld = game.getGameWorld();
     }
