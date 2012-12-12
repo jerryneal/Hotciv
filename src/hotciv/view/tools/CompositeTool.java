@@ -5,7 +5,6 @@ import minidraw.framework.Tool;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
