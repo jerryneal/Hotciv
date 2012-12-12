@@ -30,11 +30,12 @@ public class BaseGame implements Game {
     private UnitFactory unitFactory;
     private WorldLayoutStrategy worldLayoutStrategy;
     private AttackResolver attackResolver;
+    private CityProductionStrategy cityProductionStrategy;
 
     private Set<WinnerObserver> winnerObservers;
     private Set<EndOfRoundObserver> endOfRoundObservers;
     private Set<GameObserver> gameObservers;
-    private Position tileFocus;
+    private Position tileFocusPosition = new Position(0, 0);
 
     public BaseGame(GameStrategyFactory factory) {
         // Making the observer lists.
@@ -42,20 +43,20 @@ public class BaseGame implements Game {
         this.endOfRoundObservers = new HashSet<EndOfRoundObserver>();
         this.gameObservers = new HashSet<GameObserver>();
 
-
-        // First strategies
+        // Strategies
         this.getWinner = factory.createWinnerStrategy(this);
         this.newAgeCalculator = factory.createNewAgeCalculatorStrategy(this);
         this.unitFactory = factory.createUnitFactoryStrategy(this);
         this.worldLayoutStrategy = factory.createWorldLayoutStrategy(this);
         this.attackResolver = factory.createAttackResolverStrategy(this);
-
-        // Player starts
-        playerTurn = Player.RED;
+        this.cityProductionStrategy = factory.createCityProductionStrategy(this);
 
         // Gameworld
         this.gameWorld = new GameWorld(unitFactory, gameObservers);
         createWorld();
+
+        // Player starts
+        playerTurn = Player.RED;
     }
 
     /**
@@ -192,7 +193,7 @@ public class BaseGame implements Game {
             CityImpl city = cityEntry.getValue();
             Position cityPosition = cityEntry.getKey();
 
-            city.increaseProductionAmount(6);
+            this.cityProductionStrategy.produceOnCity(city);
             int productionAmount = city.getProductionAmount();
             String produces = city.getProduction();
 
@@ -225,14 +226,27 @@ public class BaseGame implements Game {
 
     }
 
-    public void changeWorkForceFocusInCityAt(Position p, String balance) {
-        throw new UnsupportedOperationException();
+    public void changeWorkForceFocusInCityAt(Position position, String balance) {
+        CityImpl city = getCityAt(position);
+        if (city == null) {
+            throw new IllegalArgumentException("No city at: " + position);
+        }
+        if (city.getOwner() != playerTurn) {
+            return;
+        }
+        city.setWorkForceFocus(balance);
+
+        // Calling the observers
+        callWorldChangedAddObserver(position);
     }
 
     public void changeProductionInCityAt(Position position, String unitType) {
         City city = gameWorld.getCity(position);
         if (city == null) {
             throw new IllegalArgumentException("Called changeProduction on a position with no city: " + position);
+        }
+        if (city.getOwner() != playerTurn) {
+            return;
         }
         city.setProduction(unitType);
 
@@ -262,7 +276,7 @@ public class BaseGame implements Game {
 
     @Override
     public void setTileFocus(Position position) {
-        this.tileFocus = position;
+        tileFocusPosition = position;
         for (GameObserver gameObserver : gameObservers) {
             gameObserver.tileFocusChangedAt(position);
         }
@@ -270,7 +284,7 @@ public class BaseGame implements Game {
 
     @Override
     public Position getTileFocus() {
-        return this.tileFocus;
+        return this.tileFocusPosition;
     }
 
     private void callWorldChangedAddObserver(Position position) {

@@ -2,7 +2,6 @@ package hotciv.standard;
 
 import hotciv.framework.*;
 import hotciv.variants.AlphaCiv;
-import hotciv.variants.GameLogger;
 import org.junit.Before;
 import org.junit.Test;
 

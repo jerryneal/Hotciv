@@ -9,10 +9,10 @@ import hotciv.variants.strategies.Dice;
  * @author Erik
  *         Created: 19-11-12, 14:47
  */
-public class FixedDice implements Dice {
+public class IWantToTestThereforeIUseADieThatWillReturnTheValueThatISayItShould implements Dice {
     private int value;
 
-    public FixedDice(int value) {
+    public IWantToTestThereforeIUseADieThatWillReturnTheValueThatISayItShould(int value) {
         this.value = value;
     }
 

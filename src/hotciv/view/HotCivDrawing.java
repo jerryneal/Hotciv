@@ -18,6 +18,8 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
     private Game game;
     private TextFigure ageTextField;
     private ShieldFigure turnShield;
+
+    private WorkForceFocusFigure workForceFocusFigure;
     private ShieldFigure unitShield;
     private ShieldFigure cityShield;
     private ProductionFigure productionFigure;
@@ -64,6 +66,9 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
 
         productionFigure = new ProductionFigure();
         add(productionFigure);
+
+        workForceFocusFigure = new WorkForceFocusFigure();
+        add(workForceFocusFigure);
 
         movesLeftText = new TextFigure("", new Point(GfxConstants.UNIT_COUNT_X, GfxConstants.UNIT_COUNT_Y));
         add(movesLeftText);
@@ -129,9 +134,11 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
 
         City city = game.getCityAt(position);
         if (city != null) {
+            workForceFocusFigure.setWorkForceFocus(city.getWorkforceFocus());
             cityShield.setPlayer(city.getOwner());
             productionFigure.setProduction(city.getProduction());
         } else {
+            workForceFocusFigure.setWorkForceFocus(null);
             cityShield.setBlank();
             productionFigure.setProduction(null);
         }
