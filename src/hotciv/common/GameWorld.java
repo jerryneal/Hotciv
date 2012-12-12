@@ -74,6 +74,10 @@ public class GameWorld {
                 callWorldChangedAddObserver(aroundPosition);
                 return;
             }
+            // Escaping infinite loops.
+            if (Position.getDistance(position, aroundPosition) > GameConstants.WORLDSIZE) {
+                return;
+            }
         }
     }
 
@@ -86,9 +90,8 @@ public class GameWorld {
      */
     private boolean canPlaceUnitAt(Position position) {
         // First see if its a valid position.
-        if (position.getColumn() < 0 || position.getRow() < 0 || position.getColumn() > 15 || position.getRow() > 15) {
+        if (!isWithinGameworld(position))
             return false;
-        }
 
 
         // Checking for a unit conflicts.
@@ -105,6 +108,13 @@ public class GameWorld {
             }
         }
 
+        return true;
+    }
+
+    public static boolean isWithinGameworld(Position position) {
+        if (position.getColumn() < 0 || position.getRow() < 0 || position.getColumn() > 15 || position.getRow() > 15) {
+            return false;
+        }
         return true;
     }
 

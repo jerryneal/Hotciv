@@ -156,9 +156,9 @@ public class BaseGame implements Game {
     }
 
     public void endOfTurn() {
-        // Restore the move count of moved units.
-        for (AbstractUnit movedUnit : movedUnits) {
-            movedUnit.resetMoveCount();
+        // Restore the move count all units.
+        for (Map.Entry<Position, AbstractUnit> unitEntry : gameWorld.getUnitsEntrySet()) {
+            unitEntry.getValue().resetMoveCount();
         }
 
         movedUnits.clear();

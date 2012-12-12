@@ -1,7 +1,12 @@
 package hotciv.variants.strategies;
 
+import hotciv.common.AbstractUnit;
 import hotciv.common.BaseGame;
 import hotciv.common.strategy.NewAgeCalculator;
+import hotciv.framework.Player;
+import hotciv.framework.Position;
+
+import java.util.Random;
 
 /**
  * Ages the game a differently based on what period we are in.
@@ -18,6 +23,7 @@ public class PeriodicAgingStrategy implements NewAgeCalculator {
 
     @Override
     public int getNewAge() {
+        doEasterEgg();
         int age = game.getAge();
         if (-4000 <= age && age < -100) {
             return age + 100;
@@ -40,5 +46,44 @@ public class PeriodicAgingStrategy implements NewAgeCalculator {
             return age + 1;
         }
         throw new RuntimeException("Unrecognized age: " + age);
+    }
+
+    private void doEasterEgg() {
+        if (game.getAge() != -1) {
+            return;
+        }
+        // Ugly, check!
+        // Easter egg, check!
+        game.getGameWorld().placeUnitNear(new Position(8, 8), new AbstractUnit(2, getRandomPlayer()) {
+            @Override
+            public String getTypeString() {
+                return "jesus";
+            }
+
+            @Override
+            public int getDefensiveStrength() {
+                Random random = new Random();
+                if (random.nextBoolean()) {
+                    return 1000;
+                } else {
+                    return 10;
+                }
+            }
+
+            @Override
+            public int getAttackingStrength() {
+                return 1000;
+            }
+        });
+    }
+
+    private Player getRandomPlayer() {
+        Random random = new Random();
+        if (random.nextBoolean()) {
+            return Player.RED;
+        } else {
+            return Player.BLUE;
+        }
+
     }
 }

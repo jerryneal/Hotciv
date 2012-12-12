@@ -14,7 +14,7 @@ import java.util.*;
  * //TODO: Document!
  *
  * @author : Erik
- * Date: 25-11-12, 19:52
+ *         Date: 25-11-12, 19:52
  */
 public class EtaCivCityProductionStrategy implements CityProductionStrategy {
     private BaseGame game;
@@ -48,7 +48,9 @@ public class EtaCivCityProductionStrategy implements CityProductionStrategy {
 
             List<Tile> tilesAroundCity = new ArrayList<Tile>();
             for (Position position : cityPosition.getPositionsWithinDistance(1)) {
-                tilesAroundCity.add(game.getTileAt(position));
+                if (GameWorld.isWithinGameworld(position)) {
+                    tilesAroundCity.add(game.getTileAt(position));
+                }
             }
             Comparator<Tile> tileSorter;
             if (GameConstants.foodFocus.equals(focus)) {
@@ -61,7 +63,7 @@ public class EtaCivCityProductionStrategy implements CityProductionStrategy {
 
             Collections.sort(tilesAroundCity, tileSorter);
 
-            for (int i = 0; i < citySize - 1; i++) {
+            for (int i = 0; i < citySize - 1 && i < tilesAroundCity.size(); i++) {
                 String typeString = tilesAroundCity.get(i).getTypeString();
                 productionIncrease += productionFromTile(typeString);
                 foodIncrease += foodFromTile(typeString);

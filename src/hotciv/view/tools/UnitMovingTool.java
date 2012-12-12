@@ -38,12 +38,15 @@ public class UnitMovingTool extends NullTool {
         dragged = false;
         Figure figure = model.findFigure(x, y);
         if (figure instanceof UnitFigure) {
+            this.moveFrom = new Position(GfxConstants.getTileYFromPixel(y), GfxConstants.getTileXFromPixel(x));
+            if (game.getUnitAt(moveFrom) == null) {
+                return;
+            }
             this.draggingFigure = figure;
             this.draggingX = x;
             this.draggingY = y;
             this.initialDraggingX = x;
             this.initialDraggingY = y;
-            this.moveFrom = new Position(GfxConstants.getTileYFromPixel(y), GfxConstants.getTileXFromPixel(x));
         }
     }
 

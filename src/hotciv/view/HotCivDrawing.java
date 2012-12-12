@@ -7,6 +7,9 @@ import minidraw.framework.Figure;
 import minidraw.standard.StandardDrawing;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * //TODO: Doc
@@ -28,26 +31,8 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
     public HotCivDrawing(Game game) {
         this.game = game;
         game.addObserver(this);
+        placeAllUnitsAndCities();
 
-        // Placing all cities and units in the GameWorld.
-        for (int x = 0; x < GameConstants.WORLDSIZE; x++) {
-            for (int y = 0; y < GameConstants.WORLDSIZE; y++) {
-                Position position = new Position(y, x);
-                City city = game.getCityAt(position);
-                if (city != null) {
-                    this.add(new CityFigure(city,
-                            new Point(GfxConstants.getXFromColumn(x),
-                                    GfxConstants.getYFromRow(y))));
-                }
-
-                Unit unit = game.getUnitAt(position);
-                if (unit != null) {
-                    this.add(new UnitFigure(unit,
-                            new Point(GfxConstants.getXFromColumn(x),
-                                    GfxConstants.getYFromRow(y))));
-                }
-            }
-        }
 
         ageTextField = new TextFigure("4000 BC",
                 new Point(GfxConstants.AGE_TEXT_X,
@@ -74,42 +59,49 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
         add(movesLeftText);
     }
 
-    @Override
-    public void worldChangedAt(Position position) {
-        int column = GfxConstants.getXFromColumn(position.getColumn());
-        int row = GfxConstants.getYFromRow(position.getRow());
+    private void placeAllUnitsAndCities() {
+        // Placing all cities and units in the GameWorld.
+        for (int x = 0; x < GameConstants.WORLDSIZE; x++) {
+            for (int y = 0; y < GameConstants.WORLDSIZE; y++) {
+                Position position = new Position(y, x);
+                City city = game.getCityAt(position);
+                if (city != null) {
+                    this.add(new CityFigure(city,
+                            new Point(GfxConstants.getXFromColumn(x),
+                                    GfxConstants.getYFromRow(y))));
+                }
 
-        // TODO: This is ugly.
-        // Updating the city.
-        City city = game.getCityAt(position);
-        Figure figure = this.findFigure(column + GfxConstants.TILESIZE / 2, row + GfxConstants.TILESIZE / 2);
-        if (figure != null) {
-            if (figure instanceof CityFigure) {
-                CityFigure cityFigure = (CityFigure) figure;
-                // Cities can't move, and sometimes we hit the city when we didn't mean to.
-                if (game.getCityAt(position) != null) {
-                    this.remove(figure);
+                Unit unit = game.getUnitAt(position);
+                if (unit != null) {
+                    this.add(new UnitFigure(unit,
+                            new Point(GfxConstants.getXFromColumn(x),
+                                    GfxConstants.getYFromRow(y))));
                 }
             }
         }
-        if (city != null) {
-            this.add(new CityFigure(city, new Point(column, row)));
-            // Potentially we need to redraw some stuff.
-            tileFocusChangedAt(game.getTileFocus());
-        }
+    }
 
-        // Updating the unit.
-        Unit unit = game.getUnitAt(position);
-        if (figure != null) {
-            if (figure instanceof UnitFigure) {
-                this.remove(figure);
+    @Override
+    public void worldChangedAt(Position position) {
+        lock();
+
+        Iterator<Figure> figureIterator = this.iterator();
+        List<Figure> figureList = new ArrayList<Figure>();
+        while (figureIterator.hasNext()) {
+            Figure next = figureIterator.next();
+            if (next instanceof UnitFigure || next instanceof CityFigure) {
+                figureList.add(next);
             }
         }
-        if (unit != null) {
-            this.add(new UnitFigure(unit, new Point(column, row)));
-            // Potentially we need to redraw some stuff.
-            tileFocusChangedAt(game.getTileFocus());
+
+        for (Figure figure : figureList) {
+            this.remove(figure);
         }
+
+        placeAllUnitsAndCities();
+
+        unlock();
+
 
         requestUpdate();
     }

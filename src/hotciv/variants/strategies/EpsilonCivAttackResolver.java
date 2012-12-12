@@ -25,7 +25,9 @@ public class EpsilonCivAttackResolver implements AttackResolver {
         int attackStrength = getCombinedBattleStrength(game, attacker, true);
         int defendingStrength = getCombinedBattleStrength(game, defender, false);
 
-        return attackStrength * dice.getNext() > defendingStrength * dice.getNext();
+        int dice1 = dice.getNext();
+        int dice2 = dice.getNext();
+        return attackStrength * dice1 > defendingStrength * dice2;
     }
 
     public static int getCombinedBattleStrength(BaseGame game, Unit unit, boolean attacking) {

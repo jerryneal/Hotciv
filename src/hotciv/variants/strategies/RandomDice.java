@@ -13,6 +13,6 @@ public class RandomDice implements Dice {
 
     @Override
     public int getNext() {
-        return (dice.nextInt() % 6) + 1;
+        return (Math.abs(dice.nextInt()) % 6) + 1;
     }
 }
