@@ -6,42 +6,34 @@ import hotciv.common.strategy.*;
 import hotciv.variants.strategies.*;
 
 /**
- * * A factory that creates the strategies needed by the game to make it act like SemiCiv.
+ * A factory that creates the strategies needed by the game to make it act like AlphaCiv.
  *
  * @author Erik
- *         Created: 23-11-12, 13:05
+ *         Created: 22-11-12, 13:09
  */
-public class SemiCivFactory implements GameStrategyFactory {
-    private Dice dice;
-
-    public SemiCivFactory(Dice dice) {
-        this.dice = dice;
-    }
-
-    // TODO: City Workforce and population: EtaCiv.
+public class AlphaCivFactory implements GameStrategyFactory {
     @Override
     public GetWinner createWinnerStrategy(BaseGame game) {
-        return new TripleWinnerWins(game);
+        return new AgeBasedWinnerStrategy(game);
     }
 
     @Override
     public NewAgeCalculator createNewAgeCalculatorStrategy(BaseGame game) {
-        return new PeriodicAgingStrategy(game);
+        return new LinearAgeStrategy(game);
     }
 
     @Override
     public UnitFactory createUnitFactoryStrategy(BaseGame game) {
-        // TODO: Unit actions: Settler like GammaCiv
-        return new GammaUnitFactory(game);
+        return new DefaultUnitFactory();
     }
 
     @Override
     public WorldLayoutStrategy createWorldLayoutStrategy(BaseGame game) {
-        return new DeltaWorldLayout(game);
+        return new AlphaCivWorldLayout(game);
     }
 
     @Override
     public AttackResolver createAttackResolverStrategy(BaseGame game) {
-        return new EpsilonCivAttackResolver(game, dice);
+        return new AttackerWinsAttackResolver();
     }
 }

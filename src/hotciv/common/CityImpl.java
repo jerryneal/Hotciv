@@ -14,8 +14,6 @@ public class CityImpl implements City {
     private Player owner;
     private String produces;
     private int productionAmount;
-    private String workForceFocus;
-    private int size;
 
     /**
      * The default and only constructor for CityImpl.
@@ -27,12 +25,6 @@ public class CityImpl implements City {
         // We set a city to pr. default produce settlers.
         this.produces = GameConstants.SETTLER;
         this.productionAmount = 0;
-
-        // workForceFocus is on production pr. default.
-        this.workForceFocus = GameConstants.productionFocus;
-
-        // Size defaults to 1.
-        this.size = 1;
     }
 
     @Override
@@ -46,7 +38,7 @@ public class CityImpl implements City {
 
     @Override
     public int getSize() {
-        return size;
+        return 1;
     }
 
     @Override
@@ -73,7 +65,7 @@ public class CityImpl implements City {
      *
      * @param increase The amount.
      */
-    public void increaseProductionAmount(int increase) {
+    protected void increaseProductionAmount(int increase) {
         productionAmount += increase;
     }
 
@@ -88,24 +80,7 @@ public class CityImpl implements City {
 
     @Override
     public String getWorkforceFocus() {
-        return this.workForceFocus;
+        throw new UnsupportedOperationException();
     }
 
-    /**
-     * Sets the workForceFocus for this city, se GameConstants for valid values.
-     *
-     * @param workForceFocus the workForceFocus.
-     */
-    public void setWorkForceFocus(String workForceFocus) {
-        this.workForceFocus = workForceFocus;
-    }
-
-    /**
-     * Sets the size of the city.
-     *
-     * @param size the size.
-     */
-    public void setSize(int size) {
-        this.size = size;
-    }
 }
