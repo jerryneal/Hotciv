@@ -110,7 +110,7 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
 
     @Override
     public void turnEnds(Player nextPlayer, int age) {
-        ageTextField.setText(Integer.toString(Math.abs(age)) + ((age > 0) ? " AC" : " BC"));
+        ageTextField.setText(Integer.toString(Math.abs(age)) + ((age >= 0) ? " AD" : " BC"));
         turnShield.setPlayer(nextPlayer);
         requestUpdate();
     }

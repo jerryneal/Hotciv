@@ -47,6 +47,8 @@ public class UnitMovingTool extends NullTool {
             this.draggingY = y;
             this.initialDraggingX = x;
             this.initialDraggingY = y;
+        } else {
+            draggingFigure = null;
         }
     }
 
