@@ -100,6 +100,8 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
 
         placeAllUnitsAndCities();
 
+        tileFocusChangedAt(game.getTileFocus());
+
         unlock();
 
 

@@ -23,20 +23,23 @@ public class UnitFigure extends ImageFigure {
     }
 
     public void draw(Graphics g) {
-        super.draw(g);
+        g.drawImage(fImage, fDisplayBox.x,
+                fDisplayBox.y - GfxConstants.UNIT_OFFSET_Y,
+                fDisplayBox.width, fDisplayBox.height, null);
 
-        g.setColor(GfxConstants.getColorForPlayer(unit.getOwner()));
-        g.fillOval(position.x, position.y,
-                10, 10);
-    }
+        // Draw the owner circle
+        Color color =
+                GfxConstants.getColorForPlayer(unit.getOwner());
+        g.setColor(color);
+        g.fillOval(fDisplayBox.x, fDisplayBox.y, 8, 6);
+        g.setColor(Color.black);
+        g.drawOval(fDisplayBox.x, fDisplayBox.y, 8, 6);
 
-    @Override
-    protected void basicMoveBy(int x, int y) {
-        super.basicMoveBy(x, y);
-        position = new Point(position.x + x, position.y + y);
-    }
-
-    public Unit getUnit() {
-        return unit;
+        // Draw the 'movable' box
+        g.setColor(unit.getMoveCount() > 0 ?
+                Color.green : Color.red);
+        g.fillOval(fDisplayBox.x, fDisplayBox.y + 7, 8, 6);
+        g.setColor(Color.black);
+        g.drawOval(fDisplayBox.x, fDisplayBox.y + 7, 8, 6);
     }
 }

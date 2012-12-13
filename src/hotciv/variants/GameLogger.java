@@ -103,6 +103,7 @@ public class GameLogger implements Game {
 
     @Override
     public void setTileFocus(Position position) {
+        printer.print(getPlayerInTurn() + " set the tile focus to " + position);
         game.setTileFocus(position);
     }
 
