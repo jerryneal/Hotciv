@@ -35,6 +35,8 @@ public class HotCivFactory implements Factory {
 
     public JTextField createStatusField(DrawingEditor editor) {
         // Create status field.
-        return new JTextField();
+        JTextField res = new JTextField();
+        res.setEditable(false);
+        return res;
     }
 }
