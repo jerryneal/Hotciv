@@ -6,6 +6,7 @@ import hotciv.common.strategy.NewAgeCalculator;
 import hotciv.framework.Player;
 import hotciv.framework.Position;
 
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -16,6 +17,9 @@ import java.util.Random;
  */
 public class PeriodicAgingStrategy implements NewAgeCalculator {
     private BaseGame game;
+    private boolean firstJesusSpawn = false;
+    private int jesusDeadCounter = 0;
+    private final String jesus = "jesus";
 
     public PeriodicAgingStrategy(BaseGame game) {
         this.game = game;
@@ -49,15 +53,39 @@ public class PeriodicAgingStrategy implements NewAgeCalculator {
     }
 
     private void doEasterEgg() {
-        if (game.getAge() != -1) {
+        if (game.getAge() < 0) {
             return;
         }
         // Ugly, check!
         // Easter egg, check!
+        if (firstJesusSpawn) {
+            firstJesusSpawn = true;
+            placeJesus();
+        } else {
+            boolean foundJesus = false;
+            for (Map.Entry<Position, AbstractUnit> unitEntry : game.getGameWorld().getUnitsEntrySet()) {
+                if (unitEntry.getValue().getTypeString().equals(jesus)) {
+                    foundJesus = true;
+                    break;
+                }
+            }
+            if (!foundJesus) {
+                jesusDeadCounter++;
+                if (jesusDeadCounter == 3) {
+                    placeJesus();
+                    jesusDeadCounter = 0;
+                }
+            } else {
+                jesusDeadCounter = 0;
+            }
+        }
+    }
+
+    private void placeJesus() {
         game.getGameWorld().placeUnitNear(new Position(8, 8), new AbstractUnit(2, getRandomPlayer()) {
             @Override
             public String getTypeString() {
-                return "jesus";
+                return jesus;
             }
 
             @Override
