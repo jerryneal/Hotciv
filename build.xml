@@ -58,11 +58,18 @@
 
             test: Run JUnit test cases.
 
-            show: Run the HotCiv game.
+            show: Run the HotCiv game, with all tools.
 
             emmatest: Run same JUnit tests as above and in addition
             generate Emma code coverage report in
             coverage/index.html.
+
+            tool-production: Run a stub with the production tool
+            tool-tileselection: Run a stub with the tile selection tool
+            tool-turnpassing: Run a stub with the turn passing tool
+            tool-unitaction: Run a stub with the unit action tool
+            tool-unitmoving: Run a stub with the unit moving tool
+            tool-workforce: Run a stub with the workforce focus changing tool
         </echo>
     </target>
 
