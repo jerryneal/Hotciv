@@ -119,6 +119,8 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
         turnShield.setPlayer(nextPlayer);
         requestUpdate();
 
+        worldChangedAt(game.getTileFocus());
+
         updateWinner();
     }
 

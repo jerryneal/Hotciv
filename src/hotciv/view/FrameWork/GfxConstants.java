@@ -89,26 +89,6 @@ public class GfxConstants {
     }
 
     /**
-     * Returns the tile the pixel represent.
-     *
-     * @param pixelX The pixel value.
-     * @return The tile in X position.
-     */
-    public static int getTileXFromPixel(int pixelX) {
-        return (pixelX - MAP_OFFSET_X) / TILESIZE;
-    }
-
-    /**
-     * Returns the tile the pixel represent.
-     *
-     * @param pixelY The pixel value.
-     * @return The tile in Y position.
-     */
-    public static int getTileYFromPixel(int pixelY) {
-        return (pixelY - MAP_OFFSET_Y) / TILESIZE;
-    }
-
-    /**
      * get a graphical color based upon game player's color
      */
     public static java.awt.Color getColorForPlayer(Player p) {
