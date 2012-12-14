@@ -29,7 +29,7 @@ public class HotCivFactory implements Factory {
 
     public Drawing createDrawing(DrawingEditor editor) {
         // Create the model in MVC
-        HotCivDrawing drawing = new HotCivDrawing(game);
+        HotCivDrawing drawing = new HotCivDrawing(game, editor);
         return drawing;
     }
 

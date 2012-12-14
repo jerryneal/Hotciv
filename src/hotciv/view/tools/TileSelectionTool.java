@@ -22,8 +22,9 @@ public class TileSelectionTool extends ClickingTool {
 
     @Override
     public void mouseClicked(MouseEvent mouseEvent, int x, int y) {
-        int posX = GfxConstants.getTileXFromPixel(x);
-        int posY = GfxConstants.getTileYFromPixel(y);
+        Position position = GfxConstants.getPositionFromXY(x, y);
+        int posX = position.getColumn();
+        int posY = position.getRow();
         if (posX > 0 && posX < GameConstants.WORLDSIZE && posY > 0 && posY < GameConstants.WORLDSIZE) {
             game.setTileFocus(new Position(posY, posX));
         }

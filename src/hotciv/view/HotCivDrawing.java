@@ -3,6 +3,7 @@ package hotciv.view;
 import hotciv.framework.*;
 import hotciv.view.figures.*;
 import hotciv.view.framework.GfxConstants;
+import minidraw.framework.DrawingEditor;
 import minidraw.framework.Figure;
 import minidraw.standard.StandardDrawing;
 
@@ -19,6 +20,7 @@ import java.util.List;
  */
 public class HotCivDrawing extends StandardDrawing implements GameObserver {
     private Game game;
+    private DrawingEditor editor;
     private TextFigure ageTextField;
     private ShieldFigure turnShield;
 
@@ -28,8 +30,9 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
     private ProductionFigure productionFigure;
     private TextFigure movesLeftText;
 
-    public HotCivDrawing(Game game) {
+    public HotCivDrawing(Game game, DrawingEditor editor) {
         this.game = game;
+        this.editor = editor;
         game.addObserver(this);
         placeAllUnitsAndCities();
 
@@ -106,6 +109,8 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
 
 
         requestUpdate();
+
+        updateWinner();
     }
 
     @Override
@@ -113,6 +118,8 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
         ageTextField.setText(Integer.toString(Math.abs(age)) + ((age >= 0) ? " AD" : " BC"));
         turnShield.setPlayer(nextPlayer);
         requestUpdate();
+
+        updateWinner();
     }
 
     @Override
@@ -136,7 +143,14 @@ public class HotCivDrawing extends StandardDrawing implements GameObserver {
             cityShield.setBlank();
             productionFigure.setProduction(null);
         }
+        requestUpdate();
+
+        updateWinner();
     }
 
-
+    private void updateWinner() {
+        if (game.getWinner() != null) {
+            editor.showStatus(game.getWinner() + " has WON THE GAME!");
+        }
+    }
 }

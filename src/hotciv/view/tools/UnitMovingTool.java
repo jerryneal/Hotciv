@@ -38,7 +38,7 @@ public class UnitMovingTool extends NullTool {
         dragged = false;
         Figure figure = model.findFigure(x, y);
         if (figure instanceof UnitFigure) {
-            this.moveFrom = new Position(GfxConstants.getTileYFromPixel(y), GfxConstants.getTileXFromPixel(x));
+            this.moveFrom = GfxConstants.getPositionFromXY(x, y);
             if (game.getUnitAt(moveFrom) == null) {
                 return;
             }
@@ -74,7 +74,7 @@ public class UnitMovingTool extends NullTool {
             draggingX = 0;
             draggingY = 0;
 
-            Position moveTo = new Position(GfxConstants.getTileYFromPixel(y), GfxConstants.getTileXFromPixel(x));
+            Position moveTo = GfxConstants.getPositionFromXY(x, y);
             game.moveUnit(moveFrom, moveTo);
         }
     }

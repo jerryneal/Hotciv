@@ -31,9 +31,8 @@ public class UnitActionTool extends ClickingTool {
             Figure figure = model.findFigure(x, y);
             if (figure instanceof UnitFigure) {
                 UnitFigure unitFigure = (UnitFigure) figure;
-                int posX = GfxConstants.getTileXFromPixel(x);
-                int posY = GfxConstants.getTileXFromPixel(y);
-                game.performUnitActionAt(new Position(posY, posX));
+                Position position = GfxConstants.getPositionFromXY(x, y);
+                game.performUnitActionAt(position);
             }
         }
     }
