@@ -53,12 +53,12 @@ public class PeriodicAgingStrategy implements NewAgeCalculator {
     }
 
     private void doEasterEgg() {
-        if (game.getAge() < 0) {
+        if (game.getAge() < -1) {
             return;
         }
         // Ugly, check!
         // Easter egg, check!
-        if (firstJesusSpawn) {
+        if (!firstJesusSpawn) {
             firstJesusSpawn = true;
             placeJesus();
         } else {
